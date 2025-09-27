@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -10,8 +11,11 @@ import 'package:timber_app/Home_page.dart';
 import 'package:timber_app/b.dart';
 import 'package:timber_app/c.dart';
 import 'package:timber_app/d.dart';
+import 'package:timber_app/firebase_options.dart';
 
-void main() {
+void main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   runApp(const MyApp());
 }
 
@@ -47,7 +51,7 @@ class MyApp extends StatelessWidget {
                 Positioned(
                   left: 16,
                   right: 16,
-                  bottom: 16,
+                  bottom: 0,
                   child: SafeArea(
                     child: Container(
                       height: 80,
@@ -71,8 +75,8 @@ class MyApp extends StatelessWidget {
                           backgroundColor: Colors.white,
                           type: BottomNavigationBarType.fixed,
                           elevation: 0,
-                          selectedItemColor: Colors.blue,
-                          unselectedItemColor: Colors.blue[100],
+                          selectedItemColor: Colors.green,
+                          unselectedItemColor: Colors.green[300],
                           showUnselectedLabels: true,
                           selectedFontSize: 12,
                           selectedLabelStyle: TextStyle(
@@ -122,7 +126,7 @@ class MyApp extends StatelessWidget {
         curve: Curves.easeOut,
         builder: (context, scale, child) => Transform.scale(
           scale: scale,
-          child: Icon(icon, color: active ? Colors.blue : Colors.blue[100]),
+          child: Icon(icon, color: active ? Colors.green : Colors.green[300]),
         ),
       ),
       label: label,
