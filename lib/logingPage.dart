@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/loging.dart';
 
 class Loging_homePage extends StatefulWidget {
@@ -31,10 +31,25 @@ class _Loging_homePageState extends State<Loging_homePage> {
               Center(
                 child: Text(
                   "Login",
-                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 65,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "sfProRoundSemiB",
+                  ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 0),
+              Center(
+                child: Text(
+                  "Hi! Welcome Back, you've been missed",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: "sfProRoundSemiB",
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              SizedBox(height: 40),
               Form(
                 autovalidateMode: AutovalidateMode.always,
                 onChanged: () {
@@ -48,57 +63,267 @@ class _Loging_homePageState extends State<Loging_homePage> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(bottom: 8.0, left: 5),
-                        child: Text("Enter Your Id Number"),
-                      ),
-                      TextFormField(
-                        controller: usernameController,
-                        decoration: InputDecoration(
-                          labelText: 'Username',
-                          hintText: 'Enter username',
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                              30,
-                            ), // rounded corners
-                            borderSide: BorderSide(
-                              color: Colors.black, // border color
-                              width: 2, // border thickness
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: BorderSide(
-                              color: Colors.green, // border color when focused
-                              width: 3,
-                            ),
+                        child: Text(
+                          "Enter Your Id Number",
+                          style: TextStyle(
+                            fontFamily: "sfproRoundSemiB",
+                            fontSize: 16,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16),
                       TextFormField(
                         controller: usernameController,
+                        style: TextStyle(
+                          color: Colors.black, // text color
+                          fontFamily: "sfproRoundRegular", // your custom font
+                          fontSize: 16, // text size
+                          fontWeight: FontWeight.w600,
+                        ),
                         decoration: InputDecoration(
-                          labelText: 'Username',
-                          hintText: 'Enter username',
+                          labelText: "ID Number",
+                          hintText: "Enter your ID Number",
+                          labelStyle: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: "sfproRoundRegular",
+                            fontWeight: FontWeight.bold,
+                          ),
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade400,
+                            fontFamily: "sfproRoundRegular",
+                            fontWeight: FontWeight.bold,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 20,
+                          ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                               30,
                             ), // rounded corners
                             borderSide: BorderSide(
-                              color: Colors.black, // border color
-                              width: 2, // border thickness
+                              color: Colors.grey.shade400, // thin grey border
+                              width: 1.5,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide(
-                              color: Colors.green, // border color when focused
-                              width: 3,
+                              color:
+                                  Colors.black, // highlight color when focused
+                              width: 2,
                             ),
                           ),
+                          floatingLabelStyle: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "sfproRoundRegular",
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 35),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 8.0, left: 5),
+                        child: Text(
+                          "Enter Your Password",
+                          style: TextStyle(
+                            fontFamily: "sfproRoundSemiB",
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      TextFormField(
+                        controller: passwordController,
+                        obscureText: true,
+                        style: TextStyle(
+                          color: Colors.black, // text color
+                          fontFamily: "sfproRoundRegular", // your custom font
+                          fontSize: 16, // text size
+                          fontWeight: FontWeight.w600,
+                        ),
+                        decoration: InputDecoration(
+                          labelText: "Password",
+                          hintText: "Enter password",
+                          labelStyle: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: "sfproRoundRegular",
+                            fontWeight: FontWeight.bold,
+                          ),
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade400,
+                            fontFamily: "sfproRoundRegular",
+                            fontWeight: FontWeight.bold,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 20,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade400,
+                              width: 1.5,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide(
+                              color: Colors.black,
+                              width: 2,
+                            ),
+                          ),
+                          floatingLabelStyle: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "sfproRoundRegular",
+                          ),
+                          suffixIcon: Icon(
+                            Icons.visibility_off,
+                            color: Colors.grey,
+                          ), // eye icon
                         ),
                       ),
                     ],
                   ),
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Center(
+                    child: Container(
+                      child: AnimatedOpacity(
+                        duration: Duration(milliseconds: 500),
+                        opacity: isVisible_button ? 1.0 : 0.0,
+                        child: Visibility(
+                          visible: isVisible_button,
+                          child: CupertinoButton(
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundColor: Colors.black,
+                              child: Icon(
+                                Iconsax.login5,
+                                size: 65,
+                                color: Colors.white,
+                              ),
+                            ),
+                            onPressed: () {
+                              if (usernameController.text.isEmpty ||
+                                  passwordController.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Please fill in all fields.',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'sfpro',
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    duration: Duration(seconds: 5),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              } else {
+                                setState(() {
+                                  isVisible_button = false;
+                                  isVisible_loading = true;
+                                });
+                                Login()
+                                    .signIn(
+                                      usernameController.text,
+                                      passwordController.text,
+                                      context,
+                                    )
+                                    .whenComplete(() {
+                                      setState(() {
+                                        isVisible_button = true;
+                                        isVisible_loading = false;
+                                      });
+                                    });
+                              }
+
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => const Home(),
+                              //   ),
+                              // );},
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Center(
+                child: Visibility(
+                  visible: isVisible_loading,
+                  child: Center(
+                    child: CupertinoActivityIndicator(
+                      animating: isVisible_loading,
+                      radius: 13,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+
+              Divider(
+                color: Colors.grey.shade400, // line color
+                thickness: 1, // line thickness
+                indent: 20, // left spacing
+                endIndent: 20, // right spacing
+              ),
+              SizedBox(height: 30),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Container(
+                        child: CupertinoButton(
+                          child: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.green,
+                            child: Icon(
+                              Iconsax.building,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "If you don't have an account \n Create account",
+                      style: TextStyle(
+                        fontFamily: "sfproRoundSemiB",
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Center(
+                      child: Container(
+                        child: CupertinoButton(
+                          child: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.blue,
+                            child: Icon(
+                              Iconsax.user_add,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
