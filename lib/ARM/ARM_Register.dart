@@ -1,18 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:timber_app/ARM/ARM_Register.dart';
-import 'package:timber_app/CO/CO_Register.dart';
-import 'package:timber_app/RM/RM_Register.dart';
 
-class Positionpicker extends StatefulWidget {
-  const Positionpicker({super.key});
+class ArmRegister extends StatefulWidget {
+  const ArmRegister({super.key});
 
   @override
-  State<Positionpicker> createState() => _PositionpickerState();
+  State<ArmRegister> createState() => _ArmRegisterState();
 }
 
-class _PositionpickerState extends State<Positionpicker> {
+class _ArmRegisterState extends State<ArmRegister> {
   int _selectedTown = 0;
 
   static const double _kItemExtent = 32.0;
@@ -44,7 +41,7 @@ class _PositionpickerState extends State<Positionpicker> {
               SizedBox(height: 70),
               Center(
                 child: Text(
-                  "You are?",
+                  "arm You are?",
                   style: TextStyle(
                     fontSize: 50,
                     color: Colors.blue,
@@ -216,28 +213,7 @@ class _PositionpickerState extends State<Positionpicker> {
                           ),
                         ),
                         onPressed: () {
-                          if (_townName[_selectedTown] == 'RM') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RmRegister(),
-                              ),
-                            );
-                          } else if (_townName[_selectedTown] == 'ARM') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ArmRegister(),
-                              ),
-                            );
-                          } else if (_townName[_selectedTown] == 'CO') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CoRegister(),
-                              ),
-                            );
-                          }
+                         
                         },
                       ),
                     ),
