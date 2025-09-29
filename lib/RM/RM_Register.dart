@@ -71,30 +71,48 @@ class _RmRegisterState extends State<RmRegister> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Text(
-                    "RM",
-                    style: TextStyle(
-                      fontFamily: "sfproRoundSemiB",
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                  child: Container(
+                    height: 250,
+                    width: size.width - 30,
+
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    textAlign: TextAlign.center,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20),
+                        Icon(Iconsax.user_add, size: 50, color: Colors.blue),
+                        Center(
+                          child: Text(
+                            "RM Registration",
+                            style: TextStyle(
+                              fontFamily: "sfproRoundSemiB",
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30, right: 30),
+                          child: Text(
+                            "Please complete your registration by providing accurate details. Submitted information will be reviewed by the administration, and once verified, your account will be approved. Thank you for your trust.",
+                            style: TextStyle(
+                              fontFamily: "sfproRoundRegular",
+                              fontSize: 15,
+                              color: Colors.blue[300],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                Center(
-                  child: Text(
-                    "Registration",
-                    style: TextStyle(
-                      fontFamily: "sfproRoundSemiB",
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                SizedBox(height: 60),
+
+                SizedBox(height: 20),
 
                 /// Enter Your Id Number
                 Padding(
@@ -155,7 +173,7 @@ class _RmRegisterState extends State<RmRegister> {
                     ),
                   ),
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: 20),
 
                 //Enter your name
                 Padding(
@@ -217,7 +235,7 @@ class _RmRegisterState extends State<RmRegister> {
                   ),
                 ),
 
-                SizedBox(height: 40),
+                SizedBox(height: 20),
 
                 //Enter your nic number
                 Padding(
@@ -279,7 +297,7 @@ class _RmRegisterState extends State<RmRegister> {
                   ),
                 ),
 
-                SizedBox(height: 40),
+                SizedBox(height: 20),
 
                 //Enter your mobile number
                 Padding(
@@ -341,7 +359,7 @@ class _RmRegisterState extends State<RmRegister> {
                   ),
                 ),
 
-                SizedBox(height: 40),
+                SizedBox(height: 20),
 
                 //Enter your office name
                 Padding(
@@ -453,7 +471,7 @@ class _RmRegisterState extends State<RmRegister> {
                     ),
                   ),
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: 20),
 
                 //Enter your password
                 Padding(
@@ -515,7 +533,7 @@ class _RmRegisterState extends State<RmRegister> {
                   ),
                 ),
 
-                SizedBox(height: 40),
+                SizedBox(height: 20),
 
                 //Re Enter your password
                 Padding(
@@ -578,111 +596,96 @@ class _RmRegisterState extends State<RmRegister> {
                 ),
                 SizedBox(height: 40),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 8.0,
-                        right: 8.0,
-                        bottom: 20,
-                      ),
-                      child: Container(
-                        child: CupertinoButton(
-                          child: CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.blue,
-                            child: Icon(
-                              Iconsax.user_add,
-                              size: 35,
-                              color: Colors.white,
-                            ),
+                    Center(
+                      child: CupertinoButton(
+                        color: Colors.blue.withOpacity(0.2),
+                        child: Text(
+                          "Submit",
+                          style: TextStyle(
+                            fontFamily: "sfproRoundSemiB",
+                            fontSize: 20,
+                            color: Colors.blue,
                           ),
-                          onPressed: () async {
-                            bool result =
-                                await InternetConnection().hasInternetAccess;
+                        ),
+                        onPressed: () async {
+                          bool result =
+                              await InternetConnection().hasInternetAccess;
 
-                            if (result == false) {
+                          if (result == false) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'No internet connection',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                duration: Duration(seconds: 3),
+                                backgroundColor: Colors.grey,
+                              ),
+                            );
+                            return;
+                          } else {
+                            if (idController.text.isEmpty ||
+                                usernameController.text.isEmpty ||
+                                mobileController.text.isEmpty ||
+                                nicController.text.isEmpty ||
+                                passwordController.text.isEmpty ||
+                                _townName[_selectedTown].toString().isEmpty ||
+                                passwordReController.text.isEmpty ||
+                                passwordController.text !=
+                                    passwordReController.text) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'No internet connection',
+                                    'Please fill all fields correctly',
                                     style: TextStyle(color: Colors.white),
                                   ),
-                                  duration: Duration(seconds: 3),
-                                  backgroundColor: Colors.grey,
+                                  duration: Duration(seconds: 5),
+                                  backgroundColor: Colors.red,
                                 ),
                               );
                               return;
                             } else {
-                              if (idController.text.isEmpty ||
-                                  usernameController.text.isEmpty ||
-                                  mobileController.text.isEmpty ||
-                                  nicController.text.isEmpty ||
-                                  passwordController.text.isEmpty ||
-                                  _townName[_selectedTown].toString().isEmpty ||
-                                  passwordReController.text.isEmpty ||
-                                  passwordController.text !=
-                                      passwordReController.text) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Please fill all fields correctly',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    duration: Duration(seconds: 5),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                                return;
-                              } else {
-                                Map<String, String> employeeData = {
-                                  "employeeId": idController.text,
-                                  "employeeName": usernameController.text,
-                                  "employeeMobile": mobileController.text,
-                                  "employeePosition": "RM",
-                                  "employeeLocation": _townName[_selectedTown]
-                                      .toString(),
-                                  "employeePassword": passwordController.text,
-                                };
-                                employeeReference
-                                    .child(idController.text)
-                                    .set(employeeData)
-                                    .then((_) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            '${usernameController.text} Registration Request Sent Successfully',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          duration: Duration(seconds: 5),
-                                          backgroundColor: Colors.green,
+                              Map<String, String> employeeData = {
+                                "employeeId": idController.text,
+                                "employeeName": usernameController.text,
+                                "employeeMobile": mobileController.text,
+                                "employeePosition": "RM",
+                                "employeeLocation": _townName[_selectedTown]
+                                    .toString(),
+                                "employeePassword": passwordController.text,
+                              };
+                              employeeReference
+                                  .child(idController.text)
+                                  .set(employeeData)
+                                  .then((_) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          '${usernameController.text} Registration Request Sent Successfully',
+                                          style: TextStyle(color: Colors.white),
                                         ),
-                                      );
-                                    })
-                                    .catchError((error) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            "Failed to save manager data: $error",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          duration: Duration(seconds: 5),
-                                          backgroundColor: Colors.redAccent,
+                                        duration: Duration(seconds: 5),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
+                                  })
+                                  .catchError((error) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "Failed to save manager data: $error",
+                                          style: TextStyle(color: Colors.white),
                                         ),
-                                      );
-                                    });
-                              }
+                                        duration: Duration(seconds: 5),
+                                        backgroundColor: Colors.redAccent,
+                                      ),
+                                    );
+                                  });
                             }
-                          },
-                        ),
+                          }
+                        },
                       ),
                     ),
                   ],
