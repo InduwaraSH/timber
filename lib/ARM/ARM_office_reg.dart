@@ -14,36 +14,38 @@ class ArmOfficeRegister extends StatefulWidget {
 class _ArmOfficeRegisterState extends State<ArmOfficeRegister> {
   int _selectedTown = 0;
   int _selectedarmOfficeLocation = 0;
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController nicController = TextEditingController();
-  TextEditingController mobileController = TextEditingController();
+
   TextEditingController idController = TextEditingController();
-  TextEditingController passwordReController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
 
   late DatabaseReference branchReference;
   late DatabaseReference employeeReference;
 
   static const double _kItemExtent = 32.0;
   static const List<String> _rmOfficeLocation = <String>[
-    'Embilipitya',
+    
     'Matara',
-    'Galle',
+    'Colombo',
+    'Ratnapura',
+    'Jaffna',
+    'Anuradhapura',
+    'Kandy',
+    
+    
+    
+   
+    
+  ];
+
+  static const List<String> _armOfficeLocation = <String>[
+    "Embilipitya",
+    "Matara",
+    "Galle",
     "Hambantota",
     "Tangalle",
     "Weligama",
     "Ahangama",
-    "Kamburupitiya",
-    "Akuressa",
-    "Deniyaya",
-  ];
-
-  static const List<String> _armOfficeLocation = <String>[
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
+    "Kegalle",
   ];
 
   @override
@@ -189,130 +191,6 @@ class _ArmOfficeRegisterState extends State<ArmOfficeRegister> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
-
-                //Enter your name
-                Padding(
-                  padding: EdgeInsets.only(bottom: 8.0, left: 5),
-                  child: Text(
-                    "Enter Your Name",
-                    style: TextStyle(
-                      fontFamily: "sfproRoundSemiB",
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                TextFormField(
-                  controller: usernameController,
-                  style: TextStyle(
-                    color: Colors.black, // text color
-                    fontFamily: "sfproRoundRegular", // your custom font
-                    fontSize: 16, // text size
-                    fontWeight: FontWeight.w600,
-                  ),
-                  decoration: InputDecoration(
-                    labelText: "Name",
-                    hintText: "Enter your Name",
-                    labelStyle: TextStyle(
-                      color: Colors.grey,
-                      fontFamily: "sfproRoundRegular",
-                      fontWeight: FontWeight.bold,
-                    ),
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontFamily: "sfproRoundRegular",
-                      fontWeight: FontWeight.bold,
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 16,
-                      horizontal: 20,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        30,
-                      ), // rounded corners
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade400, // thin grey border
-                        width: 1.5,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                        color: Colors.black, // highlight color when focused
-                        width: 2,
-                      ),
-                    ),
-                    floatingLabelStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "sfproRoundRegular",
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 20),
-
-                //Enter your nic number
-                Padding(
-                  padding: EdgeInsets.only(bottom: 8.0, left: 5),
-                  child: Text(
-                    "Enter Your NIC Number",
-                    style: TextStyle(
-                      fontFamily: "sfproRoundSemiB",
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                TextFormField(
-                  controller: nicController,
-                  style: TextStyle(
-                    color: Colors.black, // text color
-                    fontFamily: "sfproRoundRegular", // your custom font
-                    fontSize: 16, // text size
-                    fontWeight: FontWeight.w600,
-                  ),
-                  decoration: InputDecoration(
-                    labelText: "NIC Number",
-                    hintText: "Enter your NIC Number",
-                    labelStyle: TextStyle(
-                      color: Colors.grey,
-                      fontFamily: "sfproRoundRegular",
-                      fontWeight: FontWeight.bold,
-                    ),
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontFamily: "sfproRoundRegular",
-                      fontWeight: FontWeight.bold,
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 16,
-                      horizontal: 20,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        30,
-                      ), // rounded corners
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade400, // thin grey border
-                        width: 1.5,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                        color: Colors.black, // highlight color when focused
-                        width: 2,
-                      ),
-                    ),
-                    floatingLabelStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "sfproRoundRegular",
-                    ),
-                  ),
-                ),
-
                 SizedBox(height: 20),
 
                 //Enter your mobile number
@@ -603,129 +481,6 @@ class _ArmOfficeRegisterState extends State<ArmOfficeRegister> {
                   ),
                 ),
 
-                SizedBox(height: 20),
-
-                //Enter your password
-                Padding(
-                  padding: EdgeInsets.only(bottom: 8.0, left: 5),
-                  child: Text(
-                    "Enter Your Password",
-                    style: TextStyle(
-                      fontFamily: "sfproRoundSemiB",
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                TextFormField(
-                  controller: passwordController,
-                  style: TextStyle(
-                    color: Colors.black, // text color
-                    fontFamily: "sfproRoundRegular", // your custom font
-                    fontSize: 16, // text size
-                    fontWeight: FontWeight.w600,
-                  ),
-                  decoration: InputDecoration(
-                    labelText: "Password",
-                    hintText: "Enter your Password",
-                    labelStyle: TextStyle(
-                      color: Colors.grey,
-                      fontFamily: "sfproRoundRegular",
-                      fontWeight: FontWeight.bold,
-                    ),
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontFamily: "sfproRoundRegular",
-                      fontWeight: FontWeight.bold,
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 16,
-                      horizontal: 20,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        30,
-                      ), // rounded corners
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade400, // thin grey border
-                        width: 1.5,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                        color: Colors.black, // highlight color when focused
-                        width: 2,
-                      ),
-                    ),
-                    floatingLabelStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "sfproRoundRegular",
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 20),
-
-                //Re Enter your password
-                Padding(
-                  padding: EdgeInsets.only(bottom: 8.0, left: 5),
-                  child: Text(
-                    "Re Enter Your Password",
-                    style: TextStyle(
-                      fontFamily: "sfproRoundSemiB",
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                TextFormField(
-                  controller: passwordReController,
-                  style: TextStyle(
-                    color: Colors.black, // text color
-                    fontFamily: "sfproRoundRegular", // your custom font
-                    fontSize: 16, // text size
-                    fontWeight: FontWeight.w600,
-                  ),
-                  decoration: InputDecoration(
-                    labelText: "Password",
-                    hintText: "Enter your Password",
-                    labelStyle: TextStyle(
-                      color: Colors.grey,
-                      fontFamily: "sfproRoundRegular",
-                      fontWeight: FontWeight.bold,
-                    ),
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontFamily: "sfproRoundRegular",
-                      fontWeight: FontWeight.bold,
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 16,
-                      horizontal: 20,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        30,
-                      ), // rounded corners
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade400, // thin grey border
-                        width: 1.5,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                        color: Colors.black, // highlight color when focused
-                        width: 2,
-                      ),
-                    ),
-                    floatingLabelStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "sfproRoundRegular",
-                    ),
-                  ),
-                ),
                 SizedBox(height: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -742,86 +497,65 @@ class _ArmOfficeRegisterState extends State<ArmOfficeRegister> {
                           ),
                         ),
                         onPressed: () async {
-                          bool result =
-                              await InternetConnection().hasInternetAccess;
-
-                          if (result == false) {
+                          if (idController.text.isEmpty ||
+                              mobileController.text.isEmpty ||
+                              _armOfficeLocation[_selectedarmOfficeLocation]
+                                  .toString()
+                                  .isEmpty ||
+                              _rmOfficeLocation[_selectedTown]
+                                  .toString()
+                                  .isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  'No internet connection',
+                                  'Please fill all fields correctly',
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                duration: Duration(seconds: 3),
-                                backgroundColor: Colors.grey,
+                                duration: Duration(seconds: 5),
+                                backgroundColor: Colors.red,
                               ),
                             );
                             return;
                           } else {
-                            if (idController.text.isEmpty ||
-                                usernameController.text.isEmpty ||
-                                mobileController.text.isEmpty ||
-                                nicController.text.isEmpty ||
-                                passwordController.text.isEmpty ||
-                                _rmOfficeLocation[_selectedTown]
-                                    .toString()
-                                    .isEmpty ||
-                                _armOfficeLocation[_selectedTown]
-                                    .toString()
-                                    .isEmpty ||
-                                passwordReController.text.isEmpty ||
-                                passwordController.text !=
-                                    passwordReController.text) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Please fill all fields correctly',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  duration: Duration(seconds: 5),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                              return;
-                            } else {
-                              Map<String, String> employeeData = {
-                                "employeeId": idController.text,
-                                "employeeName": usernameController.text,
-                                "employeeMobile": mobileController.text,
-                                "employeePosition": "RM",
-                                "employeeLocation":
-                                    _armOfficeLocation[_selectedTown]
-                                        .toString(),
-                                "employeePassword": passwordController.text,
-                              };
-                              employeeReference
-                                  .child(idController.text)
-                                  .set(employeeData)
-                                  .then((_) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          '${usernameController.text} Registration Request Sent Successfully',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        duration: Duration(seconds: 5),
-                                        backgroundColor: Colors.green,
+                            branchReference = FirebaseDatabase.instance
+                                .ref()
+                                .child("ARM_branches");
+                            Map<String, String> branchData = {
+                              "branchId": idController.text,
+                              "Relevent RO Branch":
+                                  _rmOfficeLocation[_selectedTown].toString(),
+                              "branchLocation":
+                                  _armOfficeLocation[_selectedarmOfficeLocation]
+                                      .toString(),
+                              "mobile": mobileController.text,
+                            };
+                            branchReference
+                                .child(idController.text)
+                                .set(branchData)
+                                .then((_) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Registration Successful ${_armOfficeLocation[_selectedarmOfficeLocation].toString()}',
+                                        style: TextStyle(color: Colors.white),
                                       ),
-                                    );
-                                  })
-                                  .catchError((error) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "Failed to save manager data: $error",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        duration: Duration(seconds: 5),
-                                        backgroundColor: Colors.redAccent,
+                                      duration: Duration(seconds: 5),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                })
+                                .catchError((error) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        "Failed to save branch data: $error",
+                                        style: TextStyle(color: Colors.white),
                                       ),
-                                    );
-                                  });
-                            }
+                                      duration: Duration(seconds: 5),
+                                      backgroundColor: Colors.redAccent,
+                                    ),
+                                  );
+                                });
                           }
                         },
                       ),

@@ -5,15 +5,12 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/instance_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/Home_page.dart';
+import 'package:timber_app/RM/RM_Sent.dart';
 import 'package:timber_app/b.dart';
 import 'package:timber_app/c.dart';
 import 'package:timber_app/d.dart';
 
-
-
-
 class rm_b_navbar extends StatelessWidget {
-  
   const rm_b_navbar({super.key, required this.office_location});
 
   final String office_location;
@@ -132,5 +129,5 @@ class rm_b_navbar extends StatelessWidget {
 
 class NavigControll extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
-  final screens = [page(), pgtwo(), pgthree(), pgfour()];
+  final screens = [page(), RmSent(), pgthree(), pgfour()];
 }
