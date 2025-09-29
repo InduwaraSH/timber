@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/loging.dart';
+import 'package:timber_app/office_reg_picker.dart';
 
 class Loging_homePage extends StatefulWidget {
   const Loging_homePage({super.key});
@@ -295,7 +296,14 @@ class _Loging_homePageState extends State<Loging_homePage> {
                               color: Colors.white,
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OfficeRegPicker(),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),

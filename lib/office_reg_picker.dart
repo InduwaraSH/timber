@@ -2,21 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/ARM/ARM_Register.dart';
+import 'package:timber_app/ARM/ARM_office_reg.dart';
 import 'package:timber_app/CO/CO_Register.dart';
 import 'package:timber_app/RM/RM_Register.dart';
+import 'package:timber_app/RM/RM_office_reg.dart';
 
-class Positionpicker extends StatefulWidget {
-  const Positionpicker({super.key});
+class OfficeRegPicker extends StatefulWidget {
+  const OfficeRegPicker({super.key});
 
   @override
-  State<Positionpicker> createState() => _PositionpickerState();
+  State<OfficeRegPicker> createState() => _OfficeRegPickerState();
 }
 
-class _PositionpickerState extends State<Positionpicker> {
+class _OfficeRegPickerState extends State<OfficeRegPicker> {
   int _selectedTown = 0;
 
   static const double _kItemExtent = 32.0;
-  static const List<String> _townName = <String>['RM', 'ARM', 'CO'];
+  static const List<String> _townName = <String>['RM office', 'ARM office'];
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
@@ -44,10 +46,10 @@ class _PositionpickerState extends State<Positionpicker> {
               SizedBox(height: 70),
               Center(
                 child: Text(
-                  "You are?",
+                  "Rm & Arm",
                   style: TextStyle(
                     fontSize: 50,
-                    color: Colors.blue,
+                    color: Colors.green,
                     fontWeight: FontWeight.bold,
                     fontFamily: "sfproRoundSemiB",
                   ),
@@ -58,23 +60,23 @@ class _PositionpickerState extends State<Positionpicker> {
               Padding(
                 padding: const EdgeInsets.only(left: 60.0, right: 60.0),
                 child: Text(
-                  "Before registering, we need to know who you are. Please select your role from the dropdown list: RM, ARM, or CO. This step is important because it helps us identify your position and verify your information. After you submit your registration, we will carefully check the details you provided with your original data. If everything matches correctly, your account will be successfully registered and approved to use this platform securely.",
+                  "Please select the appropriate office type, either RM Office or ARM Office, and carefully enter your details. The office you choose will be linked to your account and may directly affect future processes and approvals. Therefore, ensure you select the correct office type before submitting your information.",
                   style: TextStyle(
                     fontSize: 15,
                     fontFamily: "sfproRoundRegular",
                     fontWeight: FontWeight.w700,
                     color: Colors.grey[400],
                   ),
-                  textAlign: TextAlign.justify,
+                  textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 70),
               ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
                 child: Center(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.lightBlueAccent.withOpacity(0.3),
+                      color: Colors.green.withOpacity(0.3),
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     height: 70,
@@ -103,7 +105,7 @@ class _PositionpickerState extends State<Positionpicker> {
                                     itemExtent: _kItemExtent,
                                     selectionOverlay:
                                         CupertinoPickerDefaultSelectionOverlay(
-                                          background: Colors.blue.withOpacity(
+                                          background: Colors.green.withOpacity(
                                             0.12,
                                           ),
                                         ),
@@ -126,7 +128,7 @@ class _PositionpickerState extends State<Positionpicker> {
                                           child: Text(
                                             _townName[index],
                                             style: TextStyle(
-                                              color: Colors.blue,
+                                              color: Colors.green,
                                               fontFamily: "sfproRoundRegular",
                                               fontWeight: FontWeight.w700,
                                               fontSize: 25.0,
@@ -157,7 +159,7 @@ class _PositionpickerState extends State<Positionpicker> {
                                       _townName[_selectedTown],
                                       style: const TextStyle(
                                         fontSize: 25.0,
-                                        color: Colors.blue,
+                                        color: Colors.green,
                                         fontFamily: "sfproRoundSemiB",
                                       ),
                                     ),
@@ -174,33 +176,25 @@ class _PositionpickerState extends State<Positionpicker> {
               ),
               SizedBox(height: 20),
               Text(
-                "RM - Regional Manager",
+                "RM - Regional Manager office",
                 style: TextStyle(
                   fontFamily: "sfproRoundRegular",
                   fontSize: 15,
-                  color: Colors.lightBlue[500],
+                  color: Colors.green[500],
                 ),
                 textAlign: TextAlign.start,
               ),
               Text(
-                "ARM - Assistant Regional Manager",
+                "ARM - Assistant Regional Manager office",
                 style: TextStyle(
                   fontFamily: "sfproRoundRegular",
                   fontSize: 15,
-                  color: Colors.lightBlue[500],
+                  color: Colors.green[500],
                 ),
                 textAlign: TextAlign.start,
               ),
-              Text(
-                "CO - Cope Officer",
-                style: TextStyle(
-                  fontFamily: "sfproRoundRegular",
-                  fontSize: 15,
-                  color: Colors.lightBlue[500],
-                ),
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(height: 60),
+
+              SizedBox(height: 120),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -214,7 +208,7 @@ class _PositionpickerState extends State<Positionpicker> {
                       child: CupertinoButton(
                         child: CircleAvatar(
                           radius: 30,
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Colors.green,
                           child: Icon(
                             Iconsax.next,
                             size: 35,
@@ -222,25 +216,18 @@ class _PositionpickerState extends State<Positionpicker> {
                           ),
                         ),
                         onPressed: () {
-                          if (_townName[_selectedTown] == 'RM') {
+                          if (_townName[_selectedTown] == 'RM office') {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RmRegister(),
+                                builder: (context) => RmOfficeRegister(),
                               ),
                             );
-                          } else if (_townName[_selectedTown] == 'ARM') {
+                          } else if (_townName[_selectedTown] == 'ARM office') {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ArmRegister(),
-                              ),
-                            );
-                          } else if (_townName[_selectedTown] == 'CO') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CoRegister(),
+                                builder: (context) => ArmOfficeRegister(),
                               ),
                             );
                           }
