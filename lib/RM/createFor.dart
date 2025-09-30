@@ -7,14 +7,14 @@ import 'package:intl/intl.dart';
 
 class Create_Form_Rm extends StatefulWidget {
   final String office_location;
-  const Create_Form_Rm({super.key, required this.office_location});
+  final String branch_name;
+  const Create_Form_Rm(this.office_location, this.branch_name, {super.key});
 
   @override
   State<Create_Form_Rm> createState() => _Create_Form_RmState();
 }
 
 class _Create_Form_RmState extends State<Create_Form_Rm> {
-  
   DateTime? _selectedDate; // Added to fix undefined name error
   TextEditingController POCController = TextEditingController();
   TextEditingController SerialController = TextEditingController();
@@ -26,19 +26,6 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
   String getFormattedDate(DateTime? date) {
     if (date == null) return '';
     return "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-  }
-
- 
-
-  @override
-  void initState() {
-    super.initState();
-
-    employeeReference = FirebaseDatabase.instance
-        .ref()
-        .child("RM_branch_data_saved")
-        .child(widget.office_location.toString())
-        .child("Sent");
   }
 
   void _showDialog(Widget child) {
@@ -73,21 +60,25 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                     width: size.width - 30,
 
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.2),
+                      color: const Color(0xFFDAD6FF).withOpacity(0.7),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
                       children: [
                         SizedBox(height: 20),
-                        Icon(Iconsax.user_add, size: 50, color: Colors.blue),
+                        Icon(
+                          Iconsax.paperclip,
+                          size: 50,
+                          color: Color(0xFF756AB6),
+                        ),
                         Center(
                           child: Text(
-                            "ARM Registration",
+                            "Timber Registration",
                             style: TextStyle(
                               fontFamily: "sfproRoundSemiB",
                               fontSize: 35,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue,
+                              color: Color(0xFF756AB6),
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -99,7 +90,7 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                             style: TextStyle(
                               fontFamily: "sfproRoundRegular",
                               fontSize: 15,
-                              color: Colors.blue[300],
+                              color: Color(0xFF756AB6).withOpacity(0.4),
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -412,7 +403,8 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                 'DateInformed': getFormattedDate(
                                   _selectedDate,
                                 ).toString(),
-                                'ARM_Branch_Name': "Matara",
+                                'ARM_Branch_Name': widget.branch_name
+                                    .toString(),
                                 "office_location": widget.office_location
                                     .toString(),
                                 "from": "RM",
@@ -420,7 +412,7 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                               FirebaseDatabase.instance
                                   .ref()
                                   .child("ARM_branch_data_saved")
-                                  .child("Matara")
+                                  .child(widget.branch_name.toString())
                                   .child("Recived")
                                   .push()
                                   .set(reqData)

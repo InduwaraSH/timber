@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/PositionPicker.dart';
+import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
 import 'package:timber_app/RM/createFor.dart';
 import 'package:timber_app/RM/sent_CardView.dart';
 
@@ -111,14 +112,14 @@ class _RmSentState extends State<RmSent> {
                 const SizedBox(height: 6),
                 Row(
                   children: [
-                    Icon(Icons.double_arrow, color: Colors.green, size: 16),
+                    Icon(Icons.double_arrow, color: Colors.pink[200], size: 16),
                     Text(
                       branchName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontFamily: 'sfproRoundSemiB',
-                        color: Colors.green,
+                        color: Colors.pink[200],
                       ),
                     ),
                   ],
@@ -193,7 +194,10 @@ class _RmSentState extends State<RmSent> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Create_Form_Rm(office_location: widget.office_location.toString()),
+                                  builder: (context) => ARM_OfficeIN_RM(
+                                    office_location: widget.office_location
+                                        .toString(),
+                                  ),
                                 ),
                               );
                             },
