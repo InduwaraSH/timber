@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/PositionPicker.dart';
+import 'package:timber_app/RM/createFor.dart';
 import 'package:timber_app/RM/sent_CardView.dart';
 
 class RmSent extends StatefulWidget {
@@ -100,7 +101,7 @@ class _RmSentState extends State<RmSent> {
                 Text(
                   poc,
                   style: const TextStyle(
-                    fontSize: 35,
+                    fontSize: 25,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'sfproRoundSemiB',
                     color: Color(0xFF756AB6),
@@ -110,14 +111,14 @@ class _RmSentState extends State<RmSent> {
                 const SizedBox(height: 6),
                 Row(
                   children: [
-                    Icon(Icons.double_arrow),
+                    Icon(Icons.double_arrow, color: Colors.green, size: 16),
                     Text(
                       branchName,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontFamily: 'sfproRoundSemiB',
-                        color: Color(0xFF756AB6),
+                        color: Colors.green,
                       ),
                     ),
                   ],
@@ -192,7 +193,7 @@ class _RmSentState extends State<RmSent> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Positionpicker(),
+                                  builder: (context) => Create_Form_Rm(office_location: widget.office_location.toString()),
                                 ),
                               );
                             },
