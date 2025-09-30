@@ -5,22 +5,24 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/instance_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/Home_page.dart';
+import 'package:timber_app/RM/RM_Sent.dart';
 import 'package:timber_app/b.dart';
 import 'package:timber_app/c.dart';
 import 'package:timber_app/d.dart';
 
-
-
-
-class co_b_navbar extends StatelessWidget {
+class co_b_navbar extends StatefulWidget {
+  final String office_location;
   const co_b_navbar({super.key, required this.office_location});
 
-  final String office_location;
+  @override
+  State<co_b_navbar> createState() => _co_b_navbarState();
+}
 
+class _co_b_navbarState extends State<co_b_navbar> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigControll());
+    final controller = Get.put(NavigControll(widget.office_location));
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -131,5 +133,14 @@ class co_b_navbar extends StatelessWidget {
 
 class NavigControll extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
-  final screens = [page(), pgtwo(), pgthree(), pgfour()];
+  final String office_location;
+
+  NavigControll(this.office_location);
+
+  late final List<Widget> screens = [
+    page(office_location: office_location),
+    RmSent(office_location: office_location),
+    pgthree(office_location: office_location),
+    pgfour(office_location: office_location),
+  ];
 }

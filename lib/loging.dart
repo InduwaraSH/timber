@@ -6,7 +6,6 @@ import 'package:timber_app/ARM/ARM_B_Nav.dart';
 import 'package:timber_app/CO/CO_B_Nav.dart';
 import 'package:timber_app/RM/RM_B_Nav.dart';
 
-
 class Login {
   late final credential;
   Future<void> signIn(
@@ -65,29 +64,30 @@ class Login {
         final snapshot_office = await dbref.child('employeeOffice').get();
         if (snapshot.exists) {
           if (snapshot.value == 'RM') {
-           
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    rm_b_navbar(office_location: snapshot_office.value.toString()),
+                builder: (context) => RmBNavbar(
+                  office_location: snapshot_office.value.toString(),
+                ),
               ),
             );
           } else if (snapshot.value == 'ARM') {
-           
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    arm_b_navbar(office_location: snapshot_office.value.toString()),
+                builder: (context) => arm_b_navbar(
+                  office_location: snapshot_office.value.toString(),
+                ),
               ),
             );
           } else if (snapshot.value == 'EMP') {
-           
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => co_b_navbar(office_location: snapshot_office.value.toString()),
+                builder: (context) => co_b_navbar(
+                  office_location: snapshot_office.value.toString(),
+                ),
               ),
             );
           }

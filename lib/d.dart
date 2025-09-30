@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class pgfour extends StatelessWidget {
-  const pgfour
-  ({super.key});
+  final String office_location;
+  const pgfour({super.key, required this.office_location});
 
   @override
   Widget build(BuildContext context) {
