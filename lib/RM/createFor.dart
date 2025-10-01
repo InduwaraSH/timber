@@ -429,7 +429,8 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                   })
                                   .then((_) {
                                     Map<String, String> status = {
-                                      'Status': "ARMRecived",
+                                      'location': POCController.text,
+                                      'Status': "ARM_R_D_One",
                                       'RM_R_D_One': getFormattedDate(
                                         _selectedDate,
                                       ).toString(),

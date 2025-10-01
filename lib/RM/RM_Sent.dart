@@ -70,6 +70,7 @@ class _RmSentState extends State<RmSent> {
               DateInformed: DateInformed,
               LetterNo: LetterNo,
               SerialNum: SerialNum,
+              office_location: widget.office_location,
             ),
           ),
         );
@@ -112,14 +113,18 @@ class _RmSentState extends State<RmSent> {
                 const SizedBox(height: 6),
                 Row(
                   children: [
-                    Icon(Icons.double_arrow, color: Colors.pink[200], size: 16),
+                    Icon(
+                      Icons.double_arrow,
+                      color: Colors.black.withOpacity(0.4),
+                      size: 16,
+                    ),
                     Text(
                       branchName,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontFamily: 'sfproRoundSemiB',
-                        color: Colors.pink[200],
+                        color: Colors.black.withOpacity(0.4),
                       ),
                     ),
                   ],
@@ -176,7 +181,7 @@ class _RmSentState extends State<RmSent> {
                               fontSize: 50,
                               fontFamily: "sfproRoundSemiB",
                               fontWeight: FontWeight.bold,
-                              color: const Color(0xFFB1AFFF),
+                              color: Color(0xFFB1AFFF),
                             ),
                           ),
                           CupertinoButton(
