@@ -76,7 +76,7 @@ class Login {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => arm_b_navbar(
+                builder: (context) => arm_b_nav_bar(
                   office_location: snapshot_office.value.toString(),
                 ),
               ),

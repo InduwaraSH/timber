@@ -192,7 +192,7 @@ class _RmSentState extends State<RmSent> {
                               child: Icon(
                                 Iconsax.additem,
                                 size: 40,
-                                color: const Color(0xFFB1AFFF),
+                                color:  Color(0xFFB1AFFF),
                               ),
                             ),
                             onPressed: () {
@@ -202,6 +202,7 @@ class _RmSentState extends State<RmSent> {
                                   builder: (context) => ARM_OfficeIN_RM(
                                     office_location: widget.office_location
                                         .toString(),
+                                        
                                   ),
                                 ),
                               );

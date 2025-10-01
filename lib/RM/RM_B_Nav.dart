@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/Home_page.dart';
+import 'package:timber_app/RM/RM_Home.dart';
 import 'package:timber_app/RM/RM_Sent.dart';
 import 'package:timber_app/c.dart';
 import 'package:timber_app/d.dart';
@@ -56,8 +57,7 @@ class _RmBNavbarState extends State<RmBNavbar> {
                     borderRadius: BorderRadius.circular(30),
                     child: BottomNavigationBar(
                       currentIndex: controller.selectedIndex.value,
-                      onTap: (index) =>
-                          controller.selectedIndex.value = index,
+                      onTap: (index) => controller.selectedIndex.value = index,
                       backgroundColor: Colors.white,
                       type: BottomNavigationBarType.fixed,
                       elevation: 0,
@@ -65,18 +65,31 @@ class _RmBNavbarState extends State<RmBNavbar> {
                       unselectedItemColor: Colors.grey,
                       showUnselectedLabels: true,
                       selectedFontSize: 12,
-                      selectedLabelStyle:
-                          const TextStyle(fontWeight: FontWeight.bold),
+                      selectedLabelStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                       unselectedFontSize: 12,
                       items: [
-                        _navItem(Iconsax.home, "Home",
-                            controller.selectedIndex.value == 0),
-                        _navItem(Iconsax.send_24, "Sent",
-                            controller.selectedIndex.value == 1),
-                        _navItem(Iconsax.arrow_down_24, "Received",
-                            controller.selectedIndex.value == 2),
-                        _navItem(Iconsax.chart_2, "Statistics",
-                            controller.selectedIndex.value == 3),
+                        _navItem(
+                          Iconsax.home,
+                          "Home",
+                          controller.selectedIndex.value == 0,
+                        ),
+                        _navItem(
+                          Iconsax.send_24,
+                          "Sent",
+                          controller.selectedIndex.value == 1,
+                        ),
+                        _navItem(
+                          Iconsax.arrow_down_24,
+                          "Received",
+                          controller.selectedIndex.value == 2,
+                        ),
+                        _navItem(
+                          Iconsax.chart_2,
+                          "Statistics",
+                          controller.selectedIndex.value == 3,
+                        ),
                       ],
                     ),
                   ),
@@ -112,7 +125,7 @@ class NavigControll extends GetxController {
   NavigControll(this.office_location);
 
   late final List<Widget> screens = [
-    page(office_location: office_location),
+    RMHomepage(office_location: office_location),
     RmSent(office_location: office_location),
     pgthree(office_location: office_location),
     pgfour(office_location: office_location),

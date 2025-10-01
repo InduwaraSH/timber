@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/Home_page.dart';
+import 'package:timber_app/RM/RM_Home.dart';
 import 'package:timber_app/RM/RM_Sent.dart';
 import 'package:timber_app/b.dart';
 import 'package:timber_app/c.dart';
 import 'package:timber_app/d.dart';
 
-class arm_b_navbar extends StatefulWidget {
+class arm_b_nav_bar extends StatefulWidget {
   final String office_location;
-  const arm_b_navbar({super.key, required this.office_location});
+  const arm_b_nav_bar({super.key, required this.office_location});
 
   @override
-  State<arm_b_navbar> createState() => _arm_b_navbarState();
+  State<arm_b_nav_bar> createState() => _arm_b_nav_barState();
 }
 
-class _arm_b_navbarState extends State<arm_b_navbar> {
+class _arm_b_nav_barState extends State<arm_b_nav_bar> {
   late final NavigControll controller;
 
   @override
@@ -126,7 +127,7 @@ class NavigControll extends GetxController {
 
   late final List<Widget> screens = [
     page(office_location: office_location),
-    RmSent(office_location: office_location),
+    pgtwo(),
     pgthree(office_location: office_location),
     pgfour(office_location: office_location),
   ];
