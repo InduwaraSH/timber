@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/ARM/ARM_Recived_view.dart';
 import 'package:timber_app/ARM/ARM_info_panel.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
@@ -68,7 +69,7 @@ class _ARMReceivedState extends State<ARMReceived> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => ARM_infoPanel(
+            builder: (_) => ARM_Received_View(
               branchName: branchName,
               poc: poc,
               DateInformed: DateInformed,

@@ -136,7 +136,7 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                   child: Text(
                     "Search and connect with the most relevant CO to move your project forward efficiently. Find, select, and collaborate easily.",
                     style: TextStyle(
@@ -147,7 +147,7 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 0),
                 Center(
                   child: AnimatedBuilder(
                     animation: _controller,
@@ -163,23 +163,23 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
 
                           // ❤️ center icon
                           Container(
-                            width: 55,
-                            height: 55,
+                            width: 65,
+                            height: 65,
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.blue,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Color.fromARGB(255, 3, 127, 229),
+                                  color: Colors.blue,
                                   blurRadius: 78,
                                   blurStyle: BlurStyle.outer,
                                 ),
                               ],
                             ),
                             child: Icon(
-                              Iconsax.buildings_24,
-                              color: Colors.blue[100],
-                              size: 35,
+                              Iconsax.buildings,
+                              color: Colors.white,
+                              size: 38,
                             ),
                           ),
 
@@ -187,7 +187,7 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
                           ...List.generate(contactList.length, (i) {
                             final angle = (2 * pi / contactList.length) * i;
                             final radius = i.isEven
-                                ? maxRadius * 1.4
+                                ? maxRadius * 1.35
                                 : maxRadius * 0.85;
                             final size = i.isEven ? 28.0 : 35.0;
 
@@ -226,8 +226,8 @@ class DottedCirclePainter extends CustomPainter {
       ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke;
 
-    final double radiusOuter = size.width / 1.5;
-    final double radiusInner = size.width / 2.8;
+    final double radiusOuter = size.width / 2.1;
+    final double radiusInner = size.width / 3.2;
 
     // Rotate the canvas
     canvas.save();

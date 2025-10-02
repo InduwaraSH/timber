@@ -114,22 +114,22 @@ class _ARM_infoPanelState extends State<ARM_infoPanel> {
                           ),
                         ),
 
-                        FloatingActionButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => Find_CO_for_ARM(),
-                              ),
-                            );
-                          },
-                          backgroundColor: Colors.black,
-                          child: Icon(
-                            Iconsax.people5,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                        ),
+                        // FloatingActionButton(
+                        //   onPressed: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (_) => Find_CO_for_ARM(),
+                        //       ),
+                        //     );
+                        //   },
+                        //   backgroundColor: Colors.black,
+                        //   child: Icon(
+                        //     Iconsax.people5,
+                        //     color: Colors.white,
+                        //     size: 30,
+                        //   ),
+                        // ),
                         //     Container(
                         //       child: Row(
                         //         children: [
