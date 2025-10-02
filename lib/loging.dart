@@ -81,7 +81,7 @@ class Login {
                 ),
               ),
             );
-          } else if (snapshot.value == 'EMP') {
+          } else if (snapshot.value == 'CO') {
             Navigator.push(
               context,
               MaterialPageRoute(

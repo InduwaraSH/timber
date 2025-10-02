@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:iconsax/iconsax.dart';
 
-class SentCardview extends StatefulWidget {
+class ARM_infoPanel extends StatefulWidget {
   final String branchName;
   final String poc;
   final String DateInformed;
@@ -11,7 +11,7 @@ class SentCardview extends StatefulWidget {
   final String SerialNum;
   final String office_location;
 
-  const SentCardview({
+  const ARM_infoPanel({
     super.key,
     required this.branchName,
     required this.poc,
@@ -22,10 +22,10 @@ class SentCardview extends StatefulWidget {
   });
 
   @override
-  State<SentCardview> createState() => _SentCardviewState();
+  State<ARM_infoPanel> createState() => _ARM_infoPanelState();
 }
 
-class _SentCardviewState extends State<SentCardview> {
+class _ARM_infoPanelState extends State<ARM_infoPanel> {
   final database = FirebaseDatabase.instance.ref();
 
   List<String> steps = [
@@ -117,7 +117,7 @@ class _SentCardviewState extends State<SentCardview> {
                           onPressed: () {},
                           backgroundColor: Colors.black,
                           child: Icon(
-                            Iconsax.info_circle,
+                            Iconsax.people5,
                             color: Colors.white,
                             size: 30,
                           ),

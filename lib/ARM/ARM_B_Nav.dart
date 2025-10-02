@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/ARM/ARM_Recived.dart';
 import 'package:timber_app/Home_page.dart';
-import 'package:timber_app/RM/RM_Home.dart';
-import 'package:timber_app/RM/RM_Sent.dart';
+
 import 'package:timber_app/b.dart';
-import 'package:timber_app/c.dart';
+
 import 'package:timber_app/d.dart';
 
 class arm_b_nav_bar extends StatefulWidget {
@@ -128,7 +128,7 @@ class NavigControll extends GetxController {
   late final List<Widget> screens = [
     page(office_location: office_location),
     pgtwo(),
-    pgthree(office_location: office_location),
+    ARMReceived(office_location: office_location),
     pgfour(office_location: office_location),
   ];
 }
