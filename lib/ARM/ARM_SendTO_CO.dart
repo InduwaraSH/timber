@@ -1,122 +1,106 @@
+import 'package:avatar_plus/avatar_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:timber_app/ARM/ARM_Find_CO.dart';
-import 'package:timber_app/ARM/ARM_info_panel.dart';
 
-class ARM_Received_View extends StatelessWidget {
-  final String branchName;
+class ARM_SentTO_CO extends StatelessWidget {
   final String poc;
   final String DateInformed;
   final String LetterNo;
   final String SerialNum;
-  final String office_location;
+  final String CO_Name;
+  final String CO_ID;
 
-  const ARM_Received_View({
+  const ARM_SentTO_CO({
     super.key,
-    required this.branchName,
     required this.poc,
     required this.DateInformed,
     required this.LetterNo,
     required this.SerialNum,
-    required this.office_location,
+    required this.CO_Name,
+    required this.CO_ID,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFFDFBFF), Color(0xFFEDEBFF)], // pastel gradient
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
         child: SafeArea(
           bottom: false,
           child: Padding(
             padding: const EdgeInsets.all(22.0),
             child: SingleChildScrollView(
-              // ✅ scrollable
-              physics: const BouncingScrollPhysics(), // iOS feel
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Header Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        "Details",
+                        "Review",
                         style: TextStyle(
                           fontSize: 50,
                           fontWeight: FontWeight.bold,
                           fontFamily: "sfproRoundSemiB",
-                          color: Colors.black87,
+                          color: Colors.black,
                           letterSpacing: -1,
                         ),
                       ),
+                    ],
+                  ),
+
+                  // CO Profile Card
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Row(
                         children: [
-                          FloatingActionButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => ARM_infoPanel(
-                                    branchName: branchName,
-                                    poc: poc,
-                                    DateInformed: DateInformed,
-                                    LetterNo: LetterNo,
-                                    SerialNum: SerialNum,
-                                    office_location: office_location,
-                                  ),
-                                ),
-                              );
-                            },
-                            backgroundColor: Colors.black,
-                            child: Icon(
-                              Iconsax.chart_15,
-                              color: Colors.lightGreen,
-                              size: 35,
+                          Text(
+                            "Sent To :",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black.withOpacity(0.5),
+                              fontFamily: "sfproRoundSemiB",
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(width: 16),
-
-                          FloatingActionButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => Find_CO_for_ARM(
-                                    poc: poc,
-                                    DateInformed: DateInformed,
-                                    LetterNo: LetterNo,
-                                    SerialNum: SerialNum,
-                                    office_location: office_location,
-                                  ),
+                          const SizedBox(width: 10),
+                          Row(
+                            children: [
+                              ClipOval(
+                                child: AvatarPlus(
+                                  CO_Name,
+                                  height: 40,
+                                  width: 40,
                                 ),
-                              );
-                            },
-                            backgroundColor: Colors.black,
-                            child: Icon(
-                              Iconsax.send_24,
-                              color: Colors.white,
-                              size: 35,
-                            ),
+                              ),
+                              const SizedBox(width: 5),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    CO_Name,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "sfproRoundSemiB",
+                                      color: Colors.black.withOpacity(0.5),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                ],
+                              ),
+                            ],
                           ),
                         ],
                       ),
+                      SizedBox(height: 30),
                     ],
                   ),
-                  const SizedBox(height: 30),
 
-                  // Bigger, softer info cards
-                  _buildInfoCard(
-                    "Branch",
-                    branchName,
-                    CupertinoIcons.building_2_fill,
-                  ),
+                  // Info Cards
                   _buildInfoCard(
                     "Date Informed",
                     DateInformed,
@@ -133,20 +117,25 @@ class ARM_Received_View extends StatelessWidget {
                     CupertinoIcons.number_square_fill,
                   ),
                   _buildInfoCard(
-                    "Office Location",
-                    office_location,
-                    CupertinoIcons.map_pin_ellipse,
-                  ),
-                  _buildInfoCard(
                     "Place of Coupe",
                     poc,
                     CupertinoIcons.cube_box_fill,
                   ),
 
                   const SizedBox(height: 40),
-
-                  // Floating elegant Send button
-                  const SizedBox(height: 20),
+                  Center(
+                    child: CupertinoButton(
+                      color: Colors.blue,
+                      child: Text(
+                        "Send Now",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "sfproRoundSemiB",
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -156,12 +145,17 @@ class ARM_Received_View extends StatelessWidget {
     );
   }
 
+  // Reusable Info Card
   Widget _buildInfoCard(String title, String value, IconData icon) {
     return Container(
       margin: const EdgeInsets.only(bottom: 18),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.95),
+        gradient: LinearGradient(
+          colors: [Color.fromARGB(255, 253, 253, 253), Color(0xFFEDEBFF)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
@@ -178,14 +172,17 @@ class ARM_Received_View extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blueAccent, Colors.lightBlue],
+              gradient: const LinearGradient(
+                colors: [
+                  Color.fromARGB(255, 215, 214, 214),
+                  Color.fromARGB(255, 215, 214, 214),
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(icon, color: Colors.white, size: 26),
+            child: Icon(icon, color: Colors.black, size: 28),
           ),
           const SizedBox(width: 18),
           Expanded(
@@ -195,20 +192,20 @@ class ARM_Received_View extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     color: Colors.grey,
                     fontFamily: "sfproRoundRegular",
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
                   value,
                   style: const TextStyle(
-                    fontSize: 25,
+                    fontSize: 20,
                     fontFamily: "sfproRoundSemiB",
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Colors.grey,
                   ),
                 ),
               ],

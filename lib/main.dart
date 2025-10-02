@@ -6,6 +6,7 @@ import 'package:timber_app/logingPage.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  
   runApp(const MyApp());
 }
 

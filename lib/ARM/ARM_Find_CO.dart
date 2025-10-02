@@ -3,9 +3,23 @@ import 'package:avatar_plus/avatar_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/ARM/ARM_SendTO_CO.dart';
 
 class Find_CO_for_ARM extends StatefulWidget {
-  const Find_CO_for_ARM({super.key});
+  final String poc;
+  final String DateInformed;
+  final String LetterNo;
+  final String SerialNum;
+  final String office_location;
+
+  const Find_CO_for_ARM({
+    super.key,
+    required this.poc,
+    required this.DateInformed,
+    required this.LetterNo,
+    required this.SerialNum,
+    required this.office_location,
+  });
 
   @override
   State<Find_CO_for_ARM> createState() => _Find_CO_for_ARMState();
@@ -13,9 +27,7 @@ class Find_CO_for_ARM extends StatefulWidget {
 
 class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
     with SingleTickerProviderStateMixin {
-  final DatabaseReference dbRef = FirebaseDatabase.instance.ref().child(
-    "Connection ARM_CO/Matara",
-  );
+  late DatabaseReference dbRef;
 
   late AnimationController _controller;
   List<Map<dynamic, dynamic>> contactList = [];
@@ -24,13 +36,17 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
   void initState() {
     super.initState();
 
+    dbRef = FirebaseDatabase.instance
+        .ref()
+        .child("Connection ARM_CO")
+        .child(widget.office_location);
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 40),
     )..repeat();
   }
 
-  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -52,9 +68,17 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
           offset: Offset(dx, dy),
           child: GestureDetector(
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("Pressed ${user["CO_Name"] ?? "Unknown"}"),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ARM_SentTO_CO(
+                    poc: widget.poc.toString(),
+                    DateInformed: widget.DateInformed.toString(),
+                    LetterNo: widget.LetterNo.toString(),
+                    SerialNum: widget.SerialNum.toString(),
+                    CO_Name: user["CO_Name"].toString(),
+                    CO_ID: user["CO_ID"].toString(),
+                  ),
                 ),
               );
             },
@@ -136,7 +160,7 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                  padding: const EdgeInsets.only(left: 20.0, right: 16.0),
                   child: Text(
                     "Search and connect with the most relevant CO to move your project forward efficiently. Find, select, and collaborate easily.",
                     style: TextStyle(
@@ -155,19 +179,19 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
                       return Stack(
                         alignment: Alignment.center,
                         children: [
-                          // 🔄 rotating dotted orbits
+                          // rotating dotted orbits
                           CustomPaint(
                             size: Size(maxRadius * 4, maxRadius * 4),
                             painter: DottedCirclePainter(_controller.value),
                           ),
 
-                          // ❤️ center icon
+                          //  center icon
                           Container(
                             width: 65,
                             height: 65,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.blue,
+                              color: Colors.blue.withOpacity(0.7),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.blue,
@@ -177,8 +201,8 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
                               ],
                             ),
                             child: Icon(
-                              Iconsax.buildings,
-                              color: Colors.white,
+                              Iconsax.send_24,
+                              color: Colors.black87,
                               size: 38,
                             ),
                           ),
@@ -187,9 +211,9 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
                           ...List.generate(contactList.length, (i) {
                             final angle = (2 * pi / contactList.length) * i;
                             final radius = i.isEven
-                                ? maxRadius * 1.35
-                                : maxRadius * 0.85;
-                            final size = i.isEven ? 28.0 : 35.0;
+                                ? maxRadius * 1.25
+                                : maxRadius * 0.75;
+                            final size = i.isEven ? 28.0 : 38.0;
 
                             return _buildUser(
                               contactList[i],
@@ -226,8 +250,8 @@ class DottedCirclePainter extends CustomPainter {
       ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke;
 
-    final double radiusOuter = size.width / 2.1;
-    final double radiusInner = size.width / 3.2;
+    final double radiusOuter = size.width / 2.3;
+    final double radiusInner = size.width / 3.7;
 
     // Rotate the canvas
     canvas.save();

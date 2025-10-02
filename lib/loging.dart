@@ -82,14 +82,14 @@ class Login {
               ),
             );
           } else if (snapshot.value == 'CO') {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => co_b_navbar(
-                  office_location: snapshot_office.value.toString(),
-                ),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => co_b_navbar(
+            //       office_location: snapshot_office.value.toString(),
+            //     ),
+            //   ),
+            // );
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:timber_app/Home_page.dart';
+
 import 'package:timber_app/RM/RM_Home.dart';
 import 'package:timber_app/RM/RM_Sent.dart';
 import 'package:timber_app/c.dart';
@@ -16,12 +16,12 @@ class RmBNavbar extends StatefulWidget {
 }
 
 class _RmBNavbarState extends State<RmBNavbar> {
-  late final NavigControll controller;
+  late final RMNavigControll rm_controller;
 
   @override
   void initState() {
     super.initState();
-    controller = Get.put(NavigControll(widget.office_location));
+    rm_controller = Get.put(RMNavigControll(widget.office_location));
   }
 
   @override
@@ -32,7 +32,7 @@ class _RmBNavbarState extends State<RmBNavbar> {
         body: Stack(
           children: [
             // Page content
-            controller.screens[controller.selectedIndex.value],
+            rm_controller.screens[rm_controller.selectedIndex.value],
 
             // Floating bottom nav bar
             Positioned(
@@ -56,8 +56,9 @@ class _RmBNavbarState extends State<RmBNavbar> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(30),
                     child: BottomNavigationBar(
-                      currentIndex: controller.selectedIndex.value,
-                      onTap: (index) => controller.selectedIndex.value = index,
+                      currentIndex: rm_controller.selectedIndex.value,
+                      onTap: (index) =>
+                          rm_controller.selectedIndex.value = index,
                       backgroundColor: Colors.white,
                       type: BottomNavigationBarType.fixed,
                       elevation: 0,
@@ -73,22 +74,22 @@ class _RmBNavbarState extends State<RmBNavbar> {
                         _navItem(
                           Iconsax.home,
                           "Home",
-                          controller.selectedIndex.value == 0,
+                          rm_controller.selectedIndex.value == 0,
                         ),
                         _navItem(
                           Iconsax.send_24,
                           "Sent",
-                          controller.selectedIndex.value == 1,
+                          rm_controller.selectedIndex.value == 1,
                         ),
                         _navItem(
                           Iconsax.arrow_down_24,
                           "Received",
-                          controller.selectedIndex.value == 2,
+                          rm_controller.selectedIndex.value == 2,
                         ),
                         _navItem(
                           Iconsax.chart_2,
                           "Statistics",
-                          controller.selectedIndex.value == 3,
+                          rm_controller.selectedIndex.value == 3,
                         ),
                       ],
                     ),
@@ -118,11 +119,11 @@ class _RmBNavbarState extends State<RmBNavbar> {
   }
 }
 
-class NavigControll extends GetxController {
+class RMNavigControll extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
   final String office_location;
 
-  NavigControll(this.office_location);
+  RMNavigControll(this.office_location);
 
   late final List<Widget> screens = [
     RMHomepage(office_location: office_location),
