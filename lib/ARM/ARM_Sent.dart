@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/ARM/ARM_Sent_Cardview.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
 import 'package:timber_app/RM/createFor.dart';
@@ -49,11 +50,12 @@ class _ARM_SentState extends State<ARM_Sent> {
   }
 
   Widget listItem({required Map Sent, required int index}) {
-    final String branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
+    final String to = Sent['from'] ?? "Not Available";
     final String poc = Sent['placeOfCoupe'] ?? "N/A";
     final String DateInformed = Sent['DateInformed'] ?? "N/A";
     final String LetterNo = Sent['LetterNo'] ?? "N/A";
     final String SerialNum = Sent['Serial Number'] ?? "N/A";
+    final String branchName = Sent['arm_office_location'] ?? "Not Available";
 
     Color activeColor1 = const Color(0xFFEDEBFF);
     Color activeColor2 = const Color(0xFFDAD6FF);
@@ -64,13 +66,14 @@ class _ARM_SentState extends State<ARM_Sent> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => SentCardview(
+            builder: (_) => ARM_SentCardview(
               branchName: branchName,
               poc: poc,
               DateInformed: DateInformed,
               LetterNo: LetterNo,
               SerialNum: SerialNum,
               office_location: widget.office_location,
+              to: to,
             ),
           ),
         );
@@ -119,7 +122,7 @@ class _ARM_SentState extends State<ARM_Sent> {
                       size: 16,
                     ),
                     Text(
-                      branchName,
+                      to,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,

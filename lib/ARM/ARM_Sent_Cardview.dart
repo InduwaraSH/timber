@@ -2,18 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:timber_app/RM/RM_SentDetail.dart';
 import 'package:timber_app/RM/sent_detail.dart';
 
-class SentCardview extends StatefulWidget {
+class ARM_SentCardview extends StatefulWidget {
   final String branchName;
   final String poc;
   final String DateInformed;
   final String LetterNo;
   final String SerialNum;
   final String office_location;
+  final String to;
 
-  const SentCardview({
+  const ARM_SentCardview({
     super.key,
     required this.branchName,
     required this.poc,
@@ -21,13 +21,14 @@ class SentCardview extends StatefulWidget {
     required this.LetterNo,
     required this.SerialNum,
     required this.office_location,
+    required this.to,
   });
 
   @override
-  State<SentCardview> createState() => _SentCardviewState();
+  State<ARM_SentCardview> createState() => _ARM_SentCardviewState();
 }
 
-class _SentCardviewState extends State<SentCardview> {
+class _ARM_SentCardviewState extends State<ARM_SentCardview> {
   final database = FirebaseDatabase.instance.ref();
 
   List<String> steps = [
@@ -120,7 +121,8 @@ class _SentCardviewState extends State<SentCardview> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => RM_SentDetail(
+                                builder: (_) => ARM_SentDetail(
+                                  to:widget.to,
                                   poc: widget.poc,
                                   DateInformed: widget.DateInformed,
                                   LetterNo: widget.LetterNo,

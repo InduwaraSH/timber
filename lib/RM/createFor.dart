@@ -448,9 +448,7 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                     FirebaseDatabase.instance
                                         .ref()
                                         .child("Status_of_job")
-                                        .child(
-                                          widget.office_location.toString(),
-                                        )
+                                        .child(widget.branch_name.toString())
                                         .child(SerialController.text)
                                         .set(status);
                                   })
