@@ -21,6 +21,7 @@ class _RmBNavbarState extends State<RmBNavbar> {
   @override
   void initState() {
     super.initState();
+    Get.delete<RMNavigControll>();
     rm_controller = Get.put(RMNavigControll(widget.office_location));
   }
 

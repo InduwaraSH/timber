@@ -21,6 +21,7 @@ class _arm_b_nav_barState extends State<arm_b_nav_bar> {
   @override
   void initState() {
     super.initState();
+    Get.delete<ARMNavigControll>();
     arm_controller = Get.put(ARMNavigControll(widget.office_location));
   }
 

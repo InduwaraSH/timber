@@ -49,6 +49,7 @@ class Login {
       );
     } else {
       try {
+        await FirebaseAuth.instance.signOut();
         final credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
               email: '${employeeId.trim()}@gmail.com',

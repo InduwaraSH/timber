@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:timber_app/ARM/ARM_B_Nav.dart';
 import 'package:timber_app/PositionPicker.dart';
+import 'package:timber_app/RM/RM_B_Nav.dart';
 import 'package:timber_app/loging.dart';
 import 'package:timber_app/office_reg_picker.dart';
 
@@ -231,18 +236,244 @@ class _Loging_homePageState extends State<Loging_homePage> {
                                   isVisible_button = false;
                                   isVisible_loading = true;
                                 });
-                                Login()
-                                    .signIn(
-                                      usernameController.text,
-                                      passwordController.text,
-                                      context,
-                                    )
-                                    .whenComplete(() {
+                                late final credential;
+                                () async {
+                                  bool result = await InternetConnection()
+                                      .hasInternetAccess;
+
+                                  if (result == false) {
+                                    setState(() {
+                                      isVisible_button = true;
+                                      isVisible_loading = false;
+                                    });
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'No internet connection',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontFamily: 'sfpro',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        duration: Duration(seconds: 3),
+                                        backgroundColor: Colors.grey,
+                                      ),
+                                    );
+
+                                    return;
+                                  } else if (usernameController.text.isEmpty ||
+                                      passwordController.text.isEmpty) {
+                                    setState(() {
+                                      isVisible_button = true;
+                                      isVisible_loading = false;
+                                    });
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Please fill all fields correctly.',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'sfpro',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        duration: Duration(seconds: 3),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  } else {
+                                    try {
+                                      await FirebaseAuth.instance.signOut();
+                                      await FirebaseAuth.instance
+                                          .signInWithEmailAndPassword(
+                                            email:
+                                                '${usernameController.text}@gmail.com',
+                                            password: passwordController.text,
+                                          );
+                                      print(
+                                        "Signed in as: ${usernameController.text}@gmail.com",
+                                      );
+                                      DatabaseReference dbref = FirebaseDatabase
+                                          .instance
+                                          .ref()
+                                          .child("employee_data_saved")
+                                          .child(usernameController.text);
+
+                                      final snapshot = await dbref
+                                          .child('employeePosition')
+                                          .get();
+                                      print(
+                                        "employeePosition: ${snapshot.value}",
+                                      );
+
+                                      final snapshot_office = await dbref
+                                          .child('employeeOffice')
+                                          .get();
+                                      print(
+                                        "employeeOffice: ${snapshot_office.value}",
+                                      );
+                                      if (snapshot.exists) {
+                                        if (snapshot.value == 'RM') {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => RmBNavbar(
+                                                office_location: snapshot_office
+                                                    .value
+                                                    .toString(),
+                                              ),
+                                            ),
+                                          ).whenComplete(() {
+                                            setState(() {
+                                              isVisible_button = true;
+                                              isVisible_loading = false;
+                                            });
+                                          });
+                                        } else if (snapshot.value == 'ARM') {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  arm_b_nav_bar(
+                                                    office_location:
+                                                        snapshot_office.value
+                                                            .toString(),
+                                                  ),
+                                            ),
+                                          ).whenComplete(() {
+                                            setState(() {
+                                              isVisible_button = true;
+                                              isVisible_loading = false;
+                                            });
+                                          });
+                                        } else if (snapshot.value == 'CO') {
+                                          // Navigator.push(
+                                          //   context,
+                                          //   MaterialPageRoute(
+                                          //     builder: (context) => co_b_navbar(
+                                          //       office_location: snapshot_office.value.toString(),
+                                          //     ),
+                                          //   ),
+                                          // );
+                                        }
+                                      } else {
+                                        setState(() {
+                                          isVisible_button = true;
+                                          isVisible_loading = false;
+                                        });
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Something went wrong',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'sfpro',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            duration: Duration(seconds: 3),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      }
+                                    } on FirebaseAuthException catch (e) {
                                       setState(() {
                                         isVisible_button = true;
                                         isVisible_loading = false;
                                       });
-                                    });
+                                      print("FirebaseAuthException: ${e.code}");
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            e.code,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'sfpro',
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          duration: Duration(seconds: 3),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                      // print("FirebaseAuthException: ${credential.user?.email}");
+                                      if (e.code == 'user-not-found') {
+                                        setState(() {
+                                          isVisible_button = true;
+                                          isVisible_loading = false;
+                                        });
+                                        print('No user found for that email.');
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'No user found for that email.',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'sfpro',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            duration: Duration(seconds: 3),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      } else if (e.code == 'wrong-password') {
+                                        setState(() {
+                                          isVisible_button = true;
+                                          isVisible_loading = false;
+                                        });
+                                        print(
+                                          'Wrong password provided for that user.',
+                                        );
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Wrong password provided for that user.',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'sfpro',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            duration: Duration(seconds: 3),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      }
+                                    } catch (e) {
+                                      setState(() {
+                                        isVisible_button = true;
+                                        isVisible_loading = false;
+                                      });
+                                      print("Unexpected error: $e");
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "Unexpected error: $e",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'sfpro',
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          duration: Duration(seconds: 3),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  }
+                                }();
                               }
 
                               // Navigator.push(
