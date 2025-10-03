@@ -78,6 +78,7 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
                     SerialNum: widget.SerialNum.toString(),
                     CO_Name: user["CO_Name"].toString(),
                     CO_ID: user["CO_ID"].toString(),
+                    office_location: widget.office_location.toString(),
                   ),
                 ),
               );

@@ -414,7 +414,7 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                   .child("ARM_branch_data_saved")
                                   .child(widget.branch_name.toString())
                                   .child("Recived")
-                                  .push()
+                                  .child(SerialController.text)
                                   .set(reqData)
                                   .then((_) {
                                     FirebaseDatabase.instance

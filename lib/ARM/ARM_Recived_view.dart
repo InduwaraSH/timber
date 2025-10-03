@@ -26,6 +26,8 @@ class ARM_Received_View extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFFFDFBFF), Color(0xFFEDEBFF)], // pastel gradient
@@ -59,6 +61,7 @@ class ARM_Received_View extends StatelessWidget {
                       Row(
                         children: [
                           FloatingActionButton(
+                            heroTag: "info_panel",
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -84,6 +87,7 @@ class ARM_Received_View extends StatelessWidget {
                           const SizedBox(width: 16),
 
                           FloatingActionButton(
+                            heroTag: "find_co",
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -109,14 +113,25 @@ class ARM_Received_View extends StatelessWidget {
                       ),
                     ],
                   ),
+
+                  Row(
+                    children: [
+                      Icon(Icons.double_arrow, size: 20, color: Colors.grey),
+                      Text(
+                        "From: $office_location",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: "sfproRoundSemiB",
+
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 30),
 
                   // Bigger, softer info cards
-                  _buildInfoCard(
-                    "Branch",
-                    branchName,
-                    CupertinoIcons.building_2_fill,
-                  ),
                   _buildInfoCard(
                     "Date Informed",
                     DateInformed,
@@ -132,16 +147,8 @@ class ARM_Received_View extends StatelessWidget {
                     SerialNum,
                     CupertinoIcons.number_square_fill,
                   ),
-                  _buildInfoCard(
-                    "Office Location",
-                    office_location,
-                    CupertinoIcons.map_pin_ellipse,
-                  ),
-                  _buildInfoCard(
-                    "Place of Coupe",
-                    poc,
-                    CupertinoIcons.cube_box_fill,
-                  ),
+
+                  _buildInfoCard("Place of Coupe", poc, Iconsax.location5),
 
                   const SizedBox(height: 40),
 

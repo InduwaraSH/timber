@@ -1,15 +1,19 @@
 import 'package:avatar_plus/avatar_plus.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:intl/intl.dart';
 
-class ARM_SentTO_CO extends StatelessWidget {
+class ARM_SentTO_CO extends StatefulWidget {
   final String poc;
   final String DateInformed;
   final String LetterNo;
   final String SerialNum;
   final String CO_Name;
   final String CO_ID;
+  final String office_location;
 
   const ARM_SentTO_CO({
     super.key,
@@ -19,12 +23,29 @@ class ARM_SentTO_CO extends StatelessWidget {
     required this.SerialNum,
     required this.CO_Name,
     required this.CO_ID,
+    required this.office_location,
   });
 
+  @override
+  State<ARM_SentTO_CO> createState() => _ARM_SentTO_COState();
+}
+
+class _ARM_SentTO_COState extends State<ARM_SentTO_CO> {
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFFDFBFF), Color(0xFFEDEBFF)], // pastel gradient
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+
         child: SafeArea(
           bottom: false,
           child: Padding(
@@ -71,7 +92,7 @@ class ARM_SentTO_CO extends StatelessWidget {
                             children: [
                               ClipOval(
                                 child: AvatarPlus(
-                                  CO_Name,
+                                  widget.CO_Name,
                                   height: 40,
                                   width: 40,
                                 ),
@@ -81,7 +102,7 @@ class ARM_SentTO_CO extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    CO_Name,
+                                    widget.CO_Name,
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -103,23 +124,23 @@ class ARM_SentTO_CO extends StatelessWidget {
                   // Info Cards
                   _buildInfoCard(
                     "Date Informed",
-                    DateInformed,
-                    CupertinoIcons.calendar,
+                    widget.DateInformed,
+                    Iconsax.calendar,
                   ),
                   _buildInfoCard(
                     "Letter No",
-                    LetterNo,
-                    CupertinoIcons.doc_text_fill,
+                    widget.LetterNo,
+                    Iconsax.document,
                   ),
                   _buildInfoCard(
                     "Serial Number",
-                    SerialNum,
-                    CupertinoIcons.number_square_fill,
+                    widget.SerialNum,
+                    Iconsax.hashtag,
                   ),
                   _buildInfoCard(
                     "Place of Coupe",
-                    poc,
-                    CupertinoIcons.cube_box_fill,
+                    widget.poc,
+                    Iconsax.location,
                   ),
 
                   const SizedBox(height: 40),
@@ -133,9 +154,115 @@ class ARM_SentTO_CO extends StatelessWidget {
                           fontFamily: "sfproRoundSemiB",
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        bool result =
+                            await InternetConnection().hasInternetAccess;
+
+                        if (result == false) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'No internet connection',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              duration: Duration(seconds: 3),
+                              backgroundColor: Colors.grey,
+                            ),
+                          );
+                          return;
+                        } else {
+                          Map<String, String> reqData = {
+                            'Serial Number': widget.SerialNum,
+                            'placeOfCoupe': widget.poc,
+                            'LetterNo': widget.LetterNo,
+                            'DateInformed': widget.DateInformed,
+
+                            "arm_office_location": widget.office_location
+                                .toString(),
+                            "from": "CO ${widget.CO_Name}",
+                          };
+                          FirebaseDatabase.instance
+                              .ref()
+                              .child("CO_branch_data_saved")
+                              .child(widget.CO_ID.toString())
+                              .child("Recived")
+                              .child(widget.SerialNum.toString())
+                              .set(reqData)
+                              .then((_) {
+                                FirebaseDatabase.instance
+                                    .ref()
+                                    .child("ARM_branch_data_saved")
+                                    .child(widget.office_location.toString())
+                                    .child("Sent")
+                                    .child(widget.SerialNum.toString())
+                                    .set(reqData);
+                              })
+                              .then((_) {
+                                FirebaseDatabase.instance
+                                    .ref()
+                                    .child("Status_of_job")
+                                    .child(widget.office_location.toString())
+                                    .child(widget.SerialNum.toString())
+                                    .child("Status")
+                                    .set("CO_R_D_One");
+                              })
+                              .then((_) {
+                                FirebaseDatabase.instance
+                                    .ref()
+                                    .child("Status_of_job")
+                                    .child(widget.office_location.toString())
+                                    .child(widget.SerialNum.toString())
+                                    .child("CO_R_D_One")
+                                    .set(
+                                      DateFormat(
+                                        'yyyy-MM-dd',
+                                      ).format(DateTime.now()).toString(),
+                                    );
+                              })
+                              .then((_) {
+                                try {
+                                  FirebaseDatabase.instance
+                                      .ref()
+                                      .child("ARM_branch_data_saved")
+                                      .child(widget.office_location.toString())
+                                      .child("Recived")
+                                      .child(widget.SerialNum.toString())
+                                      .remove();
+                                  print('Data deleted successfully');
+                                } catch (e) {
+                                  print('Error deleting data: $e');
+                                }
+                              })
+                              .then((_) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: Colors.green,
+                                    content: Text(
+                                      "Job Placed Successfully",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                );
+                              })
+                              .then((_) {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              })
+                              .catchError((error) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Failed to update data: $error',
+                                    ),
+                                  ),
+                                );
+                              });
+                        }
+                      },
                     ),
                   ),
+                  const SizedBox(height: 20), // Extra space at the bottom
                 ],
               ),
             ),
@@ -171,18 +298,18 @@ class ARM_SentTO_CO extends StatelessWidget {
           Container(
             width: 50,
             height: 50,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 215, 214, 214),
-                  Color.fromARGB(255, 215, 214, 214),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Icon(icon, color: Colors.black, size: 28),
+            // decoration: BoxDecoration(
+            //   gradient: const LinearGradient(
+            //     colors: [
+            //       Color.fromARGB(255, 215, 214, 214),
+            //       Color.fromARGB(255, 215, 214, 214),
+            //     ],
+            //     begin: Alignment.topLeft,
+            //     end: Alignment.bottomRight,
+            //   ),
+            //   borderRadius: BorderRadius.circular(16),
+            // ),
+            child: Icon(icon, color: Colors.grey, size: 40),
           ),
           const SizedBox(width: 18),
           Expanded(

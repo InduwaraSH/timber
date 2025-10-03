@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/ARM/ARM_Home.dart';
 import 'package:timber_app/ARM/ARM_Recived.dart';
+import 'package:timber_app/ARM/ARM_Sent.dart';
 
 import 'package:timber_app/d.dart';
 
@@ -126,7 +127,7 @@ class ARMNavigControll extends GetxController {
 
   late final List<Widget> screens = [
     ARM_Home(office_location: office_location),
-    ARM_Home(office_location: office_location),
+    ARM_Sent(office_location: office_location),
     ARMReceived(office_location: office_location),
     pgfour(office_location: office_location),
   ];
