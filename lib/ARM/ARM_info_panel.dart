@@ -65,7 +65,7 @@ class _ARM_infoPanelState extends State<ARM_infoPanel> {
   void fetchData() async {
     final snapshot = await database
         .child('Status_of_job')
-        .child(widget.office_location.toString())
+        .child(widget.branchName.toString())
         .child(widget.SerialNum.toString())
         .get();
     if (snapshot.exists) {

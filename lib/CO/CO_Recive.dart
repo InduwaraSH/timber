@@ -4,21 +4,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:timber_app/ARM/ARM_Sent_Cardview.dart';
+import 'package:timber_app/ARM/ARM_Recived_view.dart';
+import 'package:timber_app/ARM/ARM_info_panel.dart';
+import 'package:timber_app/CO/CO_Revived_View.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
 import 'package:timber_app/RM/createFor.dart';
 import 'package:timber_app/RM/sent_CardView.dart';
 
-class ARM_Sent extends StatefulWidget {
+class CORecived extends StatefulWidget {
   final String office_location;
-  const ARM_Sent({super.key, required this.office_location});
+  final String username;
+  const CORecived({
+    super.key,
+    required this.office_location,
+    required this.username,
+  });
 
   @override
-  State<ARM_Sent> createState() => _ARM_SentState();
+  State<CORecived> createState() => _CORecivedState();
 }
 
-class _ARM_SentState extends State<ARM_Sent> {
+class _CORecivedState extends State<CORecived> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
@@ -28,9 +35,9 @@ class _ARM_SentState extends State<ARM_Sent> {
     super.initState();
     dbref = FirebaseDatabase.instance
         .ref()
-        .child('ARM_branch_data_saved')
-        .child(widget.office_location)
-        .child("Sent");
+        .child('CO_branch_data_saved')
+        .child(widget.username)
+        .child("Recived");
 
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection ==
@@ -50,15 +57,17 @@ class _ARM_SentState extends State<ARM_Sent> {
   }
 
   Widget listItem({required Map Sent, required int index}) {
-    final String to = Sent['from'] ?? "Not Available";
+    final String branchName = Sent['arm_office_location'] ?? "Not Available";
     final String poc = Sent['placeOfCoupe'] ?? "N/A";
     final String DateInformed = Sent['DateInformed'] ?? "N/A";
     final String LetterNo = Sent['LetterNo'] ?? "N/A";
     final String SerialNum = Sent['Serial Number'] ?? "N/A";
-    final String branchName = Sent['arm_office_location'] ?? "Not Available";
 
-    Color activeColor1 = const Color(0xFFEDEBFF);
-    Color activeColor2 = const Color(0xFFDAD6FF);
+    // ✅ Updated colors according to uploaded design
+    Color activeColor1 = const Color(0xFFE2ECFF);
+    Color activeColor2 = const Color(0xFFD6E4FA);
+    Color textPrimary = const Color(0xFF5065D8);
+    Color iconPrimary = const Color(0xFF5065D8);
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
@@ -66,14 +75,13 @@ class _ARM_SentState extends State<ARM_Sent> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => ARM_SentCardview(
+            builder: (_) => CO_Received_View(
               branchName: branchName,
               poc: poc,
               DateInformed: DateInformed,
               LetterNo: LetterNo,
               SerialNum: SerialNum,
               office_location: widget.office_location,
-              to: to,
             ),
           ),
         );
@@ -105,11 +113,11 @@ class _ARM_SentState extends State<ARM_Sent> {
               children: [
                 Text(
                   poc,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'sfproRoundSemiB',
-                    color: Color(0xFF756AB6),
+                    color: textPrimary,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -118,16 +126,16 @@ class _ARM_SentState extends State<ARM_Sent> {
                   children: [
                     Icon(
                       Icons.double_arrow,
-                      color: Colors.black.withOpacity(0.4),
+                      color: textPrimary.withOpacity(0.6),
                       size: 16,
                     ),
                     Text(
-                      to,
+                      branchName,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontFamily: 'sfproRoundSemiB',
-                        color: Colors.black.withOpacity(0.4),
+                        color: textPrimary.withOpacity(0.6),
                       ),
                     ),
                   ],
@@ -139,12 +147,12 @@ class _ARM_SentState extends State<ARM_Sent> {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: const Color(0xFF756AB6).withOpacity(0.1),
+                color: iconPrimary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.apartment_rounded,
-                color: Color(0xFF756AB6),
+                color: iconPrimary,
                 size: 30,
               ),
             ),
@@ -179,7 +187,7 @@ class _ARM_SentState extends State<ARM_Sent> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            "Sent",
+                            "Inbox",
                             style: TextStyle(
                               fontSize: 50,
                               fontFamily: "sfproRoundSemiB",
@@ -187,24 +195,6 @@ class _ARM_SentState extends State<ARM_Sent> {
                               color: Colors.black,
                             ),
                           ),
-                          // FloatingActionButton(
-                          //   onPressed: () {
-                          //     Navigator.push(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //         builder: (context) => ARM_OfficeIN_RM(
-                          //           office_location: widget.office_location,
-                          //         ),
-                          //       ),
-                          //     );
-                          //   },
-                          //   backgroundColor: Colors.black,
-                          //   child: Icon(
-                          //     Iconsax.pen_add,
-                          //     color: Colors.white,
-                          //     size: 30,
-                          //   ),
-                          // ),
                         ],
                       ),
                     )
@@ -212,7 +202,6 @@ class _ARM_SentState extends State<ARM_Sent> {
             ),
 
             // Firebase list
-            SizedBox(height: 0),
             Expanded(
               child: FirebaseAnimatedList(
                 controller: _scrollController,

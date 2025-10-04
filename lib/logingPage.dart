@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:timber_app/ARM/ARM_B_Nav.dart';
+import 'package:timber_app/CO/CO_B_Nav.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/RM/RM_B_Nav.dart';
 import 'package:timber_app/loging.dart';
@@ -348,14 +349,17 @@ class _Loging_homePageState extends State<Loging_homePage> {
                                             });
                                           });
                                         } else if (snapshot.value == 'CO') {
-                                          // Navigator.push(
-                                          //   context,
-                                          //   MaterialPageRoute(
-                                          //     builder: (context) => co_b_navbar(
-                                          //       office_location: snapshot_office.value.toString(),
-                                          //     ),
-                                          //   ),
-                                          // );
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => co_b_navbar(
+                                                office_location: snapshot_office
+                                                    .value
+                                                    .toString(),
+                                                    username: usernameController.text,
+                                              ),
+                                            ),
+                                          );
                                         }
                                       } else {
                                         setState(() {

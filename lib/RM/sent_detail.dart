@@ -57,7 +57,7 @@ class _ARM_SentDetailState extends State<ARM_SentDetail> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        "Review",
+                        "Sent",
                         style: TextStyle(
                           fontSize: 50,
                           fontWeight: FontWeight.bold,
@@ -87,12 +87,12 @@ class _ARM_SentDetailState extends State<ARM_SentDetail> {
                           const SizedBox(width: 10),
                           Row(
                             children: [
-                              const SizedBox(width: 5),
+                              const SizedBox(width: 3),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${widget.to} Branch",
+                                    "${widget.to} ",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -100,7 +100,6 @@ class _ARM_SentDetailState extends State<ARM_SentDetail> {
                                       color: Colors.black.withOpacity(0.5),
                                     ),
                                   ),
-                                  const SizedBox(height: 8),
                                 ],
                               ),
                             ],

@@ -4,6 +4,8 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/instance_manager.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/CO/CO_Home.dart';
+import 'package:timber_app/CO/CO_Recive.dart';
 import 'package:timber_app/Home_page.dart';
 import 'package:timber_app/RM/RM_Sent.dart';
 import 'package:timber_app/b.dart';
@@ -12,7 +14,8 @@ import 'package:timber_app/d.dart';
 
 class co_b_navbar extends StatefulWidget {
   final String office_location;
-  const co_b_navbar({super.key, required this.office_location});
+  final String username;
+  const co_b_navbar({super.key, required this.office_location, required this.username});
 
   @override
   State<co_b_navbar> createState() => _co_b_navbarState();
@@ -22,7 +25,8 @@ class _co_b_navbarState extends State<co_b_navbar> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigControll(widget.office_location));
+    Get.delete<CONavigControll>();
+    final controller = Get.put(CONavigControll(widget.office_location, widget.username));
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -131,16 +135,17 @@ class _co_b_navbarState extends State<co_b_navbar> {
   }
 }
 
-class NavigControll extends GetxController {
+class CONavigControll extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
   final String office_location;
+  final String username;
 
-  NavigControll(this.office_location);
+  CONavigControll(this.office_location, this.username);
 
   late final List<Widget> screens = [
-    page(office_location: office_location),
+    CoHome(office_location: office_location, username: username),
     RmSent(office_location: office_location),
-    pgthree(office_location: office_location),
+    CORecived(office_location: office_location, username: username),
     pgfour(office_location: office_location),
   ];
 }
