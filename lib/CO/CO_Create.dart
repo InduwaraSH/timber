@@ -15,19 +15,24 @@ class NoGlowBehavior extends ScrollBehavior {
 }
 
 class FormCO extends StatefulWidget {
-  final String office_location;
   final String SerialNum;
   final String poc;
   final String LetterNo;
   final String DateInformed;
+  final String username;
+  final String about_me;
+  final String branch_name;
 
   const FormCO({
     super.key,
-    required this.office_location,
+
     required this.SerialNum,
     required this.poc,
     required this.LetterNo,
     required this.DateInformed,
+    required this. username,
+    required this. about_me,
+    required this. branch_name,
   });
 
   @override
@@ -187,10 +192,12 @@ class _FormCOState extends State<FormCO> {
           OfficerName: OfficerNameController.text.trim(),
           OfficerPosition: OfficerPositionController.text.trim(),
           Dateinforemed: DateinforemedController.text.trim(),
-          office_location: widget.office_location,
+          office_location: widget.branch_name,
           serialnum: widget.SerialNum,
           placeofcoupe: widget.poc,
           dateinformed_from_rm: widget.DateInformed,
+          about_me:widget.about_me,
+          user_name: widget.username,
           onDone: _clear,
         ),
       ),
@@ -416,7 +423,7 @@ class _FormCOState extends State<FormCO> {
                     ),
                     const SizedBox(height: 0),
                     Text(
-                      'From: ${widget.office_location}',
+                      'From: ${widget.branch_name}',
                       style: TextStyle(color: Colors.grey[600], fontSize: 15),
                     ),
                     const SizedBox(height: 26),

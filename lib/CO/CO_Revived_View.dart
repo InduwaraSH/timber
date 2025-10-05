@@ -11,7 +11,9 @@ class CO_Received_View extends StatelessWidget {
   final String DateInformed;
   final String LetterNo;
   final String SerialNum;
-  final String office_location;
+  final String username;
+  final String about_me;
+  
 
   const CO_Received_View({
     super.key,
@@ -19,8 +21,8 @@ class CO_Received_View extends StatelessWidget {
     required this.poc,
     required this.DateInformed,
     required this.LetterNo,
-    required this.SerialNum,
-    required this.office_location,
+    required this.SerialNum, required this.username, required this.about_me,
+   
   });
 
   @override
@@ -64,19 +66,19 @@ class CO_Received_View extends StatelessWidget {
                           FloatingActionButton(
                             heroTag: "info_panel",
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => ARM_infoPanel(
-                                    branchName: branchName,
-                                    poc: poc,
-                                    DateInformed: DateInformed,
-                                    LetterNo: LetterNo,
-                                    SerialNum: SerialNum,
-                                    office_location: office_location,
-                                  ),
-                                ),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (_) => ARM_infoPanel(
+                              //       branchName: branchName,
+                              //       poc: poc,
+                              //       DateInformed: DateInformed,
+                              //       LetterNo: LetterNo,
+                              //       SerialNum: SerialNum,
+                              //       office_location: office_location,
+                              //     ),
+                              //   ),
+                              // );
                             },
                             backgroundColor: Colors.black,
                             child: Icon(
@@ -98,7 +100,9 @@ class CO_Received_View extends StatelessWidget {
                                     DateInformed: DateInformed,
                                     LetterNo: LetterNo,
                                     SerialNum: SerialNum,
-                                    office_location: office_location,
+                                    username: username,
+                                    about_me: about_me,
+                                    branch_name:branchName
                                   ),
                                 ),
                               );
@@ -119,7 +123,7 @@ class CO_Received_View extends StatelessWidget {
                     children: [
                       Icon(Icons.double_arrow, size: 20, color: Colors.grey),
                       Text(
-                        "From: $office_location",
+                        "From: $branchName",
                         style: TextStyle(
                           fontSize: 18,
                           fontFamily: "sfproRoundSemiB",

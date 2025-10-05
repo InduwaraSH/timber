@@ -4,40 +4,32 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:timber_app/ARM/ARM_Recived_view.dart';
-import 'package:timber_app/ARM/ARM_info_panel.dart';
-import 'package:timber_app/CO/CO_Revived_View.dart';
+import 'package:timber_app/ARM/ARM_Sent_Cardview.dart';
+import 'package:timber_app/CO/CO_SentView.dart';
+import 'package:timber_app/CO/c_test.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
 import 'package:timber_app/RM/createFor.dart';
 import 'package:timber_app/RM/sent_CardView.dart';
 
-class CORecived extends StatefulWidget {
+class CO_Sent extends StatefulWidget {
   final String office_location;
-  final String username;
-  const CORecived({
-    super.key,
-    required this.office_location,
-    required this.username,
-  });
+  const CO_Sent({super.key, required this.office_location});
 
   @override
-  State<CORecived> createState() => _CORecivedState();
+  State<CO_Sent> createState() => _CO_SentState();
 }
 
-class _CORecivedState extends State<CORecived> {
+class _CO_SentState extends State<CO_Sent> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
 
+  Map<String, dynamic>? latestTreeDetails;
   @override
   void initState() {
     super.initState();
-    dbref = FirebaseDatabase.instance
-        .ref()
-        .child('CO_branch_data_saved')
-        .child(widget.username)
-        .child("Recived");
+    dbref = FirebaseDatabase.instance.ref().child('trees');
 
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection ==
@@ -57,18 +49,28 @@ class _CORecivedState extends State<CORecived> {
   }
 
   Widget listItem({required Map Sent, required int index}) {
-    final String branchName = Sent['arm_office_location'] ?? "Not Available";
-    final String poc = Sent['placeOfCoupe'] ?? "N/A";
-    final String DateInformed = Sent['DateInformed'] ?? "N/A";
-    final String LetterNo = Sent['LetterNo'] ?? "N/A";
-    final String SerialNum = Sent['Serial Number'] ?? "N/A";
-    final String about_me = Sent['from'] ?? "Not Available";
-
-    // ✅ Updated colors according to uploaded design
-    Color activeColor1 = const Color(0xFFE2ECFF);
-    Color activeColor2 = const Color(0xFFD6E4FA);
-    Color textPrimary = const Color(0xFF5065D8);
-    Color iconPrimary = const Color(0xFF5065D8);
+    final String co =
+        Sent['timberReportheadlines']['From_CO'] ?? "Not Available";
+    final String poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
+    final String PlaceOfCoupe_exact_from_arm =
+        Sent['timberReportheadlines']['PlaceOfCoupe_exact_from_arm'] ??
+        "Not Available";
+    final String DateInformed = Sent['timberReportheadlines']['Date'] ?? "N/A";
+    final String LetterNo = Sent['timberReportheadlines']['LetterNo'] ?? "N/A";
+    final String SerialNum =
+        Sent['timberReportheadlines']['serialnum'] ?? "N/A";
+    final String OfficerName =
+        Sent['timberReportheadlines']['OfficerName'] ?? "N/A";
+    final String OfficerPositionAndName =
+        Sent['timberReportheadlines']['OfficerPosition&name'] ?? "N/A";
+    final String donor_details =
+        Sent['timberReportheadlines']['donor_details'] ?? "N/A";
+    final String Condition =
+        Sent['timberReportheadlines']['Condition'] ?? "N/A";
+    final String treeCount =
+        Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
+    Color activeColor1 = const Color(0xFFEDEBFF);
+    Color activeColor2 = const Color(0xFFDAD6FF);
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
@@ -76,15 +78,21 @@ class _CORecivedState extends State<CORecived> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => CO_Received_View(
-              branchName: branchName,
+            builder: (_) => CoSentview(
+              office_location: widget.office_location,
+              co: co,
               poc: poc,
+              PlaceOfCoupe_exact_from_arm: PlaceOfCoupe_exact_from_arm,
               DateInformed: DateInformed,
               LetterNo: LetterNo,
               SerialNum: SerialNum,
-              username: widget.username,
-              about_me: about_me,
+              OfficerName: OfficerName,
+              OfficerPositionAndName: OfficerPositionAndName,
+              donor_details: donor_details,
+              Condition: Condition,
+              treeCount: treeCount,
 
+              // to: to,
             ),
           ),
         );
@@ -116,11 +124,11 @@ class _CORecivedState extends State<CORecived> {
               children: [
                 Text(
                   poc,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'sfproRoundSemiB',
-                    color: textPrimary,
+                    color: Color(0xFF756AB6),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -129,16 +137,16 @@ class _CORecivedState extends State<CORecived> {
                   children: [
                     Icon(
                       Icons.double_arrow,
-                      color: textPrimary.withOpacity(0.6),
+                      color: Colors.black.withOpacity(0.4),
                       size: 16,
                     ),
                     Text(
-                      branchName,
+                      co,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontFamily: 'sfproRoundSemiB',
-                        color: textPrimary.withOpacity(0.6),
+                        color: Colors.black.withOpacity(0.4),
                       ),
                     ),
                   ],
@@ -150,12 +158,12 @@ class _CORecivedState extends State<CORecived> {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: iconPrimary.withOpacity(0.1),
+                color: const Color(0xFF756AB6).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.apartment_rounded,
-                color: iconPrimary,
+                color: Color(0xFF756AB6),
                 size: 30,
               ),
             ),
@@ -190,12 +198,30 @@ class _CORecivedState extends State<CORecived> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            "Inbox",
+                            "Sent",
                             style: TextStyle(
                               fontSize: 50,
                               fontFamily: "sfproRoundSemiB",
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
+                            ),
+                          ),
+                          FloatingActionButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => test(
+                                    office_location: widget.office_location,
+                                  ),
+                                ),
+                              );
+                            },
+                            backgroundColor: Colors.black,
+                            child: Icon(
+                              Iconsax.pen_add,
+                              color: Colors.white,
+                              size: 30,
                             ),
                           ),
                         ],
@@ -205,6 +231,7 @@ class _CORecivedState extends State<CORecived> {
             ),
 
             // Firebase list
+            SizedBox(height: 0),
             Expanded(
               child: FirebaseAnimatedList(
                 controller: _scrollController,

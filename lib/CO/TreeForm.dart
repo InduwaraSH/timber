@@ -11,14 +11,16 @@ class TreeQuesForm extends StatefulWidget {
   final String OfficerName;
   final String OfficerPosition;
   final String Dateinforemed;
-  
+
   final VoidCallback onDone;
   final String serialnum;
   final String placeofcoupe;
   final String dateinformed_from_rm;
   final String office_location;
-final String DonorDetails;
+  final String DonorDetails;
   final String PlaceOfCoupe_exact;
+  final String about_me;
+  final String user_name;
 
   const TreeQuesForm({
     super.key,
@@ -37,6 +39,8 @@ final String DonorDetails;
     required this.office_location,
     required this.PlaceOfCoupe_exact,
     required this.DonorDetails,
+    required this.about_me,
+    required this.user_name,
   });
 
   @override
@@ -194,7 +198,7 @@ class _TreeQuesFormState extends State<TreeQuesForm> {
           serialnum: widget.serialnum,
           placeofcoupe: widget.placeofcoupe,
           dateinformed_from_rm: widget.dateinformed_from_rm,
-         
+
           onEdit: (index) {
             Navigator.pop(context);
             setState(() {
@@ -233,6 +237,8 @@ class _TreeQuesFormState extends State<TreeQuesForm> {
       "TreeCount": widget.treeCount.toString(),
       "Date": widget.Dateinforemed,
       "ARM_location": widget.office_location,
+      "From_CO": widget.about_me,
+      "CO_id": widget.user_name,
     };
 
     try {

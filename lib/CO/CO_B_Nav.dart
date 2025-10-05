@@ -6,6 +6,7 @@ import 'package:get/instance_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/CO/CO_Home.dart';
 import 'package:timber_app/CO/CO_Recive.dart';
+import 'package:timber_app/CO/CO_Sent.dart';
 import 'package:timber_app/Home_page.dart';
 import 'package:timber_app/RM/RM_Sent.dart';
 import 'package:timber_app/b.dart';
@@ -150,7 +151,7 @@ class CONavigControll extends GetxController {
 
   late final List<Widget> screens = [
     CoHome(office_location: office_location, username: username),
-    RmSent(office_location: office_location),
+    CO_Sent(office_location: office_location),
     CORecived(office_location: office_location, username: username),
     pgfour(office_location: office_location),
   ];
