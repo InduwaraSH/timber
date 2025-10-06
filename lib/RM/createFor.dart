@@ -397,9 +397,15 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                               return;
                             } else {
                               Map<String, String> reqData = {
-                                'Serial Number': SerialController.text,
-                                'placeOfCoupe': POCController.text,
-                                'LetterNo': LetterNumController.text,
+                                'Serial Number': SerialController.text
+                                    .toString()
+                                    .replaceAll('/', '_'),
+                                'placeOfCoupe': POCController.text
+                                    .toString()
+                                    .replaceAll('/', '_'),
+                                'LetterNo': LetterNumController.text
+                                    .toString()
+                                    .replaceAll('/', '_'),
                                 'DateInformed': getFormattedDate(
                                   _selectedDate,
                                 ).toString(),
@@ -414,7 +420,12 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                   .child("ARM_branch_data_saved")
                                   .child(widget.branch_name.toString())
                                   .child("Recived")
-                                  .child(SerialController.text)
+                                  .child(
+                                    SerialController.text.toString().replaceAll(
+                                      '/',
+                                      '_',
+                                    ),
+                                  )
                                   .set(reqData)
                                   .then((_) {
                                     FirebaseDatabase.instance
@@ -424,7 +435,11 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                           widget.office_location.toString(),
                                         )
                                         .child("Sent")
-                                        .push()
+                                        .child(
+                                          SerialController.text
+                                              .toString()
+                                              .replaceAll('/', '_'),
+                                        )
                                         .set(reqData);
                                   })
                                   .then((_) {
@@ -449,7 +464,11 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                         .ref()
                                         .child("Status_of_job")
                                         .child(widget.branch_name.toString())
-                                        .child(SerialController.text)
+                                        .child(
+                                          SerialController.text
+                                              .toString()
+                                              .replaceAll('/', '_'),
+                                        )
                                         .set(status);
                                   })
                                   .then((_) async {

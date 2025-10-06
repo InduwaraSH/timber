@@ -18,6 +18,7 @@ class CoSentview extends StatefulWidget {
   final String donor_details;
   final String Condition;
   final String treeCount;
+  final String user_name;
 
   const CoSentview({
     super.key,
@@ -33,6 +34,7 @@ class CoSentview extends StatefulWidget {
     required this.donor_details,
     required this.Condition,
     required this.treeCount,
+    required this.user_name,
   });
 
   @override
@@ -49,9 +51,11 @@ class _CoSentviewState extends State<CoSentview> {
     super.initState();
     dbref = FirebaseDatabase.instance
         .ref()
-        .child('trees')
-        .child("7272")
-        .child("tree_details");
+        .child('CO_branch_data_saved')
+        .child(widget.user_name)
+        .child("Sent")
+        .child(widget.SerialNum)
+        .child("allTrees");
 
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection ==
@@ -240,8 +244,8 @@ class _CoSentviewState extends State<CoSentview> {
                       ),
                     );
                   },
-                  backgroundColor: const Color(0xFF6C63FF),
-                  child: const Icon(Iconsax.add_square, color: Colors.white),
+                  backgroundColor: Colors.black,
+                  child: const Icon(Iconsax.chart_15, color: Colors.green),
                 ),
               ],
             )
@@ -320,6 +324,29 @@ class _CoSentviewState extends State<CoSentview> {
           ),
         ),
       ),
+      // floatingActionButton: Container(
+      //   margin: const EdgeInsets.only(bottom: 10),
+      //   child: FloatingActionButton.extended(
+      //     backgroundColor: const Color(0xFF6C63FF),
+      //     elevation: 6,
+      //     onPressed: () {},
+      //     label: const Row(
+      //       children: [
+      //         Text(
+      //           "Confirm & Save",
+      //           style: TextStyle(
+      //             fontWeight: FontWeight.bold,
+      //             fontFamily: 'sfproRoundSemiB',
+      //             fontSize: 16,
+      //             color: Colors.white,
+      //           ),
+      //         ),
+      //         SizedBox(width: 8),
+      //         Icon(Iconsax.tick_circle, color: Colors.white),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

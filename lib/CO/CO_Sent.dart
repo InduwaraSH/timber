@@ -14,7 +14,8 @@ import 'package:timber_app/RM/sent_CardView.dart';
 
 class CO_Sent extends StatefulWidget {
   final String office_location;
-  const CO_Sent({super.key, required this.office_location});
+  final String username;
+  const CO_Sent({super.key, required this.office_location, required this.username});
 
   @override
   State<CO_Sent> createState() => _CO_SentState();
@@ -29,7 +30,7 @@ class _CO_SentState extends State<CO_Sent> {
   @override
   void initState() {
     super.initState();
-    dbref = FirebaseDatabase.instance.ref().child('trees');
+    dbref = FirebaseDatabase.instance.ref().child('CO_branch_data_saved').child(widget.username).child("Sent");
 
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection ==
@@ -91,6 +92,7 @@ class _CO_SentState extends State<CO_Sent> {
               donor_details: donor_details,
               Condition: Condition,
               treeCount: treeCount,
+              user_name: widget.username,
 
               // to: to,
             ),

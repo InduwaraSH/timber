@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:timber_app/CO/Review.dart';
 
 class TreeQuesForm extends StatefulWidget {
@@ -238,21 +239,79 @@ class _TreeQuesFormState extends State<TreeQuesForm> {
       "Date": widget.Dateinforemed,
       "ARM_location": widget.office_location,
       "From_CO": widget.about_me,
+      "From": "CO",
       "CO_id": widget.user_name,
     };
 
     try {
+      //arm branch data saved
       await database
-          .child('trees')
+          .child("ARM_branch_data_saved")
+          .child(widget.office_location)
+          .child("Recived")
           .child(widget.serialnum)
-          .child("tree_details")
+          .child("allTrees")
           .set(allTrees);
+      await database
+          .child("ARM_branch_data_saved")
+          .child(widget.office_location)
+          .child("Recived")
+          .child(widget.serialnum)
+          .child("timberReportheadlines")
+          .set(timberReportheadlines);
 
       await database
-          .child('trees')
+          .child("ARM_branch_data_saved")
+          .child(widget.office_location)
+          .child("Recived")
           .child(widget.serialnum)
-          .child('timberReportheadlines')
+          .child("from")
+          .set("CO");
+
+      //CO data saved
+      await database
+          .child("CO_branch_data_saved")
+          .child(widget.user_name)
+          .child("Sent")
+          .child(widget.serialnum)
+          .child("allTrees")
+          .set(allTrees);
+      await database
+          .child("CO_branch_data_saved")
+          .child(widget.user_name)
+          .child("Sent")
+          .child(widget.serialnum)
+          .child("timberReportheadlines")
           .set(timberReportheadlines);
+
+      //status update
+      await database
+          .child("Status_of_job")
+          .child(widget.office_location.toString())
+          .child(widget.serialnum.toString())
+          .child("Status")
+          .set("ARM_R_D_two");
+
+      await database
+          .child("Status_of_job")
+          .child(widget.office_location.toString())
+          .child(widget.serialnum.toString())
+          .child("ARM_R_D_two")
+          .set(DateFormat('yyyy-MM-dd').format(DateTime.now()).toString());
+      //remove sent data from arm
+      await database
+          .child("ARM_branch_data_saved")
+          .child(widget.office_location.toString())
+          .child("Sent")
+          .child(widget.serialnum.toString())
+          .remove();
+      //remove sent data from co
+      await database
+          .child("CO_branch_data_saved")
+          .child(widget.user_name.toString())
+          .child("Recived")
+          .child(widget.serialnum.toString())
+          .remove();
 
       widget.onDone();
       ScaffoldMessenger.of(context).showSnackBar(

@@ -151,7 +151,7 @@ class CONavigControll extends GetxController {
 
   late final List<Widget> screens = [
     CoHome(office_location: office_location, username: username),
-    CO_Sent(office_location: office_location),
+    CO_Sent(office_location: office_location, username: username),
     CORecived(office_location: office_location, username: username),
     pgfour(office_location: office_location),
   ];

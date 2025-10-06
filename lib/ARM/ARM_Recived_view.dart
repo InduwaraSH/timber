@@ -68,11 +68,8 @@ class ARM_Received_View extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (_) => ARM_infoPanel(
                                     branchName: branchName,
-                                    poc: poc,
-                                    DateInformed: DateInformed,
-                                    LetterNo: LetterNo,
+
                                     SerialNum: SerialNum,
-                                    office_location: office_location,
                                   ),
                                 ),
                               );

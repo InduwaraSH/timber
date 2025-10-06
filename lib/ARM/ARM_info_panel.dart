@@ -6,20 +6,16 @@ import 'package:timber_app/ARM/ARM_Find_CO.dart';
 
 class ARM_infoPanel extends StatefulWidget {
   final String branchName;
-  final String poc;
-  final String DateInformed;
-  final String LetterNo;
+  
   final String SerialNum;
-  final String office_location;
+  
 
   const ARM_infoPanel({
     super.key,
     required this.branchName,
-    required this.poc,
-    required this.DateInformed,
-    required this.LetterNo,
+    
     required this.SerialNum,
-    required this.office_location,
+    
   });
 
   @override

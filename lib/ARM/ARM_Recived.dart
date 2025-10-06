@@ -51,13 +51,43 @@ class _ARMReceivedState extends State<ARMReceived> {
   }
 
   Widget listItem({required Map Sent, required int index}) {
-    final String branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
-    final String poc = Sent['placeOfCoupe'] ?? "N/A";
-    final String DateInformed = Sent['DateInformed'] ?? "N/A";
-    final String LetterNo = Sent['LetterNo'] ?? "N/A";
-    final String SerialNum = Sent['Serial Number'] ?? "N/A";
+    final String from = Sent['from'] ?? "N/A";
 
-    // ✅ Updated colors according to uploaded design
+    // Declare variables for both cases
+    String branchName = "";
+    String poc = "";
+    String DateInformed = "";
+    String LetterNo = "";
+    String SerialNum = "";
+
+    // Additional variables for CO
+    String OfficerName = "";
+    String OfficerPositionAndName = "";
+    String donor_details = "";
+    String Condition = "";
+    String treeCount = "";
+
+    if (from == "CO") {
+      branchName = Sent['timberReportheadlines']['From_CO'] ?? "Not Available";
+      poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
+      DateInformed = Sent['timberReportheadlines']['Date'] ?? "N/A";
+      LetterNo = Sent['timberReportheadlines']['LetterNo'] ?? "N/A";
+      SerialNum = Sent['timberReportheadlines']['serialnum'] ?? "N/A";
+      OfficerName = Sent['timberReportheadlines']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName =
+          Sent['timberReportheadlines']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
+      Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
+      treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
+    } else if (from == "RM") {
+      branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
+      poc = Sent['placeOfCoupe'] ?? "N/A";
+      DateInformed = Sent['DateInformed'] ?? "N/A";
+      LetterNo = Sent['LetterNo'] ?? "N/A";
+      SerialNum = Sent['Serial Number'] ?? "N/A";
+    }
+
+    //  Updated colors according to uploaded design
     Color activeColor1 = const Color(0xFFE2ECFF);
     Color activeColor2 = const Color(0xFFD6E4FA);
     Color textPrimary = const Color(0xFF5065D8);
@@ -66,19 +96,53 @@ class _ARMReceivedState extends State<ARMReceived> {
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ARM_Received_View(
-              branchName: branchName,
-              poc: poc,
-              DateInformed: DateInformed,
-              LetterNo: LetterNo,
-              SerialNum: SerialNum,
-              office_location: widget.office_location,
+        if (from == "CO") {
+          //   Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (_) => ARM_Received_View(
+          //       branchName: co,
+          //       poc: poc,
+          //       DateInformed: DateInformed,
+          //       LetterNo: LetterNo,
+          //       SerialNum: SerialNum,
+          //       OfficerName: OfficerName,
+          //       OfficerPositionAndName: OfficerPositionAndName,
+          //       donor_details: donor_details,
+          //       Condition: Condition,
+          //       treeCount: treeCount,
+          //       office_location: widget.office_location,
+          //     ),
+          //   ),
+          // );
+        } else if (from == "RM") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ARM_Received_View(
+                branchName: branchName,
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                office_location: widget.office_location,
+              ),
             ),
-          ),
-        );
+          );
+        }
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (_) => ARM_Received_View(
+        //       branchName: branchName,
+        //       poc: poc,
+        //       DateInformed: DateInformed,
+        //       LetterNo: LetterNo,
+        //       SerialNum: SerialNum,
+        //       office_location: widget.office_location,
+        //     ),
+        //   ),
+        // );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
