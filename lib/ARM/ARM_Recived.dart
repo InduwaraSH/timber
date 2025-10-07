@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/ARM/ARM_RecivedView_CO.dart';
 import 'package:timber_app/ARM/ARM_Recived_view.dart';
 import 'package:timber_app/ARM/ARM_info_panel.dart';
 import 'package:timber_app/PositionPicker.dart';
@@ -59,6 +60,10 @@ class _ARMReceivedState extends State<ARMReceived> {
     String DateInformed = "";
     String LetterNo = "";
     String SerialNum = "";
+    Color activeColor1 = const Color(0xFFE2ECFF);
+    Color activeColor2 = const Color(0xFFD6E4FA);
+    Color textPrimary = const Color(0xFF5065D8);
+    Color iconPrimary = const Color(0xFF5065D8);
 
     // Additional variables for CO
     String OfficerName = "";
@@ -66,6 +71,8 @@ class _ARMReceivedState extends State<ARMReceived> {
     String donor_details = "";
     String Condition = "";
     String treeCount = "";
+    String CO_name = "";
+    String ARM_office = "";
 
     if (from == "CO") {
       branchName = Sent['timberReportheadlines']['From_CO'] ?? "Not Available";
@@ -79,42 +86,54 @@ class _ARMReceivedState extends State<ARMReceived> {
       donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
       Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
       treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
+      CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
+      ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
+
+      activeColor1 = const Color(0xFFFFE2E2);
+      activeColor2 = const Color(0xFFFFD6D6);
+      textPrimary = const Color(0xFFD85050);
+      iconPrimary = const Color(0xFFD85050);
     } else if (from == "RM") {
       branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
       poc = Sent['placeOfCoupe'] ?? "N/A";
       DateInformed = Sent['DateInformed'] ?? "N/A";
       LetterNo = Sent['LetterNo'] ?? "N/A";
       SerialNum = Sent['Serial Number'] ?? "N/A";
+
+      activeColor1 = const Color(0xFFE2ECFF);
+      activeColor2 = const Color(0xFFD6E4FA);
+      textPrimary = const Color(0xFF5065D8);
+      iconPrimary = const Color(0xFF5065D8);
     }
 
     //  Updated colors according to uploaded design
-    Color activeColor1 = const Color(0xFFE2ECFF);
-    Color activeColor2 = const Color(0xFFD6E4FA);
-    Color textPrimary = const Color(0xFF5065D8);
-    Color iconPrimary = const Color(0xFF5065D8);
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: () {
         if (from == "CO") {
-          //   Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (_) => ARM_Received_View(
-          //       branchName: co,
-          //       poc: poc,
-          //       DateInformed: DateInformed,
-          //       LetterNo: LetterNo,
-          //       SerialNum: SerialNum,
-          //       OfficerName: OfficerName,
-          //       OfficerPositionAndName: OfficerPositionAndName,
-          //       donor_details: donor_details,
-          //       Condition: Condition,
-          //       treeCount: treeCount,
-          //       office_location: widget.office_location,
-          //     ),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ArmRecivedviewCo(
+                ARM_Branch_Name: branchName,
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc,
+                OfficerName: OfficerName,
+                user_name: '',
+                ARM_Office:ARM_office
+              ),
+            ),
+          );
         } else if (from == "RM") {
           Navigator.push(
             context,
