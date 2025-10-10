@@ -3,6 +3,8 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/ARM/ARM_Sent_Cardview.dart';
+import 'package:timber_app/ARM/ARM_Sent_timeline.dart';
 import 'package:timber_app/CO/c_test.dart';
 
 class ArmRecivedviewCo extends StatefulWidget {
@@ -242,8 +244,11 @@ class _ArmRecivedviewCoState extends State<ArmRecivedviewCo> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            test(office_location: widget.office_location),
+                        builder: (_) => ArmSentTimeline_sent(
+                          branchName: widget.ARM_Office,
+                          poc: widget.poc,
+                          SerialNum: widget.SerialNum,
+                        ),
                       ),
                     );
                   },

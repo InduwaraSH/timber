@@ -23,24 +23,21 @@ class _ArmOfficeRegisterState extends State<ArmOfficeRegister> {
 
   static const double _kItemExtent = 32.0;
   static const List<String> _rmOfficeLocation = <String>[
-    
     'Matara',
     'Colombo',
     'Ratnapura',
     'Jaffna',
     'Anuradhapura',
     'Kandy',
-    
-    
-    
-   
-    
   ];
 
   static const List<String> _armOfficeLocation = <String>[
     "Embilipitya",
     "Matara",
     "Galle",
+    "Colombo",
+    "Gampaha",
+    "Kelaniya",
     "Hambantota",
     "Tangalle",
     "Weligama",

@@ -88,11 +88,14 @@ class _ARMReceivedState extends State<ARMReceived> {
       treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
       CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
       ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
-
-      activeColor1 = const Color(0xFFFFE2E2);
-      activeColor2 = const Color(0xFFFFD6D6);
-      textPrimary = const Color(0xFFD85050);
-      iconPrimary = const Color(0xFFD85050);
+      activeColor1 = const Color(0xFFE9FBE7); // very light minty green
+      activeColor2 = const Color(0xFFC8E6C9); // soft leafy pastel
+      textPrimary = const Color(0xFF4CAF50); // gentle fresh green
+      iconPrimary = const Color(0xFF4CAF50); // matching icon color
+      // activeColor1 = const Color(0xFFFFE6E9); // very light pink background
+      // activeColor2 = const Color(0xFFFFD9E0); // slightly deeper pastel
+      // textPrimary = const Color(0xFFE35D6A); // warm soft rose
+      // iconPrimary = const Color(0xFFE35D6A); // matching icon color
     } else if (from == "RM") {
       branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
       poc = Sent['placeOfCoupe'] ?? "N/A";
@@ -121,7 +124,7 @@ class _ARMReceivedState extends State<ARMReceived> {
                 DateInformed: DateInformed,
                 LetterNo: LetterNo,
                 SerialNum: SerialNum,
-                
+
                 OfficerPositionAndName: OfficerPositionAndName,
                 donor_details: donor_details,
                 Condition: Condition,
@@ -130,7 +133,7 @@ class _ARMReceivedState extends State<ARMReceived> {
                 PlaceOfCoupe_exact_from_arm: poc,
                 OfficerName: OfficerName,
                 user_name: '',
-                ARM_Office:ARM_office
+                ARM_Office: ARM_office,
               ),
             ),
           );

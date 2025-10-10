@@ -27,6 +27,7 @@ class _RmRegisterState extends State<RmRegister> {
   static const List<String> _townName = <String>[
     'Embilipitya',
     'Matara',
+    'Colombo',
     'Ratnapura',
     'Galle',
     "Hambantota",

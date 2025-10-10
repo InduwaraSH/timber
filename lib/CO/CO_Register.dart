@@ -29,6 +29,7 @@ class _CoRegisterState extends State<CoRegister> {
     'Matara',
     'Galle',
     "Hambantota",
+    "Colombo",
     "Tangalle",
     "Weligama",
     "Ahangama",
