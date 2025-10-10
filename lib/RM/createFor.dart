@@ -490,6 +490,28 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                       );
                                     });
                                   })
+                                  //this is for RM count
+                                  .then((_) async {
+                                    DatabaseReference dbref = FirebaseDatabase
+                                        .instance
+                                        .ref()
+                                        .child("RM_branch_data_saved")
+                                        .child(
+                                          widget.office_location.toString(),
+                                        )
+                                        .child("Ongoing_Count")
+                                        .child(widget.branch_name)
+                                        .child("ongoing");
+
+                                    await dbref.runTransaction((currentData) {
+                                      int currentValue =
+                                          (currentData as int?) ??
+                                          0; // if not exist → 0
+                                      return Transaction.success(
+                                        currentValue + 1,
+                                      );
+                                    });
+                                  })
                                   .then((_) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
