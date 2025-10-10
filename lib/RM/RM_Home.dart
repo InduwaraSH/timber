@@ -1,14 +1,22 @@
+import 'package:avatar_plus/avatar_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
+import 'package:timber_app/RM/RM_ProfilePage.dart';
 import 'package:timber_app/logingPage.dart';
 
 class RMHomepage extends StatefulWidget {
   final String office_location;
-  const RMHomepage({super.key, required this.office_location});
+  final String username;
+  const RMHomepage({
+    super.key,
+    required this.office_location,
+    required this.username,
+  });
 
   @override
   State<RMHomepage> createState() => _RMHomepageState();
@@ -66,24 +74,104 @@ class _RMHomepageState extends State<RMHomepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Colors.grey[200],
+      // Keep a background for contrast
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.001),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 0,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [profile_button(), alert_button()],
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const profile_button(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Welcome! ",
+                              style: const TextStyle(
+                                fontFamily: "sfproRoundSemiB",
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              widget.username,
+                              style: const TextStyle(
+                                fontFamily: "sfproRoundSemiB",
+                                fontSize: 12,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const alert_button(),
+                  ],
                 ),
               ),
-              const SizedBox(height: 0),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.007),
               OngoingCountCard(
                 ongoingCount: totalOngoing,
                 closedCount: 100, // Dummy data for closed projects
                 cityData: cityOngoing,
               ),
+              // --- NEW SECTION FOR CATEGORY BUTTONS ---
+              SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30.0,
+                  vertical: 20.0,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CategoryButton(
+                        icon: Iconsax.danger, // Example icon
+                        title: "Emergency ",
+                        textColor: Color(0xFFCE2D49),
+                        color: Color(0xFFF6A6BB),
+                        onTap: () {
+                          // Handle tap for New Projects
+                          print("New Projects tapped!");
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 20), // Space between buttons
+                    Expanded(
+                      child: CategoryButton(
+                        icon: Iconsax.pen_add, // Example icon
+                        title: "New Case",
+                        textColor: Color(0xFF7E53C2),
+                        color: Color(0xFFC2A9EF),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ARM_OfficeIN_RM(
+                                office_location: widget.office_location,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // --- END NEW SECTION ---
             ],
           ),
         ),
@@ -92,7 +180,77 @@ class _RMHomepageState extends State<RMHomepage> {
   }
 }
 
-//--- WIDGET WITH REDESIGNED GREEN CARD ---
+//--- NEW WIDGET: CategoryButton ---
+class CategoryButton extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final Color textColor;
+  final Color color;
+  final VoidCallback onTap;
+
+  const CategoryButton({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.textColor,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(
+            20,
+          ), // Slightly less rounded than the image for consistency
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.4),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.white.withOpacity(0.2),
+                child: Icon(
+                  Iconsax.arrow_right_34, // Arrow icon
+                  color: textColor,
+                  size: 18,
+                ),
+              ),
+            ),
+            Icon(icon, color: textColor, size: 30),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: TextStyle(
+                fontFamily: "sfproRoundSemiB",
+                color: textColor,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//--- WIDGET WITH REDESIGNED GREEN CARD (No changes from previous) ---
 class OngoingCountCard extends StatelessWidget {
   final int ongoingCount;
   final int closedCount;
@@ -177,7 +335,12 @@ class OngoingCountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(30, 20, 30, 120),
+      padding: const EdgeInsets.fromLTRB(
+        30,
+        20,
+        30,
+        0,
+      ), // Adjusted bottom padding to make space for new buttons
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -257,7 +420,7 @@ class OngoingCountCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Project Overview",
+                      "Projects Overview",
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 16,
@@ -334,13 +497,7 @@ class alert_button extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton(
       onPressed: () {
-        FirebaseAuth.instance.signOut().whenComplete(() {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => Loging_homePage()),
-            (route) => false,
-          );
-        });
+        
       },
       child: Container(
         margin: const EdgeInsets.only(top: 20),
@@ -348,7 +505,7 @@ class alert_button extends StatelessWidget {
         child: const CircleAvatar(
           backgroundColor: Color.fromARGB(0, 255, 255, 255),
           radius: 25,
-          child: Icon(Iconsax.notification, color: Colors.green, size: 25),
+          child: Icon(Iconsax.notification5, color: Colors.black, size: 28),
         ),
       ),
     );
@@ -361,14 +518,19 @@ class profile_button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => UserProfilePage()),
+        );
+      },
       child: Container(
-        margin: const EdgeInsets.only(top: 20, left: 20),
+        margin: const EdgeInsets.only(top: 0, left: 20, right: 0, bottom: 0),
         alignment: Alignment.topLeft,
         child: CircleAvatar(
-          radius: 25,
-          backgroundColor: Colors.green[100],
-          child: const Icon(Iconsax.user, size: 23, color: Colors.green),
+          radius: 30,
+          backgroundColor: const Color.fromARGB(0, 238, 238, 238),
+          child: ClipOval(child: AvatarPlus("2323", height: 60, width: 60)),
         ),
       ),
     );

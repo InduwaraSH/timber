@@ -323,6 +323,8 @@ class _Loging_homePageState extends State<Loging_homePage> {
                                                 office_location: snapshot_office
                                                     .value
                                                     .toString(),
+                                                username:
+                                                    usernameController.text,
                                               ),
                                             ),
                                           ).whenComplete(() {
@@ -356,7 +358,8 @@ class _Loging_homePageState extends State<Loging_homePage> {
                                                 office_location: snapshot_office
                                                     .value
                                                     .toString(),
-                                                    username: usernameController.text,
+                                                username:
+                                                    usernameController.text,
                                               ),
                                             ),
                                           );

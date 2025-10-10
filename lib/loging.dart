@@ -70,6 +70,7 @@ class Login {
               MaterialPageRoute(
                 builder: (context) => RmBNavbar(
                   office_location: snapshot_office.value.toString(),
+                  username: employeeId.trim(),
                 ),
               ),
             );

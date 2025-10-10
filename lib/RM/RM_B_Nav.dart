@@ -9,7 +9,12 @@ import 'package:timber_app/d.dart';
 
 class RmBNavbar extends StatefulWidget {
   final String office_location;
-  const RmBNavbar({super.key, required this.office_location});
+  final String username;
+  const RmBNavbar({
+    super.key,
+    required this.office_location,
+    required this.username,
+  });
 
   @override
   State<RmBNavbar> createState() => _RmBNavbarState();
@@ -22,7 +27,9 @@ class _RmBNavbarState extends State<RmBNavbar> {
   void initState() {
     super.initState();
     Get.delete<RMNavigControll>();
-    rm_controller = Get.put(RMNavigControll(widget.office_location));
+    rm_controller = Get.put(
+      RMNavigControll(widget.office_location, widget.username),
+    );
   }
 
   @override
@@ -123,11 +130,12 @@ class _RmBNavbarState extends State<RmBNavbar> {
 class RMNavigControll extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
   final String office_location;
+  final String username;
 
-  RMNavigControll(this.office_location);
+  RMNavigControll(this.office_location, this.username);
 
   late final List<Widget> screens = [
-    RMHomepage(office_location: office_location),
+    RMHomepage(office_location: office_location, username: username),
     RmSent(office_location: office_location),
     pgthree(office_location: office_location),
     pgfour(office_location: office_location),
