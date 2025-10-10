@@ -197,6 +197,23 @@ class _ARM_SentTO_COState extends State<ARM_SentTO_CO> {
                                     .child(widget.SerialNum.toString())
                                     .set(reqData);
                               })
+                              .then((_) async {
+                                DatabaseReference ongoingRef = FirebaseDatabase
+                                    .instance
+                                    .ref()
+                                    .child("ARM_branch_data_saved")
+                                    .child(widget.office_location.toString())
+                                    .child("Ongoing_Count")
+                                    .child(widget.CO_ID.toString())
+                                    .child("ongoing");
+
+                                await ongoingRef.runTransaction((currentData) {
+                                  int currentValue =
+                                      (currentData as int?) ??
+                                      0; // if not exist → 0
+                                  return Transaction.success(currentValue + 1);
+                                });
+                              })
                               .then((_) {
                                 FirebaseDatabase.instance
                                     .ref()
