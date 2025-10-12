@@ -53,21 +53,6 @@ class UserProfilePage_ARM extends StatelessWidget {
             fontSize: 24,
           ),
         ),
-        Row(
-          children: [
-            IconButton(
-              icon: const Icon(CupertinoIcons.bell_fill, color: _primaryColor),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(
-                CupertinoIcons.settings_solid,
-                color: _primaryColor,
-              ),
-              onPressed: () {},
-            ),
-          ],
-        ),
       ],
     );
   }
@@ -89,12 +74,7 @@ class UserProfilePage_ARM extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          const CircleAvatar(
-            radius: 40,
-            backgroundImage: NetworkImage(
-              'https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=800&q=80',
-            ),
-          ),
+          const CircleAvatar(radius: 40),
           const SizedBox(width: 18),
           Expanded(
             child: Column(

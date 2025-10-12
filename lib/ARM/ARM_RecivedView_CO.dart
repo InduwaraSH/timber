@@ -3,6 +3,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/ARM/ARM_Procument_add.dart';
 import 'package:timber_app/ARM/ARM_Sent_Cardview.dart';
 import 'package:timber_app/ARM/ARM_Sent_timeline.dart';
 import 'package:timber_app/CO/c_test.dart';
@@ -332,29 +333,95 @@ class _ArmRecivedviewCoState extends State<ArmRecivedviewCo> {
           ),
         ),
       ),
-      // floatingActionButton: Container(
-      //   margin: const EdgeInsets.only(bottom: 10),
-      //   child: FloatingActionButton.extended(
-      //     backgroundColor: const Color(0xFF6C63FF),
-      //     elevation: 6,
-      //     onPressed: () {},
-      //     label: const Row(
-      //       children: [
-      //         Text(
-      //           "Confirm & Save",
-      //           style: TextStyle(
-      //             fontWeight: FontWeight.bold,
-      //             fontFamily: 'sfproRoundSemiB',
-      //             fontSize: 16,
-      //             color: Colors.white,
-      //           ),
-      //         ),
-      //         SizedBox(width: 8),
-      //         Icon(Iconsax.tick_circle, color: Colors.white),
-      //       ],
-      //     ),
-      //   ),
-      // ),
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        child: FloatingActionButton.extended(
+          backgroundColor: const Color(0xFF6C63FF),
+          elevation: 6,
+          onPressed: () async {
+            try {
+              DatabaseEvent event = await dbref.once();
+
+              // Check if snapshot exists
+              if (event.snapshot.value == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("No tree data found.")),
+                );
+                return;
+              }
+
+              // Convert to List<Map<String, dynamic>>
+              List<Map<String, dynamic>> allTrees = [];
+
+              if (event.snapshot.value is Map) {
+                Map<dynamic, dynamic> treesData =
+                    event.snapshot.value as Map<dynamic, dynamic>;
+                treesData.forEach((key, value) {
+                  allTrees.add(Map<String, dynamic>.from(value));
+                });
+              } else if (event.snapshot.value is List) {
+                List<dynamic> treesData = event.snapshot.value as List<dynamic>;
+                for (var item in treesData) {
+                  if (item != null)
+                    allTrees.add(Map<String, dynamic>.from(item));
+                }
+              }
+
+              if (allTrees.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("No tree data found.")),
+                );
+                return;
+              }
+
+              // Navigate to next page
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ArmProcumentAdd(
+                    ARM_Office: widget.ARM_Office,
+                    SerialNum: widget.SerialNum,
+                    user_name: widget.user_name,
+                    allTrees: allTrees,
+                    ARM_Branch_Name: widget.ARM_Branch_Name,
+                    poc: widget.poc,
+                    DateInformed: widget.DateInformed,
+                    LetterNo: widget.LetterNo,
+                    OfficerName: widget.OfficerName,
+                    OfficerPositionAndName: widget.OfficerPositionAndName,
+                    donor_details: widget.donor_details,
+                    Condition: widget.Condition,
+                    treeCount: widget.treeCount,
+                    office_location: widget.office_location,
+                    PlaceOfCoupe_exact_from_arm:
+                        widget.PlaceOfCoupe_exact_from_arm,
+
+                  ),
+                ),
+              );
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Error fetching tree data: $e")),
+              );
+            }
+          },
+          label: const Row(
+            children: [
+              Text(
+                "Confirm & Save",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'sfproRoundSemiB',
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(width: 8),
+              Icon(Iconsax.tick_circle, color: Colors.white),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

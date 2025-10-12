@@ -11,8 +11,13 @@ import 'package:timber_app/logingPage.dart';
 
 class ARM_Home extends StatefulWidget {
   final String office_location;
+  final String username;
 
-  const ARM_Home({super.key, required this.office_location});
+  const ARM_Home({
+    super.key,
+    required this.office_location,
+    required this.username,
+  });
 
   @override
   State<ARM_Home> createState() => _ARM_HomeState();
@@ -88,7 +93,7 @@ class _ARM_HomeState extends State<ARM_Home> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const profile_button(),
+                        profile_button(username: widget.username),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -102,7 +107,7 @@ class _ARM_HomeState extends State<ARM_Home> {
                               ),
                             ),
                             Text(
-                              "widget.username",
+                              widget.username,
                               style: const TextStyle(
                                 fontFamily: "sfproRoundSemiB",
                                 fontSize: 12,
@@ -454,7 +459,8 @@ class alert_button extends StatelessWidget {
 }
 
 class profile_button extends StatelessWidget {
-  const profile_button({super.key});
+  final String username;
+  const profile_button({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -471,7 +477,7 @@ class profile_button extends StatelessWidget {
         child: CircleAvatar(
           radius: 30,
           backgroundColor: const Color.fromARGB(0, 238, 238, 238),
-          child: ClipOval(child: AvatarPlus("2323", height: 60, width: 60)),
+          child: ClipOval(child: AvatarPlus(username, height: 60, width: 60)),
         ),
       ),
     );

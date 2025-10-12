@@ -28,8 +28,6 @@ class UserProfilePage extends StatelessWidget {
               const SizedBox(height: 25),
               _buildProfileHeader(),
               const SizedBox(height: 30),
-              _buildUserStats(),
-              const SizedBox(height: 25),
 
               const SizedBox(height: 40),
               _buildActionButtons(context),
@@ -53,21 +51,6 @@ class UserProfilePage extends StatelessWidget {
             fontSize: 24,
           ),
         ),
-        Row(
-          children: [
-            IconButton(
-              icon: const Icon(CupertinoIcons.bell_fill, color: _primaryColor),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(
-                CupertinoIcons.settings_solid,
-                color: _primaryColor,
-              ),
-              onPressed: () {},
-            ),
-          ],
-        ),
       ],
     );
   }
@@ -89,19 +72,14 @@ class UserProfilePage extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          const CircleAvatar(
-            radius: 40,
-            backgroundImage: NetworkImage(
-              'https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=800&q=80',
-            ),
-          ),
+          const CircleAvatar(radius: 40),
           const SizedBox(width: 18),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 Text(
-                  "Aria Montgomery",
+                  "name",
                   style: TextStyle(
                     color: _textDark,
                     fontWeight: FontWeight.bold,
@@ -110,7 +88,7 @@ class UserProfilePage extends StatelessWidget {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  "Product Designer | UI Enthusiast",
+                  "details",
                   style: TextStyle(color: _textLight, fontSize: 14),
                 ),
               ],
@@ -126,16 +104,6 @@ class UserProfilePage extends StatelessWidget {
   }
 
   // Stats row (projects, followers, etc.)
-  Widget _buildUserStats() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _statCard("Projects", "24"),
-        _statCard("Followers", "1.4K"),
-        _statCard("Level", "Pro"),
-      ],
-    );
-  }
 
   Widget _statCard(String title, String value) {
     return Expanded(

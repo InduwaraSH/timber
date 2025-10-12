@@ -134,6 +134,7 @@ class _ARMReceivedState extends State<ARMReceived> {
                 OfficerName: OfficerName,
                 user_name: '',
                 ARM_Office: ARM_office,
+                //CO_name: branchName,
               ),
             ),
           );

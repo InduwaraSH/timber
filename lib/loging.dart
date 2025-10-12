@@ -80,6 +80,7 @@ class Login {
               MaterialPageRoute(
                 builder: (context) => arm_b_nav_bar(
                   office_location: snapshot_office.value.toString(),
+                  username: employeeId.trim(),
                 ),
               ),
             );

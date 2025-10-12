@@ -15,7 +15,7 @@ class ArmSentTimeline_sent extends StatefulWidget {
     required this.branchName,
     required this.poc,
     
-    required this.SerialNum,
+    required this.SerialNum, 
     
   });
 
