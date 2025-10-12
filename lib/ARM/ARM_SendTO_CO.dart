@@ -180,6 +180,7 @@ class _ARM_SentTO_COState extends State<ARM_SentTO_CO> {
                             "arm_office_location": widget.office_location
                                 .toString(),
                             "from": "CO ${widget.CO_Name}",
+                            "Reciver":"CO"
                           };
                           FirebaseDatabase.instance
                               .ref()

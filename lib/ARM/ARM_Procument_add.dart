@@ -7,7 +7,6 @@ class ArmProcumentAdd extends StatefulWidget {
   final String SerialNum;
   final String user_name;
   final List<Map<String, dynamic>> allTrees;
-  // Other fields can be added here as needed
   final String ARM_Branch_Name;
   final String poc;
   final String DateInformed;
@@ -45,6 +44,18 @@ class ArmProcumentAdd extends StatefulWidget {
 
 class _ArmProcumentAddState extends State<ArmProcumentAdd> {
   bool _saving = false;
+
+  // --- Text Controllers ---
+  final TextEditingController _incomeController = TextEditingController();
+  final TextEditingController _outcomeController = TextEditingController();
+
+  @override
+  void dispose() {
+    _incomeController.dispose();
+    _outcomeController.dispose();
+
+    super.dispose();
+  }
 
   IconData _getIconForLabel(String label) {
     if (label.contains("Type")) return Iconsax.tree4;
@@ -148,24 +159,44 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Tree header
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 25.0, top: 20.0),
-                child: Text(
-                  "Tree ${index + 1}",
-                  style: const TextStyle(
-                    fontFamily: 'sfproRoundSemiB',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                  ),
-                ),
+          Padding(
+            padding: const EdgeInsets.only(left: 25.0, top: 20.0),
+            child: Text(
+              "Tree ${index + 1}",
+              style: const TextStyle(
+                fontFamily: 'sfproRoundSemiB',
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
               ),
-            ],
+            ),
           ),
           const SizedBox(height: 12),
           ...fields.entries.map((e) => _summaryItem(e.key, e.value)).toList(),
         ],
+      ),
+    );
+  }
+
+  Widget _inputField(
+    String label,
+    TextEditingController controller,
+    IconData icon,
+  ) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      decoration: BoxDecoration(
+        color: const Color(0xFFEFF3FF),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon, color: const Color(0xFF6C63FF)),
+          labelText: label,
+          labelStyle: const TextStyle(fontFamily: 'sfproRoundSemiB'),
+          border: InputBorder.none,
+        ),
       ),
     );
   }
@@ -179,30 +210,48 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
           .child(widget.SerialNum)
           .child("new")
           .child("allTrees")
-          .set(widget.allTrees)
-          .then((_) async {
-            await database
-                .child('Reports')
-                .child(widget.SerialNum)
-                .child("new")
-                .child("info")
-                .set({
-                  "ARM_Office": widget.ARM_Office,
-                  "user_name": widget.user_name,
-                  "ARM_Branch_Name": widget.ARM_Branch_Name,
-                  "poc": widget.poc,
-                  "DateInformed": widget.DateInformed,
-                  "LetterNo": widget.LetterNo,
-                  "OfficerName": widget.OfficerName,
-                  "OfficerPositionAndName": widget.OfficerPositionAndName,
-                  "donor_details": widget.donor_details,
-                  "Condition": widget.Condition,
-                  "treeCount": widget.treeCount,
-                  "office_location": widget.office_location,
-                  "PlaceOfCoupe_exact_from_arm":
-                      widget.PlaceOfCoupe_exact_from_arm,
-                });
+          .set(widget.allTrees);
+
+      await database
+          .child('Reports')
+          .child(widget.SerialNum)
+          .child("new")
+          .child("info")
+          .set({
+            "ARM_Office": widget.ARM_Office,
+            "user_name": widget.user_name,
+            "ARM_Branch_Name": widget.ARM_Branch_Name,
+            "poc": widget.poc,
+            "DateInformed": widget.DateInformed,
+            "LetterNo": widget.LetterNo,
+            "OfficerName": widget.OfficerName,
+            "OfficerPositionAndName": widget.OfficerPositionAndName,
+            "donor_details": widget.donor_details,
+            "Condition": widget.Condition,
+            "treeCount": widget.treeCount,
+            "office_location": widget.office_location,
+            "PlaceOfCoupe_exact_from_arm": widget.PlaceOfCoupe_exact_from_arm,
+            "Income": _incomeController.text.trim(),
+            "Outcome": _outcomeController.text.trim(),
+            "Reciver":"RM",
+            "profitValue":
+                (double.tryParse(
+                      _incomeController.text.trim().isNotEmpty
+                          ? _incomeController.text.trim()
+                          : "0",
+                    ) ??
+                    0) -
+                (double.tryParse(
+                      _outcomeController.text.trim().isNotEmpty
+                          ? _outcomeController.text.trim()
+                          : "0",
+                    ) ??
+                    0),
           });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Data saved successfully ✅")),
+      );
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -216,40 +265,98 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9F8FF),
-      appBar: AppBar(
-        title: const Text("Procument Add"),
-        backgroundColor: const Color(0xFF6C63FF),
-      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 10),
-            ...widget.allTrees.asMap().entries.map(
-              (entry) => _treeCard(entry.value, entry.key),
+            SizedBox(height: MediaQuery.of(context).padding.top + 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 18.0, bottom: 30, right: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Outcome",
+                    style: TextStyle(
+                      fontFamily: 'sfproRoundSemiB',
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  FloatingActionButton.extended(
+                    onPressed: _saving
+                        ? null
+                        : () {
+                            if (_incomeController.text.trim().isEmpty ||
+                                _outcomeController.text.trim().isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Please fill both Income and Outcome fields.",
+                                  ),
+                                  backgroundColor: Colors.redAccent,
+                                ),
+                              );
+                              return;
+                            }
+                            _saveData();
+                          },
+                    label: _saving
+                        ? const Row(
+                            children: [
+                              CircularProgressIndicator(color: Colors.white),
+                              SizedBox(width: 10),
+                              Text("Saving..."),
+                            ],
+                          )
+                        : const Row(
+                            children: [
+                              Text(
+                                "Save Data",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'sfproRoundSemiB',
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Icon(Iconsax.tick_circle, color: Colors.white),
+                            ],
+                          ),
+                    backgroundColor: const Color(0xFF6C63FF),
+                  ),
+                ],
+              ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 18.0, bottom: 10),
+              child: Text(
+                " Enter expected income and outcome",
+                style: TextStyle(
+                  fontFamily: 'sfproRoundSemiB',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ),
+            _inputField("Income", _incomeController, Iconsax.money),
+            _inputField("Outcome", _outcomeController, Iconsax.wallet_3),
+
+            // const SizedBox(height: 50),
+            // // All Tree Cards
+            // ...widget.allTrees.asMap().entries.map(
+            //   (entry) => _treeCard(entry.value, entry.key),
+            // ),
+            // const SizedBox(height: 10),
+
+            // New Input Fields
             const SizedBox(height: 100),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _saving ? null : _saveData,
-        label: _saving
-            ? const Row(
-                children: [
-                  CircularProgressIndicator(color: Colors.white),
-                  SizedBox(width: 10),
-                  Text("Saving..."),
-                ],
-              )
-            : const Row(
-                children: [
-                  Text("Save Data"),
-                  SizedBox(width: 8),
-                  Icon(Iconsax.tick_circle),
-                ],
-              ),
-        backgroundColor: const Color(0xFF6C63FF),
       ),
     );
   }
