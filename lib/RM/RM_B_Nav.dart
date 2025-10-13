@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:timber_app/RM/RM_Home.dart';
+import 'package:timber_app/RM/RM_Recived.dart';
 import 'package:timber_app/RM/RM_Sent.dart';
 import 'package:timber_app/c.dart';
 import 'package:timber_app/d.dart';
@@ -137,7 +138,7 @@ class RMNavigControll extends GetxController {
   late final List<Widget> screens = [
     RMHomepage(office_location: office_location, username: username),
     RmSent(office_location: office_location),
-    pgthree(office_location: office_location),
+    RMRecived(office_location: office_location),
     pgfour(office_location: office_location),
   ];
 }

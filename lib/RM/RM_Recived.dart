@@ -6,23 +6,22 @@ import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/ARM/ARM_RecivedView_CO.dart';
 import 'package:timber_app/ARM/ARM_Recived_view.dart';
-import 'package:timber_app/ARM/ARM_SentView_RM.dart';
-import 'package:timber_app/ARM/ARM_Sent_Cardview.dart';
 import 'package:timber_app/ARM/ARM_info_panel.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
+import 'package:timber_app/RM/RM_Recived_view_ARM.dart';
 import 'package:timber_app/RM/createFor.dart';
 import 'package:timber_app/RM/sent_CardView.dart';
 
-class ARM_Sent extends StatefulWidget {
+class RMRecived extends StatefulWidget {
   final String office_location;
-  const ARM_Sent({super.key, required this.office_location});
+  const RMRecived({super.key, required this.office_location});
 
   @override
-  State<ARM_Sent> createState() => _ARM_SentState();
+  State<RMRecived> createState() => _RMRecivedState();
 }
 
-class _ARM_SentState extends State<ARM_Sent> {
+class _RMRecivedState extends State<RMRecived> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
@@ -32,9 +31,9 @@ class _ARM_SentState extends State<ARM_Sent> {
     super.initState();
     dbref = FirebaseDatabase.instance
         .ref()
-        .child('ARM_branch_data_saved')
+        .child('RM_branch_data_saved')
         .child(widget.office_location)
-        .child("Sent");
+        .child("Recived");
 
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection ==
@@ -75,10 +74,9 @@ class _ARM_SentState extends State<ARM_Sent> {
     String treeCount = "";
     String CO_name = "";
     String ARM_office = "";
-    String to = "";
 
     if (Reciver == "RM") {
-      branchName = Sent['info']['ARM_Office'] ?? "Not Available";
+      branchName = Sent['info']['From_CO'] ?? "Not Available";
       poc = Sent['info']['poc'] ?? "N/A";
       DateInformed = Sent['info']['Date'] ?? "N/A";
       LetterNo = Sent['info']['LetterNo'] ?? "N/A";
@@ -87,8 +85,10 @@ class _ARM_SentState extends State<ARM_Sent> {
       OfficerPositionAndName = Sent['info']['OfficerPosition&name'] ?? "N/A";
       donor_details = Sent['info']['donor_details'] ?? "N/A";
       Condition = Sent['info']['Condition'] ?? "N/A";
+
       treeCount = Sent['info']['TreeCount'] ?? "N/A";
       CO_name = Sent['info']['From_CO'] ?? "N/A";
+
       ARM_office = Sent['info']['ARM_location'] ?? "N/A";
       activeColor1 = const Color(0xFFE9FBE7); // very light minty green
       activeColor2 = const Color(0xFFC8E6C9); // soft leafy pastel
@@ -98,13 +98,12 @@ class _ARM_SentState extends State<ARM_Sent> {
       // activeColor2 = const Color(0xFFFFD9E0); // slightly deeper pastel
       // textPrimary = const Color(0xFFE35D6A); // warm soft rose
       // iconPrimary = const Color(0xFFE35D6A); // matching icon color
-    } else if (Reciver == "CO") {
-      branchName = Sent['arm_office_location'] ?? "Not Available";
-      poc = Sent['placeOfCoupe'] ?? "N/A";
+    } else if (Reciver == "RM") {
+      branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
+      poc = Sent['poc'] ?? "N/A";
       DateInformed = Sent['DateInformed'] ?? "N/A";
       LetterNo = Sent['LetterNo'] ?? "N/A";
       SerialNum = Sent['Serial Number'] ?? "N/A";
-      to = Sent['from'] ?? "N/A";
 
       activeColor1 = const Color(0xFFE2ECFF);
       activeColor2 = const Color(0xFFD6E4FA);
@@ -121,7 +120,7 @@ class _ARM_SentState extends State<ARM_Sent> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => ArmSentviewCo(
+              builder: (_) => RmRecivedViewArm(
                 ARM_Branch_Name: branchName,
                 poc: poc,
                 DateInformed: DateInformed,
@@ -132,11 +131,13 @@ class _ARM_SentState extends State<ARM_Sent> {
                 donor_details: donor_details,
                 Condition: Condition,
                 treeCount: treeCount,
+
                 office_location: widget.office_location,
                 PlaceOfCoupe_exact_from_arm: poc,
                 OfficerName: OfficerName,
                 user_name: '',
-                ARM_Office: branchName,
+                ARM_Office: ARM_office,
+                
                 //CO_name: branchName,
               ),
             ),
@@ -145,14 +146,13 @@ class _ARM_SentState extends State<ARM_Sent> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => ARM_SentCardview(
+              builder: (_) => ARM_Received_View(
                 branchName: branchName,
                 poc: poc,
                 DateInformed: DateInformed,
                 LetterNo: LetterNo,
                 SerialNum: SerialNum,
                 office_location: widget.office_location,
-                to: to,
               ),
             ),
           );
@@ -272,7 +272,7 @@ class _ARM_SentState extends State<ARM_Sent> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            "Sent",
+                            "Inbox",
                             style: TextStyle(
                               fontSize: 50,
                               fontFamily: "sfproRoundSemiB",

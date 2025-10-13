@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 
 class ArmProcumentAdd extends StatefulWidget {
   final String ARM_Office;
@@ -206,16 +207,25 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
     setState(() => _saving = true);
     try {
       await database
-          .child('Reports')
+          .child('ARM_branch_data_saved')
+          .child(widget.office_location)
+          .child("Sent")
           .child(widget.SerialNum)
-          .child("new")
+          .set({"Reciver": "RM"});
+
+      await database
+          .child('ARM_branch_data_saved')
+          .child(widget.office_location)
+          .child("Sent")
+          .child(widget.SerialNum)
           .child("allTrees")
           .set(widget.allTrees);
 
       await database
-          .child('Reports')
+          .child('ARM_branch_data_saved')
+          .child(widget.office_location)
+          .child("Sent")
           .child(widget.SerialNum)
-          .child("new")
           .child("info")
           .set({
             "ARM_Office": widget.ARM_Office,
@@ -228,12 +238,13 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
             "OfficerPositionAndName": widget.OfficerPositionAndName,
             "donor_details": widget.donor_details,
             "Condition": widget.Condition,
+            "SerialNum": widget.SerialNum,
             "treeCount": widget.treeCount,
             "office_location": widget.office_location,
             "PlaceOfCoupe_exact_from_arm": widget.PlaceOfCoupe_exact_from_arm,
             "Income": _incomeController.text.trim(),
             "Outcome": _outcomeController.text.trim(),
-            "Reciver":"RM",
+            "Reciver": "RM",
             "profitValue":
                 (double.tryParse(
                       _incomeController.text.trim().isNotEmpty
@@ -247,6 +258,94 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
                           : "0",
                     ) ??
                     0),
+          });
+
+      await database
+          .child('RM_branch_data_saved')
+          .child(widget.office_location)
+          .child("Recived")
+          .child(widget.SerialNum)
+          .set({"Reciver": "RM"});
+
+      await database
+          .child('RM_branch_data_saved')
+          .child(widget.office_location)
+          .child("Recived")
+          .child(widget.SerialNum)
+          .child("allTrees")
+          .set(widget.allTrees);
+
+      await database
+          .child('RM_branch_data_saved')
+          .child(widget.office_location)
+          .child("Recived")
+          .child(widget.SerialNum)
+          .child("info")
+          .set({
+            "ARM_Office": widget.ARM_Office,
+            "user_name": widget.user_name,
+            "ARM_Branch_Name": widget.ARM_Branch_Name,
+            "poc": widget.poc,
+            "DateInformed": widget.DateInformed,
+            "LetterNo": widget.LetterNo,
+            "OfficerName": widget.OfficerName,
+            "OfficerPositionAndName": widget.OfficerPositionAndName,
+            "donor_details": widget.donor_details,
+            "Condition": widget.Condition,
+            "SerialNum": widget.SerialNum,
+            "treeCount": widget.treeCount,
+            "office_location": widget.office_location,
+            "PlaceOfCoupe_exact_from_arm": widget.PlaceOfCoupe_exact_from_arm,
+            "Income": _incomeController.text.trim(),
+            "Outcome": _outcomeController.text.trim(),
+            "Reciver": "RM",
+            "profitValue":
+                (double.tryParse(
+                      _incomeController.text.trim().isNotEmpty
+                          ? _incomeController.text.trim()
+                          : "0",
+                    ) ??
+                    0) -
+                (double.tryParse(
+                      _outcomeController.text.trim().isNotEmpty
+                          ? _outcomeController.text.trim()
+                          : "0",
+                    ) ??
+                    0),
+          })
+          .then((_) {
+            FirebaseDatabase.instance
+                .ref()
+                .child("Status_of_job")
+                .child(widget.office_location.toString())
+                .child(widget.SerialNum.toString())
+                .child("Status")
+                .set("RM_R_D_two");
+          })
+          .then((_) {
+            FirebaseDatabase.instance
+                .ref()
+                .child("Status_of_job")
+                .child(widget.office_location.toString())
+                .child(widget.SerialNum.toString())
+                .child("RM_R_D_two")
+                .set(
+                  DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
+                );
+          })
+          .then((_) {
+            try {
+              FirebaseDatabase.instance
+                  .ref()
+                  .child("ARM_branch_data_saved")
+                  .child(widget.office_location.toString())
+                  .child("Recived")
+                  .child(widget.SerialNum.toString())
+                  .remove();
+              print('Data deleted successfully');
+            } catch (e) {
+              print('Error deleting data: $e');
+            }
           });
 
       ScaffoldMessenger.of(context).showSnackBar(
