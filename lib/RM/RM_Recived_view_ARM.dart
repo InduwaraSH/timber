@@ -24,6 +24,10 @@ class RmRecivedViewArm extends StatefulWidget {
   final String ARM_Branch_Name;
   final String ARM_Office;
 
+  final String Income;
+  final String Outcome;
+  final String Profit;
+
   const RmRecivedViewArm({
     super.key,
     required this.poc,
@@ -41,6 +45,9 @@ class RmRecivedViewArm extends StatefulWidget {
     required this.ARM_Branch_Name,
 
     required this.ARM_Office,
+    required this.Income,
+    required this.Outcome,
+    required this.Profit,
   });
 
   @override
@@ -90,6 +97,17 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
     if (label.contains("Place")) return Iconsax.map;
     if (label.contains("CO")) return Iconsax.user_octagon;
     if (label.contains("POC")) return Iconsax.user_square;
+    if (label.contains("Donor")) return Iconsax.ghost;
+    if (label.contains("Grade")) return Iconsax.weight;
+    if (label.contains("Height")) return Iconsax.arrow_up;
+
+    if (label.contains("Volume")) return Iconsax.cup;
+    if (label.contains("Value")) return Iconsax.money;
+    if (label.contains("Other")) return Iconsax.menu_board;
+    if (label.contains("Income")) return Iconsax.money_add;
+    if (label.contains("Outcome")) return Iconsax.money_remove;
+    if (label.contains("Profit")) return Iconsax.money_change;
+
     return Iconsax.info_circle;
   }
 
@@ -261,6 +279,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
   @override
   Widget build(BuildContext context) {
     final infoItems = [
+      {"label": "ARM Office", "value": widget.ARM_Office},
       {"label": "CO", "value": widget.user_name},
       {"label": "POC", "value": widget.poc},
       {"label": "Place of Coupe", "value": widget.PlaceOfCoupe_exact_from_arm},
@@ -272,6 +291,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
       {"label": "Donor Details", "value": widget.donor_details},
       {"label": "Condition", "value": widget.Condition},
       {"label": "Tree Count", "value": widget.treeCount},
+      {"label": "Income", "value": "Rs. ${widget.Income}"},
+      {"label": "Outcome", "value": "Rs. ${widget.Outcome}"},
+      {"label": "Profit", "value": "Rs. ${widget.Profit}"},
     ];
 
     return Scaffold(

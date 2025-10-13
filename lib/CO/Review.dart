@@ -18,7 +18,6 @@ class ReviewPage extends StatefulWidget {
   final String serialnum;
   final String dateinformed_from_rm;
   final String placeofcoupe;
- 
 
   const ReviewPage({
     super.key,
@@ -38,7 +37,6 @@ class ReviewPage extends StatefulWidget {
     required this.serialnum,
     required this.dateinformed_from_rm,
     required this.placeofcoupe,
-    
   });
 
   @override
@@ -123,9 +121,9 @@ class _ReviewPageState extends State<ReviewPage> {
       {"label": "Serial No", "value": widget.serialnum},
       {"label": "Date Informed (RM)", "value": widget.dateinformed_from_rm},
       {"label": "Area of Coupe", "value": widget.placeofcoupe},
-     
+
       {"label": "Location", "value": widget.location},
-      {"label": "Section No", "value": widget.new_sectionNumber},
+      {"label": "Donor Details", "value": widget.new_sectionNumber},
       {"label": "Place of Coupe", "value": widget.PlaceOfCoupe},
       {"label": "Letter No", "value": widget.LetterNo},
       {"label": "Condition", "value": widget.Condition},

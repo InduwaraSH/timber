@@ -347,9 +347,16 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
               print('Error deleting data: $e');
             }
           });
-
+      Navigator.pop(context);
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Data saved successfully ✅")),
+        const SnackBar(
+          content: Text(
+            "Data saved successfully",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(

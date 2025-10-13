@@ -3,6 +3,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/CO/CO_Timeline.dart';
 import 'package:timber_app/CO/c_test.dart';
 
 class CoSentview extends StatefulWidget {
@@ -239,8 +240,10 @@ class _CoSentviewState extends State<CoSentview> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            test(office_location: widget.office_location),
+                        builder: (context) => CO_timeline(
+                          branchName: widget.office_location,
+                          SerialNum: widget.SerialNum,
+                        ),
                       ),
                     );
                   },
@@ -258,7 +261,7 @@ class _CoSentviewState extends State<CoSentview> {
     final infoItems = [
       {"label": "CO", "value": widget.co},
       {"label": "POC", "value": widget.poc},
-      {"label": "Place of Coupe", "value": widget.PlaceOfCoupe_exact_from_arm},
+      {"label": "POC Exact", "value": widget.PlaceOfCoupe_exact_from_arm},
       {"label": "Date Informed", "value": widget.DateInformed},
       {"label": "Letter No", "value": widget.LetterNo},
       {"label": "Serial No", "value": widget.SerialNum},

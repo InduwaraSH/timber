@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/ARM/ARM_Find_CO.dart';
 import 'package:timber_app/ARM/ARM_info_panel.dart';
 import 'package:timber_app/CO/CO_Create.dart';
+import 'package:timber_app/CO/CO_Timeline.dart';
 
 class CO_Received_View extends StatelessWidget {
   final String branchName;
@@ -13,7 +14,6 @@ class CO_Received_View extends StatelessWidget {
   final String SerialNum;
   final String username;
   final String about_me;
-  
 
   const CO_Received_View({
     super.key,
@@ -21,8 +21,9 @@ class CO_Received_View extends StatelessWidget {
     required this.poc,
     required this.DateInformed,
     required this.LetterNo,
-    required this.SerialNum, required this.username, required this.about_me,
-   
+    required this.SerialNum,
+    required this.username,
+    required this.about_me,
   });
 
   @override
@@ -66,19 +67,16 @@ class CO_Received_View extends StatelessWidget {
                           FloatingActionButton(
                             heroTag: "info_panel",
                             onPressed: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (_) => ARM_infoPanel(
-                              //       branchName: branchName,
-                              //       poc: poc,
-                              //       DateInformed: DateInformed,
-                              //       LetterNo: LetterNo,
-                              //       SerialNum: SerialNum,
-                              //       office_location: office_location,
-                              //     ),
-                              //   ),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => CO_timeline(
+                                    branchName: branchName,
+
+                                    SerialNum: SerialNum,
+                                  ),
+                                ),
+                              );
                             },
                             backgroundColor: Colors.black,
                             child: Icon(
@@ -102,7 +100,7 @@ class CO_Received_View extends StatelessWidget {
                                     SerialNum: SerialNum,
                                     username: username,
                                     about_me: about_me,
-                                    branch_name:branchName
+                                    branch_name: branchName,
                                   ),
                                 ),
                               );

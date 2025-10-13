@@ -354,13 +354,13 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                   children: [
                     Center(
                       child: CupertinoButton(
-                        color: Colors.blue.withOpacity(0.2),
+                        color: Color(0xFFDAD6FF).withOpacity(0.7),
                         child: Text(
                           "Submit",
                           style: TextStyle(
                             fontFamily: "sfproRoundSemiB",
                             fontSize: 20,
-                            color: Colors.blue,
+                            color: Color(0xFF756AB6),
                           ),
                         ),
                         onPressed: () async {
@@ -513,6 +513,8 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                     });
                                   })
                                   .then((_) {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         backgroundColor: Colors.green,

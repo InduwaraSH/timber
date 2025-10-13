@@ -6,22 +6,14 @@ import 'package:timber_app/RM/sent_detail.dart';
 
 class CO_timeline extends StatefulWidget {
   final String branchName;
-  final String poc;
-  final String DateInformed;
-  final String LetterNo;
+
   final String SerialNum;
-  final String office_location;
-  final String to;
 
   const CO_timeline({
     super.key,
     required this.branchName,
-    required this.poc,
-    required this.DateInformed,
-    required this.LetterNo,
+
     required this.SerialNum,
-    required this.office_location,
-    required this.to,
   });
 
   @override
@@ -118,19 +110,19 @@ class _CO_timelineState extends State<CO_timeline> {
 
                         FloatingActionButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => ARM_SentDetail(
-                                  to:widget.to,
-                                  poc: widget.poc,
-                                  DateInformed: widget.DateInformed,
-                                  LetterNo: widget.LetterNo,
-                                  SerialNum: widget.SerialNum,
-                                  BranchNName: widget.branchName,
-                                ),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (_) => ARM_SentDetail(
+                            //       to:widget.to,
+                            //       poc: widget.poc,
+                            //       DateInformed: widget.DateInformed,
+                            //       LetterNo: widget.LetterNo,
+                            //       SerialNum: widget.SerialNum,
+                            //       BranchNName: widget.branchName,
+                            //     ),
+                            //   ),
+                            // );
                           },
                           backgroundColor: Colors.black,
                           child: Icon(

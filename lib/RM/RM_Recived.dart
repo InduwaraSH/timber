@@ -66,7 +66,7 @@ class _RMRecivedState extends State<RMRecived> {
     Color textPrimary = const Color(0xFF5065D8);
     Color iconPrimary = const Color(0xFF5065D8);
 
-    // Additional variables for CO
+    // Additional variables for ARM
     String OfficerName = "";
     String OfficerPositionAndName = "";
     String donor_details = "";
@@ -74,22 +74,28 @@ class _RMRecivedState extends State<RMRecived> {
     String treeCount = "";
     String CO_name = "";
     String ARM_office = "";
+    String Income = "";
+    String Outcome = "";
+    String Profit = "";
 
     if (Reciver == "RM") {
-      branchName = Sent['info']['From_CO'] ?? "Not Available";
+      branchName = Sent['info']['ARM_Branch_Name'] ?? "Not Available";
       poc = Sent['info']['poc'] ?? "N/A";
-      DateInformed = Sent['info']['Date'] ?? "N/A";
+      DateInformed = Sent['info']['DateInformed'] ?? "N/A";
       LetterNo = Sent['info']['LetterNo'] ?? "N/A";
       SerialNum = Sent['info']['SerialNum'] ?? "N/A";
       OfficerName = Sent['info']['OfficerName'] ?? "N/A";
-      OfficerPositionAndName = Sent['info']['OfficerPosition&name'] ?? "N/A";
+      OfficerPositionAndName = Sent['info']['OfficerPositionAndName'] ?? "N/A";
       donor_details = Sent['info']['donor_details'] ?? "N/A";
       Condition = Sent['info']['Condition'] ?? "N/A";
 
-      treeCount = Sent['info']['TreeCount'] ?? "N/A";
+      treeCount = Sent['info']['treeCount'] ?? "N/A";
       CO_name = Sent['info']['From_CO'] ?? "N/A";
+      Income = Sent['info']['Income'].toString() ?? "N/A";
+      Outcome = Sent['info']['Outcome'].toString() ?? "N/A";
+      Profit = Sent['info']['profitValue'].toString() ?? "N/A";
 
-      ARM_office = Sent['info']['ARM_location'] ?? "N/A";
+      ARM_office = Sent['info']['ARM_Office'] ?? "N/A";
       activeColor1 = const Color(0xFFE9FBE7); // very light minty green
       activeColor2 = const Color(0xFFC8E6C9); // soft leafy pastel
       textPrimary = const Color(0xFF4CAF50); // gentle fresh green
@@ -135,9 +141,12 @@ class _RMRecivedState extends State<RMRecived> {
                 office_location: widget.office_location,
                 PlaceOfCoupe_exact_from_arm: poc,
                 OfficerName: OfficerName,
-                user_name: '',
+                user_name: branchName,
                 ARM_Office: ARM_office,
-                
+                Income: Income.toString(),
+                Outcome: Outcome.toString(),
+                Profit: Profit.toString(),
+
                 //CO_name: branchName,
               ),
             ),

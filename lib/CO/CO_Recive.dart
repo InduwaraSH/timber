@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/ARM/ARM_Recived_view.dart';
 import 'package:timber_app/ARM/ARM_info_panel.dart';
-import 'package:timber_app/CO/CO_Revived_View.dart';
+import 'package:timber_app/CO/CO_Recived_View.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
 import 'package:timber_app/RM/createFor.dart';

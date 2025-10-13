@@ -204,7 +204,7 @@ class _ARM_OfficeIN_RMState extends State<ARM_OfficeIN_RM> {
                 style: TextStyle(
                   fontFamily: "sfproRoundRegular",
                   fontSize: 15,
-                  color: Colors.lightBlue[500],
+                  color: Color(0xFF756AB6),
                 ),
                 textAlign: TextAlign.start,
               ),
@@ -213,7 +213,7 @@ class _ARM_OfficeIN_RMState extends State<ARM_OfficeIN_RM> {
                 style: TextStyle(
                   fontFamily: "sfproRoundRegular",
                   fontSize: 15,
-                  color: Colors.lightBlue[500],
+                  color: Color(0xFF756AB6),
                 ),
                 textAlign: TextAlign.start,
               ),
@@ -222,7 +222,7 @@ class _ARM_OfficeIN_RMState extends State<ARM_OfficeIN_RM> {
                 style: TextStyle(
                   fontFamily: "sfproRoundRegular",
                   fontSize: 15,
-                  color: Colors.lightBlue[500],
+                  color: Color(0xFF756AB6),
                 ),
                 textAlign: TextAlign.start,
               ),
@@ -254,7 +254,6 @@ class _ARM_OfficeIN_RMState extends State<ARM_OfficeIN_RM> {
                               builder: (context) => Create_Form_Rm(
                                 widget.office_location.toString(),
                                 _townName[_selectedTown].toString(),
-                                
                               ),
                             ),
                           );
