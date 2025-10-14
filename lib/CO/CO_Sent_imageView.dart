@@ -95,26 +95,31 @@ class _CoSentImageviewState extends State<CoSentImageview> {
                       letterSpacing: -1,
                     ),
                   ),
-                  FloatingActionButton(
-                    heroTag: "uploadButton",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CoSenteImageAttach(
-                            poc: widget.poc,
-                            SerialNum: widget.SerialNum,
+
+                  /// ✅ Hide Upload button if 5 or more images
+                  if (imageUrls.length < 5)
+                    FloatingActionButton(
+                      heroTag: "uploadButton",
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CoSenteImageAttach(
+                              poc: widget.poc,
+                              SerialNum: widget.SerialNum,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    backgroundColor: Colors.blue,
-                    child: const Icon(
-                      Iconsax.cloud_plus5,
-                      color: Colors.white,
-                      size: 32,
+                        );
+                        // Refresh after upload
+                        _fetchImages();
+                      },
+                      backgroundColor: Colors.blue,
+                      child: const Icon(
+                        Iconsax.cloud_plus5,
+                        color: Colors.white,
+                        size: 32,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -129,63 +134,64 @@ class _CoSentImageviewState extends State<CoSentImageview> {
                       ),
                     )
                   : imageUrls.isEmpty
-                      ? const Center(
-                          child: Text(
-                            'No images uploaded yet.',
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black54),
-                          ),
-                        )
-                      : RefreshIndicator(
-                          onRefresh: _fetchImages,
-                          color: const Color(0xFF0A7AFE),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 4,
-                            ),
-                            child: GridView.builder(
-                              itemCount: imageUrls.length,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                  ? const Center(
+                      child: Text(
+                        'No images uploaded yet.',
+                        style: TextStyle(fontSize: 16, color: Colors.black54),
+                      ),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: _fetchImages,
+                      color: const Color(0xFF0A7AFE),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
+                        child: GridView.builder(
+                          itemCount: imageUrls.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3,
                                 crossAxisSpacing: 12,
                                 mainAxisSpacing: 12,
                               ),
-                              itemBuilder: (context, index) {
-                                final url = imageUrls[index];
-                                return GestureDetector(
-                                  onTap: () => _openFullImage(url),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(18),
-                                    child: CachedNetworkImage(
-                                      cacheManager: cacheManager,
-                                      imageUrl: url,
-                                      fit: BoxFit.cover,
-                                      fadeInDuration:
-                                          const Duration(milliseconds: 200),
-                                      fadeOutDuration:
-                                          const Duration(milliseconds: 200),
-                                      placeholder: (context, url) =>
-                                          Shimmer.fromColors(
+                          itemBuilder: (context, index) {
+                            final url = imageUrls[index];
+                            return GestureDetector(
+                              onTap: () => _openFullImage(url),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(18),
+                                child: CachedNetworkImage(
+                                  cacheManager: cacheManager,
+                                  imageUrl: url,
+                                  fit: BoxFit.cover,
+                                  fadeInDuration: const Duration(
+                                    milliseconds: 200,
+                                  ),
+                                  fadeOutDuration: const Duration(
+                                    milliseconds: 200,
+                                  ),
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
                                         baseColor: Colors.grey.shade300,
                                         highlightColor: Colors.grey.shade100,
                                         child: Container(
                                           color: Colors.grey.shade200,
                                         ),
                                       ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(
                                         Icons.broken_image,
                                         color: Colors.grey,
                                       ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
+                      ),
+                    ),
             ),
           ],
         ),
@@ -218,11 +224,8 @@ class FullImageView extends StatelessWidget {
             cacheManager: _CoSentImageviewState.cacheManager,
             imageUrl: imageUrl,
             fit: BoxFit.contain,
-            errorWidget: (context, error, stackTrace) => const Icon(
-              Icons.broken_image,
-              color: Colors.white,
-              size: 100,
-            ),
+            errorWidget: (context, error, stackTrace) =>
+                const Icon(Icons.broken_image, color: Colors.white, size: 100),
           ),
         ),
       ),

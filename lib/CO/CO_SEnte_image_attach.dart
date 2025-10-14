@@ -81,7 +81,8 @@ class _CoSenteImageAttachState extends State<CoSenteImageAttach> {
         await database.child(id).set({'url': url, 'poc': widget.poc});
         uploadedCount++;
       }
-
+      Navigator.pop(context);
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('All images uploaded successfully!')),
       );
