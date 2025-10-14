@@ -240,9 +240,8 @@ class _CoSentviewState extends State<CoSentview> {
                 Row(
                   children: [
                     FloatingActionButton(
+                      heroTag: "imageBtn",
                       onPressed: () {
-                        heroTag:
-                        "imageBtn";
                         Navigator.push(
                           context,
                           MaterialPageRoute(

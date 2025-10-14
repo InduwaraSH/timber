@@ -3,9 +3,11 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/ARM/ARMSentImageView.dart';
 import 'package:timber_app/ARM/ARM_Procument_add.dart';
 import 'package:timber_app/ARM/ARM_Sent_Cardview.dart';
 import 'package:timber_app/ARM/ARM_Sent_timeline.dart';
+import 'package:timber_app/CO/CO_Sent_imageView.dart';
 import 'package:timber_app/CO/c_test.dart';
 
 class ArmRecivedviewCo extends StatefulWidget {
@@ -240,21 +242,42 @@ class _ArmRecivedviewCoState extends State<ArmRecivedviewCo> {
                     color: Colors.black,
                   ),
                 ),
-                FloatingActionButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ArmSentTimeline_sent(
-                          branchName: widget.ARM_Office,
-                          poc: widget.poc,
-                          SerialNum: widget.SerialNum,
-                        ),
-                      ),
-                    );
-                  },
-                  backgroundColor: Colors.black,
-                  child: const Icon(Iconsax.chart_15, color: Colors.green),
+                Row(
+                  children: [
+                    FloatingActionButton(
+                      heroTag: "imageBtn",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Armsentimageview(
+                              poc: widget.poc,
+                              SerialNum: widget.SerialNum,
+                            ),
+                          ),
+                        );
+                      },
+                      backgroundColor: Colors.black,
+                      child: const Icon(Iconsax.image5, color: Colors.blue),
+                    ),
+                    const SizedBox(width: 16),
+                    FloatingActionButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ArmSentTimeline_sent(
+                              branchName: widget.ARM_Office,
+                              poc: widget.poc,
+                              SerialNum: widget.SerialNum,
+                            ),
+                          ),
+                        );
+                      },
+                      backgroundColor: Colors.black,
+                      child: const Icon(Iconsax.chart_15, color: Colors.green),
+                    ),
+                  ],
                 ),
               ],
             )
@@ -395,7 +418,6 @@ class _ArmRecivedviewCoState extends State<ArmRecivedviewCo> {
                     office_location: widget.office_location,
                     PlaceOfCoupe_exact_from_arm:
                         widget.PlaceOfCoupe_exact_from_arm,
-
                   ),
                 ),
               );

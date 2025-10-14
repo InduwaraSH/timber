@@ -6,6 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
+import 'package:timber_app/ARM/ARMSentImageView.dart';
 import 'package:timber_app/ARM/ARM_Procument_add.dart';
 import 'package:timber_app/ARM/ARM_Sent_Cardview.dart';
 import 'package:timber_app/ARM/ARM_Sent_timeline.dart';
@@ -107,7 +108,6 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
     if (label.contains("Income")) return Iconsax.money_add;
     if (label.contains("Outcome")) return Iconsax.money_remove;
     if (label.contains("Profit")) return Iconsax.money_change;
-
     return Iconsax.info_circle;
   }
 
@@ -341,7 +341,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  "Sent",
+                  "Recived",
                   style: TextStyle(
                     fontSize: 50,
                     fontWeight: FontWeight.bold,
@@ -352,12 +352,24 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                 Row(
                   children: [
                     FloatingActionButton(
-                      onPressed: _generatePdf,
-                      backgroundColor: Colors.redAccent,
-                      child: const Icon(Iconsax.printer, color: Colors.white),
+                      heroTag: "imageBtn",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Armsentimageview(
+                              poc: widget.poc,
+                              SerialNum: widget.SerialNum,
+                            ),
+                          ),
+                        );
+                      },
+                      backgroundColor: Colors.black,
+                      child: const Icon(Iconsax.image5, color: Colors.blue),
                     ),
                     const SizedBox(width: 12),
                     FloatingActionButton(
+                      heroTag: "timelineBtn",
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -403,6 +415,12 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9F8FF),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _generatePdf,
+        backgroundColor: Colors.redAccent,
+        child: const Icon(Iconsax.printer, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(

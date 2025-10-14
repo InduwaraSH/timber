@@ -6,21 +6,21 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timber_app/CO/CO_SEnte_image_attach.dart';
 
-class CoSentImageview extends StatefulWidget {
+class Armsentimageview extends StatefulWidget {
   final String poc;
   final String SerialNum;
 
-  const CoSentImageview({
+  const Armsentimageview({
     super.key,
     required this.poc,
     required this.SerialNum,
   });
 
   @override
-  State<CoSentImageview> createState() => _CoSentImageviewState();
+  State<Armsentimageview> createState() => _ArmsentimageviewState();
 }
 
-class _CoSentImageviewState extends State<CoSentImageview> {
+class _ArmsentimageviewState extends State<Armsentimageview> {
   final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
   List<String> imageUrls = [];
   bool _loading = true;
@@ -95,26 +95,26 @@ class _CoSentImageviewState extends State<CoSentImageview> {
                       letterSpacing: -1,
                     ),
                   ),
-                  FloatingActionButton(
-                    heroTag: "uploadButton",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CoSenteImageAttach(
-                            poc: widget.poc,
-                            SerialNum: widget.SerialNum,
-                          ),
-                        ),
-                      );
-                    },
-                    backgroundColor: Colors.blue,
-                    child: const Icon(
-                      Iconsax.cloud_plus5,
-                      color: Colors.white,
-                      size: 32,
-                    ),
-                  ),
+                  // FloatingActionButton(
+                  //   heroTag: "uploadButton",
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => CoSenteImageAttach(
+                  //           poc: widget.poc,
+                  //           SerialNum: widget.SerialNum,
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  //   backgroundColor: Colors.blue,
+                  //   child: const Icon(
+                  //     Iconsax.cloud_plus5,
+                  //     color: Colors.white,
+                  //     size: 32,
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -129,63 +129,64 @@ class _CoSentImageviewState extends State<CoSentImageview> {
                       ),
                     )
                   : imageUrls.isEmpty
-                      ? const Center(
-                          child: Text(
-                            'No images uploaded yet.',
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black54),
-                          ),
-                        )
-                      : RefreshIndicator(
-                          onRefresh: _fetchImages,
-                          color: const Color(0xFF0A7AFE),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 4,
-                            ),
-                            child: GridView.builder(
-                              itemCount: imageUrls.length,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                  ? const Center(
+                      child: Text(
+                        'No images uploaded yet.',
+                        style: TextStyle(fontSize: 16, color: Colors.black54),
+                      ),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: _fetchImages,
+                      color: const Color(0xFF0A7AFE),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
+                        child: GridView.builder(
+                          itemCount: imageUrls.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3,
                                 crossAxisSpacing: 12,
                                 mainAxisSpacing: 12,
                               ),
-                              itemBuilder: (context, index) {
-                                final url = imageUrls[index];
-                                return GestureDetector(
-                                  onTap: () => _openFullImage(url),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(18),
-                                    child: CachedNetworkImage(
-                                      cacheManager: cacheManager,
-                                      imageUrl: url,
-                                      fit: BoxFit.cover,
-                                      fadeInDuration:
-                                          const Duration(milliseconds: 200),
-                                      fadeOutDuration:
-                                          const Duration(milliseconds: 200),
-                                      placeholder: (context, url) =>
-                                          Shimmer.fromColors(
+                          itemBuilder: (context, index) {
+                            final url = imageUrls[index];
+                            return GestureDetector(
+                              onTap: () => _openFullImage(url),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(18),
+                                child: CachedNetworkImage(
+                                  cacheManager: cacheManager,
+                                  imageUrl: url,
+                                  fit: BoxFit.cover,
+                                  fadeInDuration: const Duration(
+                                    milliseconds: 200,
+                                  ),
+                                  fadeOutDuration: const Duration(
+                                    milliseconds: 200,
+                                  ),
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
                                         baseColor: Colors.grey.shade300,
                                         highlightColor: Colors.grey.shade100,
                                         child: Container(
                                           color: Colors.grey.shade200,
                                         ),
                                       ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(
                                         Icons.broken_image,
                                         color: Colors.grey,
                                       ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
+                      ),
+                    ),
             ),
           ],
         ),
@@ -215,14 +216,11 @@ class FullImageView extends StatelessWidget {
           minScale: 0.8,
           maxScale: 4.0,
           child: CachedNetworkImage(
-            cacheManager: _CoSentImageviewState.cacheManager,
+            cacheManager: _ArmsentimageviewState.cacheManager,
             imageUrl: imageUrl,
             fit: BoxFit.contain,
-            errorWidget: (context, error, stackTrace) => const Icon(
-              Icons.broken_image,
-              color: Colors.white,
-              size: 100,
-            ),
+            errorWidget: (context, error, stackTrace) =>
+                const Icon(Icons.broken_image, color: Colors.white, size: 100),
           ),
         ),
       ),
