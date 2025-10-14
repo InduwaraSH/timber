@@ -4,15 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:timber_app/ARM/ARM_RecivedView_CO.dart';
-import 'package:timber_app/ARM/ARM_Recived_view.dart';
-import 'package:timber_app/ARM/ARM_SentView_RM.dart';
 import 'package:timber_app/ARM/ARM_Sent_Cardview.dart';
-import 'package:timber_app/ARM/ARM_info_panel.dart';
-import 'package:timber_app/PositionPicker.dart';
+import 'package:timber_app/ARM/ARM_SentView_RM.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
-import 'package:timber_app/RM/createFor.dart';
-import 'package:timber_app/RM/sent_CardView.dart';
 
 class ARM_Sent extends StatefulWidget {
   final String office_location;
@@ -26,6 +20,7 @@ class _ARM_SentState extends State<ARM_Sent> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
+  String searchQuery = ""; // Added search variable
 
   @override
   void initState() {
@@ -56,7 +51,6 @@ class _ARM_SentState extends State<ARM_Sent> {
   Widget listItem({required Map Sent, required int index}) {
     final String Reciver = Sent['Reciver'] ?? "N/A";
 
-    // Declare variables for both cases
     String branchName = "";
     String poc = "";
     String DateInformed = "";
@@ -67,7 +61,6 @@ class _ARM_SentState extends State<ARM_Sent> {
     Color textPrimary = const Color(0xFF5065D8);
     Color iconPrimary = const Color(0xFF5065D8);
 
-    // Additional variables for CO
     String OfficerName = "";
     String OfficerPositionAndName = "";
     String donor_details = "";
@@ -90,14 +83,10 @@ class _ARM_SentState extends State<ARM_Sent> {
       treeCount = Sent['info']['TreeCount'] ?? "N/A";
       CO_name = Sent['info']['From_CO'] ?? "N/A";
       ARM_office = Sent['info']['ARM_location'] ?? "N/A";
-      activeColor1 = const Color(0xFFE9FBE7); // very light minty green
-      activeColor2 = const Color(0xFFC8E6C9); // soft leafy pastel
-      textPrimary = const Color(0xFF4CAF50); // gentle fresh green
-      iconPrimary = const Color(0xFF4CAF50); // matching icon color
-      // activeColor1 = const Color(0xFFFFE6E9); // very light pink background
-      // activeColor2 = const Color(0xFFFFD9E0); // slightly deeper pastel
-      // textPrimary = const Color(0xFFE35D6A); // warm soft rose
-      // iconPrimary = const Color(0xFFE35D6A); // matching icon color
+      activeColor1 = const Color(0xFFFFE4F0); // very soft pink
+      activeColor2 = const Color(0xFFFFCCE0); // slightly deeper pastel pink
+      textPrimary = const Color(0xFFEC83B0); // gentle pink for text
+      iconPrimary = const Color(0xFFEC83B0); // matching pink for icons
     } else if (Reciver == "CO") {
       branchName = Sent['arm_office_location'] ?? "Not Available";
       poc = Sent['placeOfCoupe'] ?? "N/A";
@@ -106,13 +95,11 @@ class _ARM_SentState extends State<ARM_Sent> {
       SerialNum = Sent['Serial Number'] ?? "N/A";
       to = Sent['from'] ?? "N/A";
 
-      activeColor1 = const Color(0xFFE2ECFF);
-      activeColor2 = const Color(0xFFD6E4FA);
-      textPrimary = const Color(0xFF5065D8);
-      iconPrimary = const Color(0xFF5065D8);
+      activeColor1 = const Color(0xFFF2E2FF); // soft pastel purple
+      activeColor2 = const Color(0xFFE6D6FA); // slightly deeper pastel
+      textPrimary = const Color(0xFF8A4ED8); // medium purple for text
+      iconPrimary = const Color(0xFF8A4ED8); // matching purple for icons
     }
-
-    //  Updated colors according to uploaded design
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
@@ -127,7 +114,6 @@ class _ARM_SentState extends State<ARM_Sent> {
                 DateInformed: DateInformed,
                 LetterNo: LetterNo,
                 SerialNum: SerialNum,
-
                 OfficerPositionAndName: OfficerPositionAndName,
                 donor_details: donor_details,
                 Condition: Condition,
@@ -137,7 +123,6 @@ class _ARM_SentState extends State<ARM_Sent> {
                 OfficerName: OfficerName,
                 user_name: '',
                 ARM_Office: branchName,
-                //CO_name: branchName,
               ),
             ),
           );
@@ -157,19 +142,6 @@ class _ARM_SentState extends State<ARM_Sent> {
             ),
           );
         }
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (_) => ARM_Received_View(
-        //       branchName: branchName,
-        //       poc: poc,
-        //       DateInformed: DateInformed,
-        //       LetterNo: LetterNo,
-        //       SerialNum: SerialNum,
-        //       office_location: widget.office_location,
-        //     ),
-        //   ),
-        // );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -192,7 +164,6 @@ class _ARM_SentState extends State<ARM_Sent> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Left texts
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -227,8 +198,6 @@ class _ARM_SentState extends State<ARM_Sent> {
                 ),
               ],
             ),
-
-            // Right icon
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -270,8 +239,8 @@ class _ARM_SentState extends State<ARM_Sent> {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
+                        children: const [
+                          Text(
                             "Sent",
                             style: TextStyle(
                               fontSize: 50,
@@ -286,7 +255,33 @@ class _ARM_SentState extends State<ARM_Sent> {
                   : null,
             ),
 
-            // Firebase list
+            // Search Bar
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: TextField(
+                decoration: const InputDecoration(
+                  hintText: "Search by POC",
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                    fontFamily: "sfproRoundSemiB",
+                  ),
+                  border: InputBorder.none,
+                  icon: Icon(Icons.search, color: Colors.grey),
+                ),
+                onChanged: (val) {
+                  setState(() {
+                    searchQuery = val.toLowerCase();
+                  });
+                },
+              ),
+            ),
+
+            // Firebase List
             Expanded(
               child: FirebaseAnimatedList(
                 controller: _scrollController,
@@ -300,6 +295,16 @@ class _ARM_SentState extends State<ARM_Sent> {
                     ) {
                       Map sent = snapshot.value as Map;
                       sent['key'] = snapshot.key;
+
+                      // Filter by POC
+                      final String poc =
+                          (sent['info']?['poc'] ?? sent['placeOfCoupe'] ?? "")
+                              .toString();
+                      if (searchQuery.isNotEmpty &&
+                          !poc.toLowerCase().contains(searchQuery)) {
+                        return const SizedBox.shrink();
+                      }
+
                       return listItem(Sent: sent, index: index);
                     },
               ),

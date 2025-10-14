@@ -21,6 +21,7 @@ class _RmSentState extends State<RmSent> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
+  String searchQuery = ""; // For search filtering
 
   @override
   void initState() {
@@ -33,11 +34,11 @@ class _RmSentState extends State<RmSent> {
 
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        if (_showHeader) setState(() => _showHeader = false);
-      } else if (_scrollController.position.userScrollDirection ==
           ScrollDirection.forward) {
         if (!_showHeader) setState(() => _showHeader = true);
+      } else if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_showHeader) setState(() => _showHeader = false);
       }
     });
   }
@@ -208,12 +209,38 @@ class _RmSentState extends State<RmSent> {
                   : null,
             ),
 
+            // Search bar below header
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: TextField(
+                decoration: const InputDecoration(
+                  hintText: "Search by POC",
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                    fontFamily: "sfproRoundSemiB",
+                  ),
+                  border: InputBorder.none,
+                  icon: Icon(Icons.search, color: Colors.grey),
+                ),
+                onChanged: (val) {
+                  setState(() {
+                    searchQuery = val.toLowerCase();
+                  });
+                },
+              ),
+            ),
+
             // Firebase list
-            SizedBox(height: 0),
             Expanded(
               child: FirebaseAnimatedList(
                 controller: _scrollController,
                 query: dbref,
+
                 itemBuilder:
                     (
                       BuildContext context,
@@ -223,6 +250,14 @@ class _RmSentState extends State<RmSent> {
                     ) {
                       Map sent = snapshot.value as Map;
                       sent['key'] = snapshot.key;
+
+                      // Filter by POC
+                      final String poc = sent['placeOfCoupe'] ?? "";
+                      if (searchQuery.isNotEmpty &&
+                          !poc.toLowerCase().contains(searchQuery)) {
+                        return const SizedBox.shrink();
+                      }
+
                       return listItem(Sent: sent, index: index);
                     },
               ),

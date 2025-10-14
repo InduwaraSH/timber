@@ -6,7 +6,6 @@ import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/ARM/ARM_RecivedView_CO.dart';
 import 'package:timber_app/ARM/ARM_Recived_view.dart';
-import 'package:timber_app/ARM/ARM_info_panel.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
 import 'package:timber_app/RM/RM_Recived_view_ARM.dart';
@@ -25,6 +24,8 @@ class _RMRecivedState extends State<RMRecived> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
+  int messageCount = 0;
+  String searchQuery = ""; // Search filtering
 
   @override
   void initState() {
@@ -34,6 +35,14 @@ class _RMRecivedState extends State<RMRecived> {
         .child('RM_branch_data_saved')
         .child(widget.office_location)
         .child("Recived");
+
+    // Get initial message count
+    dbref.once().then((event) {
+      final data = event.snapshot.value as Map?;
+      setState(() {
+        messageCount = data?.length ?? 0;
+      });
+    });
 
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection ==
@@ -55,7 +64,6 @@ class _RMRecivedState extends State<RMRecived> {
   Widget listItem({required Map Sent, required int index}) {
     final String Reciver = Sent['Reciver'] ?? "N/A";
 
-    // Declare variables for both cases
     String branchName = "";
     String poc = "";
     String DateInformed = "";
@@ -66,7 +74,7 @@ class _RMRecivedState extends State<RMRecived> {
     Color textPrimary = const Color(0xFF5065D8);
     Color iconPrimary = const Color(0xFF5065D8);
 
-    // Additional variables for ARM
+    // ARM-specific variables
     String OfficerName = "";
     String OfficerPositionAndName = "";
     String donor_details = "";
@@ -88,23 +96,18 @@ class _RMRecivedState extends State<RMRecived> {
       OfficerPositionAndName = Sent['info']['OfficerPositionAndName'] ?? "N/A";
       donor_details = Sent['info']['donor_details'] ?? "N/A";
       Condition = Sent['info']['Condition'] ?? "N/A";
-
       treeCount = Sent['info']['treeCount'] ?? "N/A";
       CO_name = Sent['info']['From_CO'] ?? "N/A";
       Income = Sent['info']['Income'].toString() ?? "N/A";
       Outcome = Sent['info']['Outcome'].toString() ?? "N/A";
       Profit = Sent['info']['profitValue'].toString() ?? "N/A";
-
       ARM_office = Sent['info']['ARM_Office'] ?? "N/A";
-      activeColor1 = const Color(0xFFE9FBE7); // very light minty green
-      activeColor2 = const Color(0xFFC8E6C9); // soft leafy pastel
-      textPrimary = const Color(0xFF4CAF50); // gentle fresh green
-      iconPrimary = const Color(0xFF4CAF50); // matching icon color
-      // activeColor1 = const Color(0xFFFFE6E9); // very light pink background
-      // activeColor2 = const Color(0xFFFFD9E0); // slightly deeper pastel
-      // textPrimary = const Color(0xFFE35D6A); // warm soft rose
-      // iconPrimary = const Color(0xFFE35D6A); // matching icon color
-    } else if (Reciver == "RM") {
+
+      activeColor1 = const Color(0xFFE9FBE7);
+      activeColor2 = const Color(0xFFC8E6C9);
+      textPrimary = const Color(0xFF4CAF50);
+      iconPrimary = const Color(0xFF4CAF50);
+    } else if (Reciver == "CO") {
       branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
       poc = Sent['poc'] ?? "N/A";
       DateInformed = Sent['DateInformed'] ?? "N/A";
@@ -116,8 +119,6 @@ class _RMRecivedState extends State<RMRecived> {
       textPrimary = const Color(0xFF5065D8);
       iconPrimary = const Color(0xFF5065D8);
     }
-
-    //  Updated colors according to uploaded design
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
@@ -132,12 +133,10 @@ class _RMRecivedState extends State<RMRecived> {
                 DateInformed: DateInformed,
                 LetterNo: LetterNo,
                 SerialNum: SerialNum,
-
                 OfficerPositionAndName: OfficerPositionAndName,
                 donor_details: donor_details,
                 Condition: Condition,
                 treeCount: treeCount,
-
                 office_location: widget.office_location,
                 PlaceOfCoupe_exact_from_arm: poc,
                 OfficerName: OfficerName,
@@ -146,8 +145,6 @@ class _RMRecivedState extends State<RMRecived> {
                 Income: Income.toString(),
                 Outcome: Outcome.toString(),
                 Profit: Profit.toString(),
-
-                //CO_name: branchName,
               ),
             ),
           );
@@ -166,19 +163,6 @@ class _RMRecivedState extends State<RMRecived> {
             ),
           );
         }
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (_) => ARM_Received_View(
-        //       branchName: branchName,
-        //       poc: poc,
-        //       DateInformed: DateInformed,
-        //       LetterNo: LetterNo,
-        //       SerialNum: SerialNum,
-        //       office_location: widget.office_location,
-        //     ),
-        //   ),
-        // );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -201,7 +185,6 @@ class _RMRecivedState extends State<RMRecived> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Left texts
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -236,8 +219,6 @@ class _RMRecivedState extends State<RMRecived> {
                 ),
               ],
             ),
-
-            // Right icon
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -263,36 +244,80 @@ class _RMRecivedState extends State<RMRecived> {
         top: true,
         bottom: false,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Animated Header
+            // Animated Header with message count
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               height: _showHeader ? 100 : 1,
               curve: Curves.easeInOut,
               child: _showHeader
                   ? Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        left: 28,
-                        right: 16,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             "Inbox",
                             style: TextStyle(
-                              fontSize: 50,
-                              fontFamily: "sfproRoundSemiB",
+                              fontSize: 48,
                               fontWeight: FontWeight.bold,
+                              fontFamily: "sfproRoundSemiB",
                               color: Colors.black,
+                            ),
+                          ),
+
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 7,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              "$messageCount",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: 'sfproRoundSemiB',
+                              ),
                             ),
                           ),
                         ],
                       ),
                     )
                   : null,
+            ),
+
+            // Search bar below Inbox row
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: TextField(
+                decoration: const InputDecoration(
+                  hintText: "Search by POC",
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                    fontFamily: "sfproRoundSemiB",
+                  ),
+                  border: InputBorder.none,
+                  icon: Icon(Icons.search, color: Colors.grey),
+                ),
+                onChanged: (val) {
+                  setState(() {
+                    searchQuery = val.toLowerCase();
+                  });
+                },
+              ),
             ),
 
             // Firebase list
@@ -309,6 +334,15 @@ class _RMRecivedState extends State<RMRecived> {
                     ) {
                       Map sent = snapshot.value as Map;
                       sent['key'] = snapshot.key;
+
+                      // Filter by POC
+                      final String poc =
+                          sent['info']?['poc'] ?? sent['poc'] ?? "";
+                      if (searchQuery.isNotEmpty &&
+                          !poc.toLowerCase().contains(searchQuery)) {
+                        return const SizedBox.shrink();
+                      }
+
                       return listItem(Sent: sent, index: index);
                     },
               ),

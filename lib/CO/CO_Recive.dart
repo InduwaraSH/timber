@@ -31,7 +31,7 @@ class _CORecivedState extends State<CORecived> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
-
+  int messageCount = 0; // New message count variable
   String searchQuery = ""; // For search filtering
 
   @override
@@ -42,6 +42,18 @@ class _CORecivedState extends State<CORecived> {
         .child('CO_branch_data_saved')
         .child(widget.username)
         .child("Recived");
+
+    // Listen to changes in the database to dynamically update the message count
+    dbref.onValue.listen((event) {
+      final data = event.snapshot.value;
+      setState(() {
+        if (data is Map) {
+          messageCount = data.length;
+        } else {
+          messageCount = 0;
+        }
+      });
+    });
 
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection ==
@@ -176,7 +188,7 @@ class _CORecivedState extends State<CORecived> {
             // Animated Header
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              height: _showHeader ? 160 : 1,
+              height: _showHeader ? 180 : 1,
               curve: Curves.easeInOut,
               child: _showHeader
                   ? Padding(
@@ -195,7 +207,7 @@ class _CORecivedState extends State<CORecived> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   profile_button(username: widget.username),
-                                  const SizedBox(width: 10),
+
                                   const Text(
                                     "Inbox",
                                     style: TextStyle(
@@ -205,14 +217,43 @@ class _CORecivedState extends State<CORecived> {
                                       color: Colors.black,
                                     ),
                                   ),
+
+                                  // Message count
                                 ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 7,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        "$messageCount",
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontFamily: "sfproRoundSemiB",
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                           const SizedBox(height: 10),
                           // Modern Search Bar
                           Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
                               color: Colors.grey[200],
@@ -240,6 +281,7 @@ class _CORecivedState extends State<CORecived> {
                     )
                   : null,
             ),
+            //const SizedBox(height: 10),
 
             // Firebase list
             Expanded(

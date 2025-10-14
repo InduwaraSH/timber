@@ -92,7 +92,7 @@ class _RmBNavbarState extends State<RmBNavbar> {
                         ),
                         _navItem(
                           Iconsax.arrow_down_24,
-                          "Received",
+                          "Inbox",
                           rm_controller.selectedIndex.value == 2,
                         ),
                         _navItem(
