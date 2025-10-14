@@ -28,6 +28,7 @@ class _RmOfficeRegisterState extends State<RmOfficeRegister> {
     'Jaffna',
     'Anuradhapura',
     'Kandy',
+    'Jaffna',
   ];
 
   @override

@@ -37,6 +37,7 @@ class _RmRegisterState extends State<RmRegister> {
     "Kamburupitiya",
     "Akuressa",
     "Deniyaya",
+    'Jaffna',
   ];
 
   @override

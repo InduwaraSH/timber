@@ -43,6 +43,7 @@ class _ArmOfficeRegisterState extends State<ArmOfficeRegister> {
     "Weligama",
     "Ahangama",
     "Kegalle",
+    'Jaffna',
   ];
 
   @override

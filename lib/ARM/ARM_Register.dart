@@ -38,6 +38,7 @@ class _ArmRegisterState extends State<ArmRegister> {
     "Kamburupitiya",
     "Akuressa",
     "Deniyaya",
+    'Jaffna',
   ];
 
   @override
