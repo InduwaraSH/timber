@@ -3,6 +3,8 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/CO/CO_SEnte_image_attach.dart';
+import 'package:timber_app/CO/CO_Sent_imageView.dart';
 import 'package:timber_app/CO/CO_Timeline.dart';
 import 'package:timber_app/CO/c_test.dart';
 
@@ -235,20 +237,45 @@ class _CoSentviewState extends State<CoSentview> {
                     color: Colors.black,
                   ),
                 ),
-                FloatingActionButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CO_timeline(
-                          branchName: widget.office_location,
-                          SerialNum: widget.SerialNum,
-                        ),
-                      ),
-                    );
-                  },
-                  backgroundColor: Colors.black,
-                  child: const Icon(Iconsax.chart_15, color: Colors.green),
+                Row(
+                  children: [
+                    FloatingActionButton(
+                      onPressed: () {
+                        heroTag:
+                        "imageBtn";
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CoSentImageview(
+                              poc: widget.poc,
+                              SerialNum: widget.SerialNum,
+                            ),
+                          ),
+                        );
+                      },
+                      backgroundColor: Colors.black,
+                      child: const Icon(Iconsax.image5, color: Colors.blue),
+                    ),
+
+                    SizedBox(width: 16),
+
+                    FloatingActionButton(
+                      heroTag: "timelineBtn",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CO_timeline(
+                              branchName: widget.office_location,
+                              SerialNum: widget.SerialNum,
+                            ),
+                          ),
+                        );
+                      },
+                      backgroundColor: Colors.black,
+                      child: const Icon(Iconsax.chart_15, color: Colors.green),
+                    ),
+                  ],
                 ),
               ],
             )
