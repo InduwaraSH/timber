@@ -15,7 +15,11 @@ import 'package:timber_app/RM/sent_CardView.dart';
 class CO_Sent extends StatefulWidget {
   final String office_location;
   final String username;
-  const CO_Sent({super.key, required this.office_location, required this.username});
+  const CO_Sent({
+    super.key,
+    required this.office_location,
+    required this.username,
+  });
 
   @override
   State<CO_Sent> createState() => _CO_SentState();
@@ -26,11 +30,16 @@ class _CO_SentState extends State<CO_Sent> {
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
 
-  Map<String, dynamic>? latestTreeDetails;
+  String searchQuery = ""; // For search filtering
+
   @override
   void initState() {
     super.initState();
-    dbref = FirebaseDatabase.instance.ref().child('CO_branch_data_saved').child(widget.username).child("Sent");
+    dbref = FirebaseDatabase.instance
+        .ref()
+        .child('CO_branch_data_saved')
+        .child(widget.username)
+        .child("Sent");
 
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection ==
@@ -93,8 +102,6 @@ class _CO_SentState extends State<CO_Sent> {
               Condition: Condition,
               treeCount: treeCount,
               user_name: widget.username,
-
-              // to: to,
             ),
           ),
         );
@@ -182,48 +189,60 @@ class _CO_SentState extends State<CO_Sent> {
         top: true,
         bottom: false,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // Animated Header
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              height: _showHeader ? 100 : 1,
+              height: _showHeader ? 160 : 1,
               curve: Curves.easeInOut,
               child: _showHeader
                   ? Padding(
                       padding: const EdgeInsets.only(
-                        top: 0,
+                        top: 15,
                         left: 28,
                         right: 16,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Sent",
-                            style: TextStyle(
-                              fontSize: 50,
-                              fontFamily: "sfproRoundSemiB",
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          FloatingActionButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => test(
-                                    office_location: widget.office_location,
-                                  ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                "Sent",
+                                style: TextStyle(
+                                  fontSize: 50,
+                                  fontFamily: "sfproRoundSemiB",
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
                                 ),
-                              );
-                            },
-                            backgroundColor: Colors.black,
-                            child: Icon(
-                              Iconsax.pen_add,
-                              color: Colors.white,
-                              size: 30,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          // Modern search bar
+                          Container(
+                            margin: const EdgeInsets.only(right: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                hintText: "Search by POC",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: "sfproRoundSemiB",
+                                ),
+                                border: InputBorder.none,
+                                icon: Icon(Icons.search, color: Colors.grey),
+                              ),
+                              onChanged: (val) {
+                                setState(() {
+                                  searchQuery = val.toLowerCase();
+                                });
+                              },
                             ),
                           ),
                         ],
@@ -231,9 +250,7 @@ class _CO_SentState extends State<CO_Sent> {
                     )
                   : null,
             ),
-
             // Firebase list
-            SizedBox(height: 0),
             Expanded(
               child: FirebaseAnimatedList(
                 controller: _scrollController,
@@ -247,6 +264,15 @@ class _CO_SentState extends State<CO_Sent> {
                     ) {
                       Map sent = snapshot.value as Map;
                       sent['key'] = snapshot.key;
+
+                      // Filter based on POC
+                      final String poc =
+                          sent['timberReportheadlines']['placeofcoupe'] ?? "";
+                      if (searchQuery.isNotEmpty &&
+                          !poc.toLowerCase().contains(searchQuery)) {
+                        return const SizedBox.shrink(); // Hide non-matching items
+                      }
+
                       return listItem(Sent: sent, index: index);
                     },
               ),

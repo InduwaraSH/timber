@@ -92,7 +92,7 @@ class _RMHomepageState extends State<RMHomepage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const profile_button(),
+                        profile_button(username: widget.username),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -513,7 +513,8 @@ class alert_button extends StatelessWidget {
 }
 
 class profile_button extends StatelessWidget {
-  const profile_button({super.key});
+  final String username;
+  const profile_button({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -530,7 +531,7 @@ class profile_button extends StatelessWidget {
         child: CircleAvatar(
           radius: 30,
           backgroundColor: const Color.fromARGB(0, 238, 238, 238),
-          child: ClipOval(child: AvatarPlus("2323", height: 60, width: 60)),
+          child: ClipOval(child: AvatarPlus(username, height: 60, width: 60)),
         ),
       ),
     );

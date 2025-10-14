@@ -83,18 +83,28 @@ class _co_b_navbarState extends State<co_b_navbar> {
                           backgroundColor: Colors.white,
                           type: BottomNavigationBarType.fixed,
                           elevation: 0,
-                          selectedItemColor: Colors.green,
-                          unselectedItemColor: Colors.green[300],
+                          selectedItemColor: Colors.black,
+
+                          unselectedItemColor: Colors.black45,
                           showUnselectedLabels: true,
-                          selectedFontSize: 12,
+                          selectedFontSize: 13,
                           selectedLabelStyle: TextStyle(
                             fontWeight: FontWeight.bold,
+                            fontFamily: "sfproRoundSemiB",
                           ),
                           unselectedFontSize: 12,
+                          unselectedLabelStyle: TextStyle(
+                            fontFamily: "sfproRoundSemiB",
+                          ),
                           items: [
+                            // _navItem(
+                            //   Iconsax.home,
+                            //   "Home",
+                            //   controller.selectedIndex.value == 0,
+                            // ),
                             _navItem(
-                              Iconsax.home,
-                              "Home",
+                              Iconsax.arrow_down_24,
+                              "Inbox",
                               controller.selectedIndex.value == 0,
                             ),
                             _navItem(
@@ -102,15 +112,11 @@ class _co_b_navbarState extends State<co_b_navbar> {
                               "Sent",
                               controller.selectedIndex.value == 1,
                             ),
-                            _navItem(
-                              Iconsax.arrow_down_24,
-                              "Received",
-                              controller.selectedIndex.value == 2,
-                            ),
+
                             _navItem(
                               Iconsax.chart_2,
                               "Statistics",
-                              controller.selectedIndex.value == 3,
+                              controller.selectedIndex.value == 2,
                             ),
                           ],
                         ),
@@ -129,12 +135,12 @@ class _co_b_navbarState extends State<co_b_navbar> {
   BottomNavigationBarItem _navItem(IconData icon, String label, bool active) {
     return BottomNavigationBarItem(
       icon: TweenAnimationBuilder<double>(
-        tween: Tween(begin: 1.0, end: active ? 1.2 : 1.0),
+        tween: Tween(begin: 1.0, end: active ? 1.3 : 1.0),
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
         builder: (context, scale, child) => Transform.scale(
           scale: scale,
-          child: Icon(icon, color: active ? Colors.green : Colors.green[300]),
+          child: Icon(icon, color: active ? Colors.black : Colors.black45),
         ),
       ),
       label: label,
@@ -150,9 +156,10 @@ class CONavigControll extends GetxController {
   CONavigControll(this.office_location, this.username);
 
   late final List<Widget> screens = [
-    CoHome(office_location: office_location, username: username),
-    CO_Sent(office_location: office_location, username: username),
+    //CoHome(office_location: office_location, username: username),
     CORecived(office_location: office_location, username: username),
+    CO_Sent(office_location: office_location, username: username),
+
     pgfour(office_location: office_location),
   ];
 }

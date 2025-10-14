@@ -1,3 +1,4 @@
+import 'package:avatar_plus/avatar_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,7 @@ import 'package:timber_app/ARM/ARM_info_panel.dart';
 import 'package:timber_app/CO/CO_Recived_View.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
+import 'package:timber_app/RM/RM_ProfilePage.dart';
 import 'package:timber_app/RM/createFor.dart';
 import 'package:timber_app/RM/sent_CardView.dart';
 
@@ -29,6 +31,8 @@ class _CORecivedState extends State<CORecived> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
+
+  String searchQuery = ""; // For search filtering
 
   @override
   void initState() {
@@ -64,7 +68,6 @@ class _CORecivedState extends State<CORecived> {
     final String SerialNum = Sent['Serial Number'] ?? "N/A";
     final String about_me = Sent['from'] ?? "Not Available";
 
-    // ✅ Updated colors according to uploaded design
     Color activeColor1 = const Color(0xFFE2ECFF);
     Color activeColor2 = const Color(0xFFD6E4FA);
     Color textPrimary = const Color(0xFF5065D8);
@@ -84,7 +87,6 @@ class _CORecivedState extends State<CORecived> {
               SerialNum: SerialNum,
               username: widget.username,
               about_me: about_me,
-
             ),
           ),
         );
@@ -110,7 +112,6 @@ class _CORecivedState extends State<CORecived> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Left texts
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -145,8 +146,6 @@ class _CORecivedState extends State<CORecived> {
                 ),
               ],
             ),
-
-            // Right icon
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -177,25 +176,63 @@ class _CORecivedState extends State<CORecived> {
             // Animated Header
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              height: _showHeader ? 100 : 1,
+              height: _showHeader ? 160 : 1,
               curve: Curves.easeInOut,
               child: _showHeader
                   ? Padding(
                       padding: const EdgeInsets.only(
-                        top: 0,
-                        left: 28,
-                        right: 16,
+                        top: 10,
+                        left: 5,
+                        right: 10,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Inbox",
-                            style: TextStyle(
-                              fontSize: 50,
-                              fontFamily: "sfproRoundSemiB",
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  profile_button(username: widget.username),
+                                  const SizedBox(width: 10),
+                                  const Text(
+                                    "Inbox",
+                                    style: TextStyle(
+                                      fontSize: 50,
+                                      fontFamily: "sfproRoundSemiB",
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          // Modern Search Bar
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                hintText: "Search by POC",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: "sfproRoundSemiB",
+                                ),
+                                border: InputBorder.none,
+                                icon: Icon(Icons.search, color: Colors.grey),
+                              ),
+                              onChanged: (val) {
+                                setState(() {
+                                  searchQuery = val.toLowerCase();
+                                });
+                              },
                             ),
                           ),
                         ],
@@ -218,11 +255,45 @@ class _CORecivedState extends State<CORecived> {
                     ) {
                       Map sent = snapshot.value as Map;
                       sent['key'] = snapshot.key;
+
+                      // Filter by POC
+                      final String poc = sent['placeOfCoupe'] ?? "";
+                      if (searchQuery.isNotEmpty &&
+                          !poc.toLowerCase().contains(searchQuery)) {
+                        return const SizedBox.shrink();
+                      }
+
                       return listItem(Sent: sent, index: index);
                     },
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class profile_button extends StatelessWidget {
+  final String username;
+  const profile_button({super.key, required this.username});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => UserProfilePage()),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+        alignment: Alignment.topLeft,
+        child: CircleAvatar(
+          radius: 30,
+          backgroundColor: const Color.fromARGB(0, 238, 238, 238),
+          child: ClipOval(child: AvatarPlus(username, height: 60, width: 60)),
         ),
       ),
     );
