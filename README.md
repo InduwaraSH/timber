@@ -90,8 +90,8 @@ The **State Timber Corporation** faced challenges in tracking tree-cutting reque
 ## ⚙️ Project Setup
 ### Clone the repository
 ```bash
-git clone https://github.com/yourusername/T-Track.git
-cd T-Track
+git clone https://github.com/InduwaraSH/timber.git
+cd timber
 
 ```
 ### Install dependencies
