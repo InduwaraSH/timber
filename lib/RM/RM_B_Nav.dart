@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -11,6 +12,7 @@ import 'package:timber_app/d.dart';
 class RmBNavbar extends StatefulWidget {
   final String office_location;
   final String username;
+
   const RmBNavbar({
     super.key,
     required this.office_location,
@@ -23,6 +25,7 @@ class RmBNavbar extends StatefulWidget {
 
 class _RmBNavbarState extends State<RmBNavbar> {
   late final RMNavigControll rm_controller;
+  bool _isNavVisible = true;
 
   @override
   void initState() {
@@ -33,6 +36,13 @@ class _RmBNavbarState extends State<RmBNavbar> {
     );
   }
 
+  /// This method allows each child page to call hide/show based on its scroll
+  void toggleNavBarVisibility(bool visible) {
+    if (_isNavVisible != visible) {
+      setState(() => _isNavVisible = visible);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -40,67 +50,78 @@ class _RmBNavbarState extends State<RmBNavbar> {
         backgroundColor: Colors.white,
         body: Stack(
           children: [
-            // Page content
-            rm_controller.screens[rm_controller.selectedIndex.value],
+            // current active screen
+            _attachScrollListener(
+              rm_controller.screens[rm_controller.selectedIndex.value],
+            ),
 
-            // Floating bottom nav bar
+            // Animated floating nav bar
             Positioned(
               left: 16,
               right: 16,
               bottom: 0,
               child: SafeArea(
-                child: Container(
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(150, 255, 255, 255),
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
+                child: AnimatedSlide(
+                  duration: const Duration(milliseconds: 300),
+                  offset: _isNavVisible ? Offset.zero : const Offset(0, 2),
+                  curve: Curves.easeOut,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: _isNavVisible ? 1 : 0,
+                    child: Container(
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(240, 255, 255, 255),
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: BottomNavigationBar(
-                      currentIndex: rm_controller.selectedIndex.value,
-                      onTap: (index) =>
-                          rm_controller.selectedIndex.value = index,
-                      backgroundColor: Colors.white,
-                      type: BottomNavigationBarType.fixed,
-                      elevation: 0,
-                      selectedItemColor: Colors.black,
-                      unselectedItemColor: Colors.grey,
-                      showUnselectedLabels: true,
-                      selectedFontSize: 12,
-                      selectedLabelStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: BottomNavigationBar(
+                          currentIndex: rm_controller.selectedIndex.value,
+                          onTap: (index) =>
+                              rm_controller.selectedIndex.value = index,
+                          backgroundColor: Colors.white,
+                          type: BottomNavigationBarType.fixed,
+                          elevation: 0,
+                          selectedItemColor: Colors.black,
+                          unselectedItemColor: Colors.grey,
+                          showUnselectedLabels: true,
+                          selectedFontSize: 12,
+                          selectedLabelStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          unselectedFontSize: 12,
+                          items: [
+                            _navItem(
+                              Iconsax.home,
+                              "Home",
+                              rm_controller.selectedIndex.value == 0,
+                            ),
+                            _navItem(
+                              Iconsax.send_24,
+                              "Sent",
+                              rm_controller.selectedIndex.value == 1,
+                            ),
+                            _navItem(
+                              Iconsax.arrow_down_24,
+                              "Inbox",
+                              rm_controller.selectedIndex.value == 2,
+                            ),
+                            _navItem(
+                              Iconsax.chart_2,
+                              "Statistics",
+                              rm_controller.selectedIndex.value == 3,
+                            ),
+                          ],
+                        ),
                       ),
-                      unselectedFontSize: 12,
-                      items: [
-                        _navItem(
-                          Iconsax.home,
-                          "Home",
-                          rm_controller.selectedIndex.value == 0,
-                        ),
-                        _navItem(
-                          Iconsax.send_24,
-                          "Sent",
-                          rm_controller.selectedIndex.value == 1,
-                        ),
-                        _navItem(
-                          Iconsax.arrow_down_24,
-                          "Inbox",
-                          rm_controller.selectedIndex.value == 2,
-                        ),
-                        _navItem(
-                          Iconsax.chart_2,
-                          "Statistics",
-                          rm_controller.selectedIndex.value == 3,
-                        ),
-                      ],
                     ),
                   ),
                 ),
@@ -109,6 +130,21 @@ class _RmBNavbarState extends State<RmBNavbar> {
           ],
         ),
       ),
+    );
+  }
+
+  /// Attach scroll detection to the screen (works if that screen uses ListView/SingleChildScrollView)
+  Widget _attachScrollListener(Widget screen) {
+    return NotificationListener<UserScrollNotification>(
+      onNotification: (notification) {
+        if (notification.direction == ScrollDirection.reverse) {
+          toggleNavBarVisibility(false);
+        } else if (notification.direction == ScrollDirection.forward) {
+          toggleNavBarVisibility(true);
+        }
+        return false;
+      },
+      child: screen,
     );
   }
 

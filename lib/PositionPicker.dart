@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/AGM/AGM_Register.dart';
 import 'package:timber_app/ARM/ARM_Register.dart';
 import 'package:timber_app/CO/CO_Register.dart';
+import 'package:timber_app/DGM/DGM_Register.dart';
 import 'package:timber_app/RM/RM_Register.dart';
 
 class Positionpicker extends StatefulWidget {
@@ -16,7 +18,13 @@ class _PositionpickerState extends State<Positionpicker> {
   int _selectedTown = 0;
 
   static const double _kItemExtent = 32.0;
-  static const List<String> _townName = <String>['RM', 'ARM', 'CO'];
+  static const List<String> _townName = <String>[
+    'RM',
+    'ARM',
+    'CO',
+    'AGM',
+    'DGM',
+  ];
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
@@ -200,6 +208,24 @@ class _PositionpickerState extends State<Positionpicker> {
                 ),
                 textAlign: TextAlign.start,
               ),
+              Text(
+                "AGM - Assistant General Manager",
+                style: TextStyle(
+                  fontFamily: "sfproRoundRegular",
+                  fontSize: 15,
+                  color: Colors.lightBlue[500],
+                ),
+                textAlign: TextAlign.start,
+              ),
+              Text(
+                "DGM - Deputy General Manager",
+                style: TextStyle(
+                  fontFamily: "sfproRoundRegular",
+                  fontSize: 15,
+                  color: Colors.lightBlue[500],
+                ),
+                textAlign: TextAlign.start,
+              ),
               SizedBox(height: 60),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -241,6 +267,20 @@ class _PositionpickerState extends State<Positionpicker> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => CoRegister(),
+                              ),
+                            );
+                          } else if (_townName[_selectedTown] == 'AGM') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AgmRegister(),
+                              ),
+                            );
+                          } else if (_townName[_selectedTown] == 'DGM') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DgmRegister(),
                               ),
                             );
                           }
