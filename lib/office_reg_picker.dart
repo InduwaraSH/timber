@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:timber_app/ARM/ARM_Register.dart';
 import 'package:timber_app/ARM/ARM_office_reg.dart';
-import 'package:timber_app/CO/CO_Register.dart';
-import 'package:timber_app/RM/RM_Register.dart';
 import 'package:timber_app/RM/RM_office_reg.dart';
 
 class OfficeRegPicker extends StatefulWidget {
@@ -18,7 +15,11 @@ class _OfficeRegPickerState extends State<OfficeRegPicker> {
   int _selectedTown = 0;
 
   static const double _kItemExtent = 32.0;
-  static const List<String> _townName = <String>['RM office', 'ARM office'];
+  static const List<String> _townName = <String>[
+    'RM office',
+    'ARM office',
+    
+  ];
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(

@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:timber_app/RM/RM_Register.dart';
 import 'package:timber_app/logingPage.dart';
 
 class page extends StatelessWidget {

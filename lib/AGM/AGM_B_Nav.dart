@@ -8,20 +8,20 @@ import 'package:timber_app/CO/CO_Recive.dart';
 import 'package:timber_app/CO/CO_Sent.dart';
 import 'package:timber_app/d.dart';
 
-class co_b_navbar extends StatefulWidget {
+class agm_b_navbar extends StatefulWidget {
   final String office_location;
   final String username;
-  const co_b_navbar({
+  const agm_b_navbar({
     super.key,
     required this.office_location,
     required this.username,
   });
 
   @override
-  State<co_b_navbar> createState() => _co_b_navbarState();
+  State<agm_b_navbar> createState() => _agm_b_navbarState();
 }
 
-class _co_b_navbarState extends State<co_b_navbar> {
+class _agm_b_navbarState extends State<agm_b_navbar> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -108,11 +108,11 @@ class _co_b_navbarState extends State<co_b_navbar> {
                               controller.selectedIndex.value == 1,
                             ),
 
-                            // _navItem(
-                            //   Iconsax.chart_2,
-                            //   "Statistics",
-                            //   controller.selectedIndex.value == 2,
-                            // ),
+                            _navItem(
+                              Iconsax.chart_2,
+                              "Statistics",
+                              controller.selectedIndex.value == 2,
+                            ),
                           ],
                         ),
                       ),

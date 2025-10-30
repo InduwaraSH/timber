@@ -3,7 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:timber_app/ARM/ARM_B_Nav.dart';
-import 'package:timber_app/CO/CO_B_Nav.dart';
 import 'package:timber_app/RM/RM_B_Nav.dart';
 
 class Login {
@@ -50,7 +49,7 @@ class Login {
     } else {
       try {
         await FirebaseAuth.instance.signOut();
-        final credential = await FirebaseAuth.instance
+        await FirebaseAuth.instance
             .signInWithEmailAndPassword(
               email: '${employeeId.trim()}@gmail.com',
               password: password.trim(),

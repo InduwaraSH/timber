@@ -12,7 +12,7 @@ class AgmRegister extends StatefulWidget {
 }
 
 class _AgmRegisterState extends State<AgmRegister> {
-  int _selectedTown = 0;
+  //int _selectedTown = 0;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nicController = TextEditingController();
@@ -23,22 +23,22 @@ class _AgmRegisterState extends State<AgmRegister> {
   late DatabaseReference branchReference;
   late DatabaseReference employeeReference;
 
-  static const double _kItemExtent = 32.0;
-  static const List<String> _townName = <String>[
-    'Embilipitya',
-    'Matara',
-    'Colombo',
-    'Ratnapura',
-    'Galle',
-    "Hambantota",
-    "Tangalle",
-    "Weligama",
-    "Ahangama",
-    "Kamburupitiya",
-    "Akuressa",
-    "Deniyaya",
-    'Jaffna',
-  ];
+  // static const double _kItemExtent = 32.0;
+  // static const List<String> _townName = <String>[
+  //   'Embilipitya',
+  //   'Matara',
+  //   'Colombo',
+  //   'Ratnapura',
+  //   'Galle',
+  //   "Hambantota",
+  //   "Tangalle",
+  //   "Weligama",
+  //   "Ahangama",
+  //   "Kamburupitiya",
+  //   "Akuressa",
+  //   "Deniyaya",
+  //   'Jaffna',
+  // ];
 
   @override
   void initState() {
@@ -47,20 +47,20 @@ class _AgmRegisterState extends State<AgmRegister> {
     employeeReference = FirebaseDatabase.instance.ref().child("employees");
   }
 
-  void _showDialog(Widget child) {
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => Container(
-        height: 216,
-        padding: const EdgeInsets.only(top: 6.0),
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        child: SafeArea(top: false, child: child),
-      ),
-    );
-  }
+  // void _showDialog(Widget child) {
+  //   showCupertinoModalPopup<void>(
+  //     context: context,
+  //     builder: (BuildContext context) => Container(
+  //       height: 216,
+  //       padding: const EdgeInsets.only(top: 6.0),
+  //       margin: EdgeInsets.only(
+  //         bottom: MediaQuery.of(context).viewInsets.bottom,
+  //       ),
+  //       color: CupertinoColors.systemBackground.resolveFrom(context),
+  //       child: SafeArea(top: false, child: child),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
