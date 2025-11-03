@@ -174,7 +174,7 @@ class RMNavigControll extends GetxController {
   late final List<Widget> screens = [
     RMHomepage(office_location: office_location, username: username),
     RmSent(office_location: office_location),
-    RMRecived(office_location: office_location),
+    RMRecived(office_location: office_location,username: username),
     pgfour(office_location: office_location),
   ];
 }

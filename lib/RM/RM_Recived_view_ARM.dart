@@ -34,6 +34,7 @@ class RmRecivedViewArm extends StatefulWidget {
   final String Income;
   final String Outcome;
   final String Profit;
+  final String CO_Name;
 
   const RmRecivedViewArm({
     super.key,
@@ -54,6 +55,7 @@ class RmRecivedViewArm extends StatefulWidget {
     required this.Income,
     required this.Outcome,
     required this.Profit,
+    required this.CO_Name,
   });
 
   @override
@@ -262,12 +264,10 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
 
       final infoItems = [
         {"label": "ARM Office", "value": widget.ARM_Office},
-        {"label": "CO", "value": widget.user_name},
+        {"label": "RM", "value": widget.user_name},
+        {"label": "CO", "value": widget.CO_Name},
         {"label": "POC", "value": widget.poc},
-        {
-          "label": "Place of Coupe",
-          "value": widget.PlaceOfCoupe_exact_from_arm,
-        },
+        {"label": "POC Exact", "value": widget.PlaceOfCoupe_exact_from_arm},
         {"label": "Date Informed", "value": widget.DateInformed},
         {"label": "Letter No", "value": widget.LetterNo},
         {"label": "Serial No", "value": widget.SerialNum},
@@ -411,10 +411,11 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
   @override
   Widget build(BuildContext context) {
     final infoItems = [
-      {"label": "ARM Office", "value": widget.ARM_Branch_Name},
-      {"label": "CO", "value": widget.user_name},
+      {"label": "ARM Office", "value": widget.ARM_Office},
+      {"label": "RM", "value": widget.user_name},
+      {"label": "CO", "value": widget.CO_Name},
       {"label": "POC", "value": widget.poc},
-      {"label": "Place of Coupe", "value": widget.PlaceOfCoupe_exact_from_arm},
+      {"label": "POC Exact", "value": widget.PlaceOfCoupe_exact_from_arm},
       {"label": "Date Informed", "value": widget.DateInformed},
       {"label": "Letter No", "value": widget.LetterNo},
       {"label": "Serial No", "value": widget.SerialNum},
@@ -490,7 +491,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child("DGM")
                             .child("Recived")
                             .child(widget.SerialNum)
-                            .set({"Reciver": "RM_N_Approved"});
+                            .set({"from": "RM_N_Approved"});
 
                         // Copy allTrees if present
                         DatabaseEvent event = await dbref.once();
@@ -510,25 +511,28 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child("DGM")
                             .child("Recived")
                             .child(widget.SerialNum)
-                            .child("info")
+                            .child("timberReportheadlines")
                             .set({
-                              "ARM_Office": widget.ARM_Branch_Name,
-                              "user_name": widget.user_name,
-                              "ARM_Branch_Name": widget.ARM_Branch_Name,
-                              "poc": widget.poc,
-                              "poc_exact": widget.PlaceOfCoupe_exact_from_arm,
-                              "DateInformed": widget.DateInformed,
-                              "LetterNo": widget.LetterNo,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPositionAndName":
-                                  widget.OfficerPositionAndName,
+                              "serialnum": widget.SerialNum,
+                              "placeofcoupe": widget.poc,
+                              "dateinformed_from_rm": widget.DateInformed,
                               "donor_details": widget.donor_details,
+                              "PlaceOfCoupe_exact_from_arm":
+                                  widget.PlaceOfCoupe_exact_from_arm,
+                              "LetterNo": widget.LetterNo,
                               "Condition": widget.Condition,
-                              "SerialNum": widget.SerialNum,
-                              "treeCount": widget.treeCount,
-                              "Income": widget.Income,
-                              "Outcome": widget.Outcome,
-                              "profitValue": widget.Profit,
+                              "OfficerName": widget.OfficerName,
+                              "OfficerPosition&name":
+                                  widget.OfficerPositionAndName,
+                              "TreeCount": widget.treeCount.toString(),
+                              "Date": widget.DateInformed,
+                              "ARM_location": widget.ARM_Office,
+                              "From_CO": widget.CO_Name,
+                              "From": widget.user_name,
+                              "income": widget.Income,
+                              "outcome": widget.Outcome,
+
+                              // "CO_id": widget.user_name,
                             });
 
                         // Also mirror to RM_branch_data_saved_test
@@ -537,7 +541,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.office_location)
                             .child("Sent")
                             .child(widget.SerialNum)
-                            .set({"Reciver": "RM_Approved"});
+                            .set({"from": "RM_Approved"});
 
                         if (event.snapshot.value != null) {
                           await database
@@ -556,23 +560,24 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.SerialNum)
                             .child("info")
                             .set({
-                              "ARM_Office": widget.ARM_Branch_Name,
-                              "user_name": widget.user_name,
-                              "ARM_Branch_Name": widget.ARM_Branch_Name,
-                              "poc": widget.poc,
-                              "poc_exact": widget.PlaceOfCoupe_exact_from_arm,
-                              "DateInformed": widget.DateInformed,
-                              "LetterNo": widget.LetterNo,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPositionAndName":
-                                  widget.OfficerPositionAndName,
+                              "serialnum": widget.SerialNum,
+                              "placeofcoupe": widget.poc,
+                              "dateinformed_from_rm": widget.DateInformed,
                               "donor_details": widget.donor_details,
+                              "PlaceOfCoupe_exact_from_arm":
+                                  widget.PlaceOfCoupe_exact_from_arm,
+                              "LetterNo": widget.LetterNo,
                               "Condition": widget.Condition,
-                              "SerialNum": widget.SerialNum,
-                              "treeCount": widget.treeCount,
-                              "Income": widget.Income,
-                              "Outcome": widget.Outcome,
-                              "profitValue": widget.Profit,
+                              "OfficerName": widget.OfficerName,
+                              "OfficerPosition&name":
+                                  widget.OfficerPositionAndName,
+                              "TreeCount": widget.treeCount.toString(),
+                              "Date": widget.DateInformed,
+                              "ARM_location": widget.ARM_Office,
+                              "From_CO": widget.CO_Name,
+                              "From": widget.user_name,
+                              "income": widget.Income,
+                              "outcome": widget.Outcome,
                             });
 
                         // Update status_of_job_test
@@ -596,18 +601,18 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               ).format(DateTime.now()).toString(),
                             )
                             .then((_) {
-                              try {
-                                FirebaseDatabase.instance
-                                    .ref()
-                                    .child("RM_branch_data_saved")
-                                    .child(widget.office_location.toString())
-                                    .child("Recived")
-                                    .child(widget.SerialNum.toString())
-                                    .remove();
-                                print('Data deleted successfully');
-                              } catch (e) {
-                                print('Error deleting data: $e');
-                              }
+                              // try {
+                              //   FirebaseDatabase.instance
+                              //       .ref()
+                              //       .child("RM_branch_data_saved")
+                              //       .child(widget.office_location.toString())
+                              //       .child("Recived")
+                              //       .child(widget.SerialNum.toString())
+                              //       .remove();
+                              //   print('Data deleted successfully');
+                              // } catch (e) {
+                              //   print('Error deleting data: $e');
+                              // }
                             });
 
                         Navigator.of(dialogContext).pop();
@@ -670,7 +675,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child("AGM")
                             .child("Recived")
                             .child(widget.SerialNum)
-                            .set({"Reciver": "RM_Approved"});
+                            .set({"from": "RM_Approved"});
 
                         // Copy allTrees if present
                         DatabaseEvent event = await dbref.once();
@@ -690,25 +695,26 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child("AGM")
                             .child("Recived")
                             .child(widget.SerialNum)
-                            .child("info")
+                            .child("timberReportheadlines")
                             .set({
-                              "ARM_Office": widget.ARM_Branch_Name,
-                              "user_name": widget.user_name,
-                              "ARM_Branch_Name": widget.ARM_Branch_Name,
-                              "poc": widget.poc,
-                              "poc_exact": widget.PlaceOfCoupe_exact_from_arm,
-                              "DateInformed": widget.DateInformed,
-                              "LetterNo": widget.LetterNo,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPositionAndName":
-                                  widget.OfficerPositionAndName,
+                              "serialnum": widget.SerialNum,
+                              "placeofcoupe": widget.poc,
+                              "dateinformed_from_rm": widget.DateInformed,
                               "donor_details": widget.donor_details,
+                              "PlaceOfCoupe_exact_from_arm":
+                                  widget.PlaceOfCoupe_exact_from_arm,
+                              "LetterNo": widget.LetterNo,
                               "Condition": widget.Condition,
-                              "SerialNum": widget.SerialNum,
-                              "treeCount": widget.treeCount,
-                              "Income": widget.Income,
-                              "Outcome": widget.Outcome,
-                              "profitValue": widget.Profit,
+                              "OfficerName": widget.OfficerName,
+                              "OfficerPosition&name":
+                                  widget.OfficerPositionAndName,
+                              "TreeCount": widget.treeCount.toString(),
+                              "Date": widget.DateInformed,
+                              "ARM_location": widget.ARM_Office,
+                              "From_CO": widget.CO_Name,
+                              "From": widget.user_name,
+                              "income": widget.Income,
+                              "outcome": widget.Outcome,
                             });
 
                         // Also mirror to RM_branch_data_saved_test
@@ -717,7 +723,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.office_location)
                             .child("Sent")
                             .child(widget.SerialNum)
-                            .set({"Reciver": "RM_Approved"});
+                            .set({"from": "RM_Approved"});
 
                         if (event.snapshot.value != null) {
                           await database
@@ -736,23 +742,24 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.SerialNum)
                             .child("info")
                             .set({
-                              "ARM_Office": widget.ARM_Branch_Name,
-                              "user_name": widget.user_name,
-                              "ARM_Branch_Name": widget.ARM_Branch_Name,
-                              "poc": widget.poc,
-                              "poc_exact": widget.PlaceOfCoupe_exact_from_arm,
-                              "DateInformed": widget.DateInformed,
-                              "LetterNo": widget.LetterNo,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPositionAndName":
-                                  widget.OfficerPositionAndName,
+                              "serialnum": widget.SerialNum,
+                              "placeofcoupe": widget.poc,
+                              "dateinformed_from_rm": widget.DateInformed,
                               "donor_details": widget.donor_details,
+                              "PlaceOfCoupe_exact_from_arm":
+                                  widget.PlaceOfCoupe_exact_from_arm,
+                              "LetterNo": widget.LetterNo,
                               "Condition": widget.Condition,
-                              "SerialNum": widget.SerialNum,
-                              "treeCount": widget.treeCount,
-                              "Income": widget.Income,
-                              "Outcome": widget.Outcome,
-                              "profitValue": widget.Profit,
+                              "OfficerName": widget.OfficerName,
+                              "OfficerPosition&name":
+                                  widget.OfficerPositionAndName,
+                              "TreeCount": widget.treeCount.toString(),
+                              "Date": widget.DateInformed,
+                              "ARM_location": widget.ARM_Office,
+                              "From_CO": widget.CO_Name,
+                              "From": widget.user_name,
+                              "income": widget.Income,
+                              "outcome": widget.Outcome,
                             });
 
                         // Update status_of_job_test
@@ -776,18 +783,18 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               ).format(DateTime.now()).toString(),
                             )
                             .then((_) {
-                              try {
-                                FirebaseDatabase.instance
-                                    .ref()
-                                    .child("RM_branch_data_saved")
-                                    .child(widget.office_location.toString())
-                                    .child("Recived")
-                                    .child(widget.SerialNum.toString())
-                                    .remove();
-                                print('Data deleted successfully');
-                              } catch (e) {
-                                print('Error deleting data: $e');
-                              }
+                              // try {
+                              //   FirebaseDatabase.instance
+                              //       .ref()
+                              //       .child("RM_branch_data_saved")
+                              //       .child(widget.office_location.toString())
+                              //       .child("Recived")
+                              //       .child(widget.SerialNum.toString())
+                              //       .remove();
+                              //   print('Data deleted successfully');
+                              // } catch (e) {
+                              //   print('Error deleting data: $e');
+                              // }
                             });
 
                         Navigator.of(dialogContext).pop();
@@ -850,7 +857,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.office_location)
                             .child("Recived")
                             .child(widget.SerialNum)
-                            .set({"Reciver": "RM_Approved"});
+                            .set({"from": "RM_Approved"});
 
                         // Copy allTrees if present
                         DatabaseEvent event = await dbref.once();
@@ -870,25 +877,26 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.office_location)
                             .child("Recived")
                             .child(widget.SerialNum)
-                            .child("info")
+                            .child("timberReportheadlines")
                             .set({
-                              "ARM_Office": widget.ARM_Branch_Name,
-                              "user_name": widget.user_name,
-                              "ARM_Branch_Name": widget.ARM_Branch_Name,
-                              "poc": widget.poc,
-                              "poc_exact": widget.PlaceOfCoupe_exact_from_arm,
-                              "DateInformed": widget.DateInformed,
-                              "LetterNo": widget.LetterNo,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPositionAndName":
-                                  widget.OfficerPositionAndName,
+                              "serialnum": widget.SerialNum,
+                              "placeofcoupe": widget.poc,
+                              "dateinformed_from_rm": widget.DateInformed,
                               "donor_details": widget.donor_details,
+                              "PlaceOfCoupe_exact_from_arm":
+                                  widget.PlaceOfCoupe_exact_from_arm,
+                              "LetterNo": widget.LetterNo,
                               "Condition": widget.Condition,
-                              "SerialNum": widget.SerialNum,
-                              "treeCount": widget.treeCount,
-                              "Income": widget.Income,
-                              "Outcome": widget.Outcome,
-                              "profitValue": widget.Profit,
+                              "OfficerName": widget.OfficerName,
+                              "OfficerPosition&name":
+                                  widget.OfficerPositionAndName,
+                              "TreeCount": widget.treeCount.toString(),
+                              "Date": widget.DateInformed,
+                              "ARM_location": widget.ARM_Office,
+                              "From_CO": widget.CO_Name,
+                              "From": widget.user_name,
+                              "income": widget.Income,
+                              "outcome": widget.Outcome,
                             });
 
                         // Also mirror to RM_branch_data_saved_test
@@ -897,7 +905,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.office_location)
                             .child("Sent")
                             .child(widget.SerialNum)
-                            .set({"Reciver": "RM_Approved"});
+                            .set({"from": "RM_Approved"});
 
                         if (event.snapshot.value != null) {
                           await database
@@ -916,23 +924,24 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.SerialNum)
                             .child("info")
                             .set({
-                              "ARM_Office": widget.ARM_Branch_Name,
-                              "user_name": widget.user_name,
-                              "ARM_Branch_Name": widget.ARM_Branch_Name,
-                              "poc": widget.poc,
-                              "poc_exact": widget.PlaceOfCoupe_exact_from_arm,
-                              "DateInformed": widget.DateInformed,
-                              "LetterNo": widget.LetterNo,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPositionAndName":
-                                  widget.OfficerPositionAndName,
+                              "serialnum": widget.SerialNum,
+                              "placeofcoupe": widget.poc,
+                              "dateinformed_from_rm": widget.DateInformed,
                               "donor_details": widget.donor_details,
+                              "PlaceOfCoupe_exact_from_arm":
+                                  widget.PlaceOfCoupe_exact_from_arm,
+                              "LetterNo": widget.LetterNo,
                               "Condition": widget.Condition,
-                              "SerialNum": widget.SerialNum,
-                              "treeCount": widget.treeCount,
-                              "Income": widget.Income,
-                              "Outcome": widget.Outcome,
-                              "profitValue": widget.Profit,
+                              "OfficerName": widget.OfficerName,
+                              "OfficerPosition&name":
+                                  widget.OfficerPositionAndName,
+                              "TreeCount": widget.treeCount.toString(),
+                              "Date": widget.DateInformed,
+                              "ARM_location": widget.ARM_Office,
+                              "From_CO": widget.CO_Name,
+                              "From": widget.user_name,
+                              "income": widget.Income,
+                              "outcome": widget.Outcome,
                             });
 
                         // Update status_of_job_test
@@ -956,32 +965,32 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               ).format(DateTime.now()).toString(),
                             )
                             .then((_) {
-                              try {
-                                FirebaseDatabase.instance
-                                    .ref()
-                                    .child("RM_branch_data_saved")
-                                    .child(widget.office_location.toString())
-                                    .child("Recived")
-                                    .child(widget.SerialNum.toString())
-                                    .remove();
-                                print('Data deleted successfully');
-                              } catch (e) {
-                                print('Error deleting data: $e');
-                              }
+                              // try {
+                              //   FirebaseDatabase.instance
+                              //       .ref()
+                              //       .child("RM_branch_data_saved")
+                              //       .child(widget.office_location.toString())
+                              //       .child("Recived")
+                              //       .child(widget.SerialNum.toString())
+                              //       .remove();
+                              //   print('Data deleted successfully');
+                              // } catch (e) {
+                              //   print('Error deleting data: $e');
+                              // }
                             })
                             .then((_) {
-                              try {
-                                FirebaseDatabase.instance
-                                    .ref()
-                                    .child("ARM_branch_data_saved")
-                                    .child(widget.office_location.toString())
-                                    .child("Sent")
-                                    .child(widget.SerialNum.toString())
-                                    .remove();
-                                print('Data deleted successfully');
-                              } catch (e) {
-                                print('Error deleting data: $e');
-                              }
+                              // try {
+                              //   FirebaseDatabase.instance
+                              //       .ref()
+                              //       .child("ARM_branch_data_saved")
+                              //       .child(widget.office_location.toString())
+                              //       .child("Sent")
+                              //       .child(widget.SerialNum.toString())
+                              //       .remove();
+                              //   print('Data deleted successfully');
+                              // } catch (e) {
+                              //   print('Error deleting data: $e');
+                              // }
                             });
 
                         Navigator.of(dialogContext).pop();

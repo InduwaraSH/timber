@@ -3,6 +3,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:timber_app/ARM/ARM_RecivedViewApproved.dart';
 import 'package:timber_app/ARM/ARM_RecivedView_CO.dart';
 import 'package:timber_app/ARM/ARM_Recived_view.dart';
 
@@ -79,6 +80,9 @@ class _ARMReceivedState extends State<ARMReceived> {
     String treeCount = "";
     String CO_name = "";
     String ARM_office = "";
+    String Income = "";
+    String Outcome = "";
+    String Profit = "";
 
     if (from == "CO") {
       branchName = Sent['timberReportheadlines']['From_CO'] ?? "Not Available";
@@ -109,6 +113,28 @@ class _ARMReceivedState extends State<ARMReceived> {
       activeColor2 = const Color(0xFFD6E4FA);
       textPrimary = const Color(0xFF5065D8);
       iconPrimary = const Color(0xFF5065D8);
+    } else if (from == "RM_Approved") {
+      branchName =
+          Sent['timberReportheadlines']['ARM_location'] ?? "Not Available";
+      poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
+      DateInformed =
+          Sent['timberReportheadlines']['dateinformed_from_rm'] ?? "N/A";
+      LetterNo = Sent['timberReportheadlines']['LetterNo'] ?? "N/A";
+      SerialNum = Sent['timberReportheadlines']['serialnum'] ?? "N/A";
+      OfficerName = Sent['timberReportheadlines']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName =
+          Sent['timberReportheadlines']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
+      Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
+      treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
+      CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
+      Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
+      Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
+
+      activeColor1 = const Color(0xFFFFF3E0);
+      activeColor2 = const Color(0xFFFFE0B2);
+      textPrimary = const Color(0xFFFF9800);
+      iconPrimary = const Color(0xFFFF9800);
     }
 
     return CupertinoButton(
@@ -147,6 +173,35 @@ class _ARMReceivedState extends State<ARMReceived> {
                 LetterNo: LetterNo,
                 SerialNum: SerialNum,
                 office_location: widget.office_location,
+              ),
+            ),
+          );
+        } else if (from == "RM_Approved") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ArmRecivedviewapproved(
+                ARM_Branch_Name: branchName,
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc,
+                OfficerName: OfficerName,
+                user_name: CO_name,
+                ARM_Office: ARM_office,
+                Income: Income,
+                Outcome: Outcome,
+                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
+                    ? (((double.tryParse(Income) ?? 0) -
+                              (double.tryParse(Outcome) ?? 0))
+                          .toString())
+                    : "N/A",
               ),
             ),
           );

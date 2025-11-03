@@ -40,7 +40,7 @@ class ARM_Received_View extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(22.0),
             child: SingleChildScrollView(
-              // ✅ scrollable
+              // scrollable
               physics: const BouncingScrollPhysics(), // iOS feel
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,11 +146,7 @@ class ARM_Received_View extends StatelessWidget {
                   ),
 
                   _buildInfoCard("Place of Coupe", poc, Iconsax.location5),
-
                   const SizedBox(height: 40),
-
-                  // Floating elegant Send button
-                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -213,7 +209,7 @@ class ARM_Received_View extends StatelessWidget {
                     fontFamily: "sfproRoundSemiB",
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
-                  ),
+                   ),
                 ),
               ],
             ),

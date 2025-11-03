@@ -14,7 +14,8 @@ import 'package:timber_app/RM/sent_CardView.dart';
 
 class RMRecived extends StatefulWidget {
   final String office_location;
-  const RMRecived({super.key, required this.office_location});
+  final String username;
+  const RMRecived({super.key, required this.office_location, required this.username});
 
   @override
   State<RMRecived> createState() => _RMRecivedState();
@@ -140,7 +141,8 @@ class _RMRecivedState extends State<RMRecived> {
                 office_location: widget.office_location,
                 PlaceOfCoupe_exact_from_arm: poc,
                 OfficerName: OfficerName,
-                user_name: branchName,
+                CO_Name: branchName,
+                user_name: widget.username,
                 ARM_Office: ARM_office,
                 Income: Income.toString(),
                 Outcome: Outcome.toString(),
