@@ -4,6 +4,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/instance_manager.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/AGM/AGM_Recived.dart';
 import 'package:timber_app/CO/CO_Recive.dart';
 import 'package:timber_app/CO/CO_Sent.dart';
 import 'package:timber_app/d.dart';
@@ -107,12 +108,6 @@ class _agm_b_navbarState extends State<agm_b_navbar> {
                               "Sent",
                               controller.selectedIndex.value == 1,
                             ),
-
-                            _navItem(
-                              Iconsax.chart_2,
-                              "Statistics",
-                              controller.selectedIndex.value == 2,
-                            ),
                           ],
                         ),
                       ),
@@ -152,7 +147,7 @@ class CONavigControll extends GetxController {
 
   late final List<Widget> screens = [
     //CoHome(office_location: office_location, username: username),
-    CORecived(office_location: office_location, username: username),
+    AGMRecived(office_location: office_location, username: username),
     CO_Sent(office_location: office_location, username: username),
 
     //pgfour(office_location: office_location),
