@@ -1,47 +1,51 @@
+import 'package:avatar_plus/avatar_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:timber_app/ARM/ARM_RecivedView_CO.dart';
-import 'package:timber_app/ARM/ARM_Recived_view.dart';
-import 'package:timber_app/PositionPicker.dart';
-import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
-import 'package:timber_app/RM/RM_Recived_view_ARM.dart';
-import 'package:timber_app/RM/createFor.dart';
-import 'package:timber_app/RM/sent_CardView.dart';
+import 'package:timber_app/AGM/AGM_RecivedView.dart';
+import 'package:timber_app/CO/CO_Recived_View.dart';
+import 'package:timber_app/RM/RM_ProfilePage.dart';
 
-class DgmRecived extends StatefulWidget {
+class DGMRecived extends StatefulWidget {
   final String office_location;
   final String username;
-  const DgmRecived({super.key, required this.office_location, required this.username});
+  const DGMRecived({
+    super.key,
+    required this.office_location,
+    required this.username,
+  });
 
   @override
-  State<DgmRecived> createState() => _DgmRecivedState();
+  State<DGMRecived> createState() => _DGMRecivedState();
 }
 
-class _DgmRecivedState extends State<DgmRecived> {
+class _DGMRecivedState extends State<DGMRecived> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
-  int messageCount = 0;
-  String searchQuery = ""; // Search filtering
+  int messageCount = 0; // New message count variable
+  String searchQuery = ""; // For search filtering
 
   @override
   void initState() {
     super.initState();
     dbref = FirebaseDatabase.instance
         .ref()
-        .child('RM_branch_data_saved')
-        .child(widget.office_location)
+        .child('Head_office_data_saved')
+        .child('AGM')
         .child("Recived");
 
-    // Get initial message count
-    dbref.once().then((event) {
-      final data = event.snapshot.value as Map?;
+    // Listen to changes in the database to dynamically update the message count
+    dbref.onValue.listen((event) {
+      final data = event.snapshot.value;
       setState(() {
-        messageCount = data?.length ?? 0;
+        if (data is Map) {
+          messageCount = data.length;
+        } else {
+          messageCount = 0;
+        }
       });
     });
 
@@ -63,72 +67,36 @@ class _DgmRecivedState extends State<DgmRecived> {
   }
 
   Widget listItem({required Map Sent, required int index}) {
-    final String Reciver = Sent['Reciver'] ?? "N/A";
+    String branchName =
+        Sent['timberReportheadlines']['ARM_location'] ?? "Not Available";
+    String poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
+    String DateInformed =
+        Sent['timberReportheadlines']['dateinformed_from_rm'] ?? "N/A";
+    String LetterNo = Sent['timberReportheadlines']['LetterNo'] ?? "N/A";
+    String SerialNum = Sent['timberReportheadlines']['serialnum'] ?? "N/A";
+    String OfficerName = Sent['timberReportheadlines']['OfficerName'] ?? "N/A";
+    String OfficerPositionAndName =
+        Sent['timberReportheadlines']['OfficerPosition&name'] ?? "N/A";
+    String donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
+    String Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
+    String treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
+    String CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
+    String Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
+    String Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
+    String RM = Sent['timberReportheadlines']['From'] ?? "N/A";
 
-    String branchName = "";
-    String poc = "";
-    String DateInformed = "";
-    String LetterNo = "";
-    String SerialNum = "";
     Color activeColor1 = const Color(0xFFE2ECFF);
     Color activeColor2 = const Color(0xFFD6E4FA);
     Color textPrimary = const Color(0xFF5065D8);
     Color iconPrimary = const Color(0xFF5065D8);
 
-    // ARM-specific variables
-    String OfficerName = "";
-    String OfficerPositionAndName = "";
-    String donor_details = "";
-    String Condition = "";
-    String treeCount = "";
-    String CO_name = "";
-    String ARM_office = "";
-    String Income = "";
-    String Outcome = "";
-    String Profit = "";
-
-    if (Reciver == "RM") {
-      branchName = Sent['info']['ARM_Branch_Name'] ?? "Not Available";
-      poc = Sent['info']['poc'] ?? "N/A";
-      DateInformed = Sent['info']['DateInformed'] ?? "N/A";
-      LetterNo = Sent['info']['LetterNo'] ?? "N/A";
-      SerialNum = Sent['info']['SerialNum'] ?? "N/A";
-      OfficerName = Sent['info']['OfficerName'] ?? "N/A";
-      OfficerPositionAndName = Sent['info']['OfficerPositionAndName'] ?? "N/A";
-      donor_details = Sent['info']['donor_details'] ?? "N/A";
-      Condition = Sent['info']['Condition'] ?? "N/A";
-      treeCount = Sent['info']['treeCount'] ?? "N/A";
-      CO_name = Sent['info']['From_CO'] ?? "N/A";
-      Income = Sent['info']['Income'].toString() ?? "N/A";
-      Outcome = Sent['info']['Outcome'].toString() ?? "N/A";
-      Profit = Sent['info']['profitValue'].toString() ?? "N/A";
-      ARM_office = Sent['info']['ARM_Office'] ?? "N/A";
-
-      activeColor1 = const Color(0xFFE9FBE7);
-      activeColor2 = const Color(0xFFC8E6C9);
-      textPrimary = const Color(0xFF4CAF50);
-      iconPrimary = const Color(0xFF4CAF50);
-    } else if (Reciver == "CO") {
-      branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
-      poc = Sent['poc'] ?? "N/A";
-      DateInformed = Sent['DateInformed'] ?? "N/A";
-      LetterNo = Sent['LetterNo'] ?? "N/A";
-      SerialNum = Sent['Serial Number'] ?? "N/A";
-
-      activeColor1 = const Color(0xFFE2ECFF);
-      activeColor2 = const Color(0xFFD6E4FA);
-      textPrimary = const Color(0xFF5065D8);
-      iconPrimary = const Color(0xFF5065D8);
-    }
-
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: () {
-        if (Reciver == "RM") {
-          Navigator.push(
+        Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => RmRecivedViewArm(
+              builder: (_) => AgmRecivedview(
                 ARM_Branch_Name: branchName,
                 poc: poc,
                 DateInformed: DateInformed,
@@ -141,30 +109,19 @@ class _DgmRecivedState extends State<DgmRecived> {
                 office_location: widget.office_location,
                 PlaceOfCoupe_exact_from_arm: poc,
                 OfficerName: OfficerName,
-                CO_Name: branchName,
                 user_name: widget.username,
-                ARM_Office: ARM_office,
-                Income: Income.toString(),
-                Outcome: Outcome.toString(),
-                Profit: Profit.toString(),
+                CO_name: CO_name,
+                Income: Income,
+                Outcome: Outcome,
+                RM: RM,
+                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
+                    ? (((double.tryParse(Income) ?? 0) -
+                              (double.tryParse(Outcome) ?? 0))
+                          .toString())
+                    : "N/A",
               ),
             ),
           );
-        } else if (Reciver == "CO") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ARM_Received_View(
-                branchName: branchName,
-                poc: poc,
-                DateInformed: DateInformed,
-                LetterNo: LetterNo,
-                SerialNum: SerialNum,
-                office_location: widget.office_location,
-              ),
-            ),
-          );
-        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -246,48 +203,97 @@ class _DgmRecivedState extends State<DgmRecived> {
         top: true,
         bottom: false,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Animated Header with message count
+            // Animated Header
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              height: _showHeader ? 100 : 1,
+              height: _showHeader ? 180 : 1,
               curve: Curves.easeInOut,
               child: _showHeader
                   ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 16,
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                        left: 5,
+                        right: 10,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Inbox",
-                            style: TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "sfproRoundSemiB",
-                              color: Colors.black,
-                            ),
-                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  profile_button(username: widget.username),
 
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 7,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              "$messageCount",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: 'sfproRoundSemiB',
+                                  const Text(
+                                    "Inbox",
+                                    style: TextStyle(
+                                      fontSize: 50,
+                                      fontFamily: "sfproRoundSemiB",
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+
+                                  // Message count
+                                ],
                               ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 7,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        "$messageCount",
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontFamily: "sfproRoundSemiB",
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          // Modern Search Bar
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                hintText: "Search by POC",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: "sfproRoundSemiB",
+                                ),
+                                border: InputBorder.none,
+                                icon: Icon(Icons.search, color: Colors.grey),
+                              ),
+                              onChanged: (val) {
+                                setState(() {
+                                  searchQuery = val.toLowerCase();
+                                });
+                              },
                             ),
                           ),
                         ],
@@ -295,32 +301,7 @@ class _DgmRecivedState extends State<DgmRecived> {
                     )
                   : null,
             ),
-
-            // Search bar below Inbox row
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: TextField(
-                decoration: const InputDecoration(
-                  hintText: "Search by POC",
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontFamily: "sfproRoundSemiB",
-                  ),
-                  border: InputBorder.none,
-                  icon: Icon(Icons.search, color: Colors.grey),
-                ),
-                onChanged: (val) {
-                  setState(() {
-                    searchQuery = val.toLowerCase();
-                  });
-                },
-              ),
-            ),
+            //const SizedBox(height: 10),
 
             // Firebase list
             Expanded(
@@ -338,8 +319,7 @@ class _DgmRecivedState extends State<DgmRecived> {
                       sent['key'] = snapshot.key;
 
                       // Filter by POC
-                      final String poc =
-                          sent['info']?['poc'] ?? sent['poc'] ?? "";
+                      final String poc = sent['placeOfCoupe'] ?? "";
                       if (searchQuery.isNotEmpty &&
                           !poc.toLowerCase().contains(searchQuery)) {
                         return const SizedBox.shrink();
@@ -350,6 +330,32 @@ class _DgmRecivedState extends State<DgmRecived> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class profile_button extends StatelessWidget {
+  final String username;
+  const profile_button({super.key, required this.username});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => UserProfilePage()),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+        alignment: Alignment.topLeft,
+        child: CircleAvatar(
+          radius: 30,
+          backgroundColor: const Color.fromARGB(0, 238, 238, 238),
+          child: ClipOval(child: AvatarPlus(username, height: 60, width: 60)),
         ),
       ),
     );

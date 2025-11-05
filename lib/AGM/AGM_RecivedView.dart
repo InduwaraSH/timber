@@ -392,7 +392,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => ArmSentTimeline_sent(
-                              branchName: widget.office_location,
+                              branchName: widget.ARM_Branch_Name,
                               poc: widget.poc,
                               SerialNum: widget.SerialNum,
                             ),

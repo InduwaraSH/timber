@@ -1,0 +1,156 @@
+import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/instance_manager.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/AGM/AGM_Recived.dart';
+import 'package:timber_app/CO/CO_Recive.dart';
+import 'package:timber_app/CO/CO_Sent.dart';
+import 'package:timber_app/DGM/DGM_Recived.dart';
+import 'package:timber_app/d.dart';
+
+class dgm_b_navbar extends StatefulWidget {
+  final String office_location;
+  final String username;
+  const dgm_b_navbar({
+    super.key,
+    required this.office_location,
+    required this.username,
+  });
+
+  @override
+  State<dgm_b_navbar> createState() => _dgm_b_navbarState();
+}
+
+class _dgm_b_navbarState extends State<dgm_b_navbar> {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    Get.delete<CONavigControll>();
+    final controller = Get.put(
+      CONavigControll(widget.office_location, widget.username),
+    );
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: Colors.transparent,
+      ),
+      home: Scaffold(
+        body: Obx(
+          () => Scaffold(
+            backgroundColor: Colors.white,
+            body: Stack(
+              children: [
+                // Page content
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 0,
+                  ), // space for nav bar
+                  child: controller.screens[controller.selectedIndex.value],
+                ),
+
+                // Floating nav bar with shadow
+                Positioned(
+                  left: 16,
+                  right: 16,
+                  bottom: 0,
+                  child: SafeArea(
+                    child: Container(
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(150, 255, 255, 255),
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: BottomNavigationBar(
+                          currentIndex: controller.selectedIndex.value,
+                          onTap: (index) =>
+                              controller.selectedIndex.value = index,
+                          backgroundColor: Colors.white,
+                          type: BottomNavigationBarType.fixed,
+                          elevation: 0,
+                          selectedItemColor: Colors.black,
+
+                          unselectedItemColor: Colors.black45,
+                          showUnselectedLabels: true,
+                          selectedFontSize: 13,
+                          selectedLabelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "sfproRoundSemiB",
+                          ),
+                          unselectedFontSize: 12,
+                          unselectedLabelStyle: TextStyle(
+                            fontFamily: "sfproRoundSemiB",
+                          ),
+                          items: [
+                            // _navItem(
+                            //   Iconsax.home,
+                            //   "Home",
+                            //   controller.selectedIndex.value == 0,
+                            // ),
+                            _navItem(
+                              Iconsax.arrow_down_24,
+                              "Inbox",
+                              controller.selectedIndex.value == 0,
+                            ),
+                            _navItem(
+                              Iconsax.send_24,
+                              "Sent",
+                              controller.selectedIndex.value == 1,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  BottomNavigationBarItem _navItem(IconData icon, String label, bool active) {
+    return BottomNavigationBarItem(
+      icon: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 1.0, end: active ? 1.3 : 1.0),
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+        builder: (context, scale, child) => Transform.scale(
+          scale: scale,
+          child: Icon(icon, color: active ? Colors.black : Colors.black45),
+        ),
+      ),
+      label: label,
+    );
+  }
+}
+
+class CONavigControll extends GetxController {
+  final Rx<int> selectedIndex = 0.obs;
+  final String office_location;
+  final String username;
+
+  CONavigControll(this.office_location, this.username);
+
+  late final List<Widget> screens = [
+    //CoHome(office_location: office_location, username: username),
+    DGMRecived(office_location: office_location, username: username),
+    CO_Sent(office_location: office_location, username: username),
+
+    //pgfour(office_location: office_location),
+  ];
+}

@@ -7,6 +7,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:timber_app/AGM/AGM_B_Nav.dart';
 import 'package:timber_app/ARM/ARM_B_Nav.dart';
 import 'package:timber_app/CO/CO_B_Nav.dart';
+import 'package:timber_app/DGM/DGM_B_Nav.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/RM/RM_B_Nav.dart';
 import 'package:timber_app/office_reg_picker.dart';
@@ -370,6 +371,20 @@ class _Loging_homePageState extends State<Loging_homePage> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   agm_b_navbar(
+                                                    office_location:
+                                                        snapshot_office.value
+                                                            .toString(),
+                                                    username:
+                                                        usernameController.text,
+                                                  ),
+                                            ),
+                                          );
+                                        } else if (snapshot.value == 'DGM') {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  dgm_b_navbar(
                                                     office_location:
                                                         snapshot_office.value
                                                             .toString(),
