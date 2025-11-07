@@ -15,7 +15,11 @@ import 'package:timber_app/RM/sent_CardView.dart';
 class RMRecived extends StatefulWidget {
   final String office_location;
   final String username;
-  const RMRecived({super.key, required this.office_location, required this.username});
+  const RMRecived({
+    super.key,
+    required this.office_location,
+    required this.username,
+  });
 
   @override
   State<RMRecived> createState() => _RMRecivedState();
@@ -86,6 +90,8 @@ class _RMRecivedState extends State<RMRecived> {
     String Income = "";
     String Outcome = "";
     String Profit = "";
+    String ARM_Id = "";
+    String CO_id = "";
 
     if (Reciver == "RM") {
       branchName = Sent['info']['ARM_Branch_Name'] ?? "Not Available";
@@ -98,7 +104,9 @@ class _RMRecivedState extends State<RMRecived> {
       donor_details = Sent['info']['donor_details'] ?? "N/A";
       Condition = Sent['info']['Condition'] ?? "N/A";
       treeCount = Sent['info']['treeCount'] ?? "N/A";
-      CO_name = Sent['info']['From_CO'] ?? "N/A";
+      CO_name = Sent['info']['CO_name'] ?? "N/A";
+      CO_id = Sent['info']['CO_id'] ?? "N/A";
+      ARM_Id = Sent['info']['ARM_ID'] ?? "N/A";
       Income = Sent['info']['Income'].toString() ?? "N/A";
       Outcome = Sent['info']['Outcome'].toString() ?? "N/A";
       Profit = Sent['info']['profitValue'].toString() ?? "N/A";
@@ -141,30 +149,36 @@ class _RMRecivedState extends State<RMRecived> {
                 office_location: widget.office_location,
                 PlaceOfCoupe_exact_from_arm: poc,
                 OfficerName: OfficerName,
-                CO_Name: branchName,
+                
                 user_name: widget.username,
                 ARM_Office: ARM_office,
                 Income: Income.toString(),
                 Outcome: Outcome.toString(),
                 Profit: Profit.toString(),
-              ),
-            ),
-          );
-        } else if (Reciver == "CO") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ARM_Received_View(
-                branchName: branchName,
-                poc: poc,
-                DateInformed: DateInformed,
-                LetterNo: LetterNo,
-                SerialNum: SerialNum,
-                office_location: widget.office_location,
+                ARM_Id: ARM_Id,
+                CO_id: CO_id,
+                CO_name: CO_name,
+
+
               ),
             ),
           );
         }
+        // } else if (Reciver == "CO") {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (_) => ARM_Received_View(
+        //         branchName: branchName,
+        //         poc: poc,
+        //         DateInformed: DateInformed,
+        //         LetterNo: LetterNo,
+        //         SerialNum: SerialNum,
+        //         office_location: widget.office_location,
+        //       ),
+        //     ),
+        //   );
+        // }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

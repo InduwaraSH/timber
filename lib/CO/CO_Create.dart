@@ -21,6 +21,7 @@ class FormCO extends StatefulWidget {
   final String username;
   final String about_me;
   final String branch_name;
+  final String RM_office;
 
   const FormCO({
     super.key,
@@ -29,9 +30,10 @@ class FormCO extends StatefulWidget {
     required this.poc,
     required this.LetterNo,
     required this.DateInformed,
-    required this. username,
-    required this. about_me,
-    required this. branch_name,
+    required this.username,
+    required this.about_me,
+    required this.branch_name,
+    required this.RM_office,
   });
 
   @override
@@ -195,8 +197,9 @@ class _FormCOState extends State<FormCO> {
           serialnum: widget.SerialNum,
           placeofcoupe: widget.poc,
           dateinformed_from_rm: widget.DateInformed,
-          about_me:widget.about_me,
+          about_me: widget.about_me,
           user_name: widget.username,
+          RM_office: widget.RM_office,
           onDone: _clear,
         ),
       ),

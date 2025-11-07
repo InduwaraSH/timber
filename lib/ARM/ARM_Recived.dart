@@ -9,7 +9,12 @@ import 'package:timber_app/ARM/ARM_Recived_view.dart';
 
 class ARMReceived extends StatefulWidget {
   final String office_location;
-  const ARMReceived({super.key, required this.office_location});
+  final String username;
+  const ARMReceived({
+    super.key,
+    required this.office_location,
+    required this.username,
+  });
 
   @override
   State<ARMReceived> createState() => _ARMReceivedState();
@@ -83,9 +88,11 @@ class _ARMReceivedState extends State<ARMReceived> {
     String Income = "";
     String Outcome = "";
     String Profit = "";
+    String RM_office = "";
+    String CO_id = "";
 
     if (from == "CO") {
-      branchName = Sent['timberReportheadlines']['From_CO'] ?? "Not Available";
+      CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
       poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
       DateInformed = Sent['timberReportheadlines']['Date'] ?? "N/A";
       LetterNo = Sent['timberReportheadlines']['LetterNo'] ?? "N/A";
@@ -98,6 +105,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
       CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
       ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
+      RM_office = Sent['timberReportheadlines']['RM_office'] ?? "N/A";
       activeColor1 = const Color(0xFFE9FBE7);
       activeColor2 = const Color(0xFFC8E6C9);
       textPrimary = const Color(0xFF4CAF50);
@@ -108,6 +116,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       DateInformed = Sent['DateInformed'] ?? "N/A";
       LetterNo = Sent['LetterNo'] ?? "N/A";
       SerialNum = Sent['Serial Number'] ?? "N/A";
+      RM_office = Sent['RM_location'] ?? "N/A";
 
       activeColor1 = const Color(0xFFE2ECFF);
       activeColor2 = const Color(0xFFD6E4FA);
@@ -145,7 +154,8 @@ class _ARMReceivedState extends State<ARMReceived> {
             context,
             MaterialPageRoute(
               builder: (_) => ArmRecivedviewCo(
-                ARM_Branch_Name: branchName,
+                co_name: CO_name,
+                CO_id: CO_id,
                 poc: poc,
                 DateInformed: DateInformed,
                 LetterNo: LetterNo,
@@ -157,8 +167,11 @@ class _ARMReceivedState extends State<ARMReceived> {
                 office_location: widget.office_location,
                 PlaceOfCoupe_exact_from_arm: poc,
                 OfficerName: OfficerName,
-                user_name: '',
+                user_name: widget.username,
                 ARM_Office: ARM_office,
+                RM_office: RM_office,
+              
+
               ),
             ),
           );
@@ -173,6 +186,7 @@ class _ARMReceivedState extends State<ARMReceived> {
                 LetterNo: LetterNo,
                 SerialNum: SerialNum,
                 office_location: widget.office_location,
+                RM_office: RM_office,
               ),
             ),
           );

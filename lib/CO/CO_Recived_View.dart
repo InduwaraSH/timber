@@ -12,6 +12,7 @@ class CO_Received_View extends StatelessWidget {
   final String SerialNum;
   final String username;
   final String about_me;
+  final String RM_office;
 
   const CO_Received_View({
     super.key,
@@ -22,6 +23,7 @@ class CO_Received_View extends StatelessWidget {
     required this.SerialNum,
     required this.username,
     required this.about_me,
+    required this.RM_office,
   });
 
   @override
@@ -99,6 +101,7 @@ class CO_Received_View extends StatelessWidget {
                                     username: username,
                                     about_me: about_me,
                                     branch_name: branchName,
+                                    RM_office: RM_office,
                                   ),
                                 ),
                               );

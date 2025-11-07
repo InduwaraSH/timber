@@ -8,7 +8,6 @@ import 'package:timber_app/ARM/ARM_Procument_add.dart';
 
 import 'package:timber_app/ARM/ARM_Sent_timeline.dart';
 
-
 class ArmRecivedviewCo extends StatefulWidget {
   final String poc;
   final String DateInformed;
@@ -22,8 +21,10 @@ class ArmRecivedviewCo extends StatefulWidget {
   final String office_location;
   final String PlaceOfCoupe_exact_from_arm;
   final String user_name;
-  final String ARM_Branch_Name;
   final String ARM_Office;
+  final String RM_office;
+  final String co_name;
+  final String CO_id;
 
   const ArmRecivedviewCo({
     super.key,
@@ -39,9 +40,12 @@ class ArmRecivedviewCo extends StatefulWidget {
     required this.office_location,
     required this.PlaceOfCoupe_exact_from_arm,
     required this.user_name,
-    required this.ARM_Branch_Name,
+   
 
     required this.ARM_Office,
+    required this.RM_office,
+  
+    required this.CO_id, required this.co_name,
   });
 
   @override
@@ -405,7 +409,8 @@ class _ArmRecivedviewCoState extends State<ArmRecivedviewCo> {
                     SerialNum: widget.SerialNum,
                     user_name: widget.user_name,
                     allTrees: allTrees,
-                    ARM_Branch_Name: widget.ARM_Branch_Name,
+                    CO_name: widget.co_name,
+                    CO_id: widget.CO_id,
                     poc: widget.poc,
                     DateInformed: widget.DateInformed,
                     LetterNo: widget.LetterNo,
@@ -417,6 +422,7 @@ class _ArmRecivedviewCoState extends State<ArmRecivedviewCo> {
                     office_location: widget.office_location,
                     PlaceOfCoupe_exact_from_arm:
                         widget.PlaceOfCoupe_exact_from_arm,
+                    RM_office: widget.RM_office, ARM_Branch_Name: '',
                   ),
                 ),
               );

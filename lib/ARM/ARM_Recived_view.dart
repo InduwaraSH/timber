@@ -11,6 +11,7 @@ class ARM_Received_View extends StatelessWidget {
   final String LetterNo;
   final String SerialNum;
   final String office_location;
+  final String RM_office;
 
   const ARM_Received_View({
     super.key,
@@ -20,6 +21,7 @@ class ARM_Received_View extends StatelessWidget {
     required this.LetterNo,
     required this.SerialNum,
     required this.office_location,
+    required this.RM_office,
   });
 
   @override
@@ -95,6 +97,7 @@ class ARM_Received_View extends StatelessWidget {
                                     LetterNo: LetterNo,
                                     SerialNum: SerialNum,
                                     office_location: office_location,
+                                    RM_office: RM_office,
                                   ),
                                 ),
                               );

@@ -7,7 +7,6 @@ import 'package:flutter/rendering.dart';
 import 'package:timber_app/CO/CO_Recived_View.dart';
 import 'package:timber_app/RM/RM_ProfilePage.dart';
 
-
 class CORecived extends StatefulWidget {
   final String office_location;
   final String username;
@@ -73,6 +72,7 @@ class _CORecivedState extends State<CORecived> {
     final String LetterNo = Sent['LetterNo'] ?? "N/A";
     final String SerialNum = Sent['Serial Number'] ?? "N/A";
     final String about_me = Sent['from'] ?? "Not Available";
+    final String RM_office = Sent['RM_office'] ?? "Not Available";
 
     Color activeColor1 = const Color(0xFFE2ECFF);
     Color activeColor2 = const Color(0xFFD6E4FA);
@@ -93,6 +93,7 @@ class _CORecivedState extends State<CORecived> {
               SerialNum: SerialNum,
               username: widget.username,
               about_me: about_me,
+              RM_office: RM_office,
             ),
           ),
         );

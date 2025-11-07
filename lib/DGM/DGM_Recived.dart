@@ -4,8 +4,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:timber_app/AGM/AGM_RecivedView.dart';
-import 'package:timber_app/CO/CO_Recived_View.dart';
+import 'package:timber_app/DGM/DGM_RecivedView.dart';
 import 'package:timber_app/RM/RM_ProfilePage.dart';
 
 class DGMRecived extends StatefulWidget {
@@ -34,7 +33,7 @@ class _DGMRecivedState extends State<DGMRecived> {
     dbref = FirebaseDatabase.instance
         .ref()
         .child('Head_office_data_saved')
-        .child('AGM')
+        .child('DGM')
         .child("Recived");
 
     // Listen to changes in the database to dynamically update the message count
@@ -77,12 +76,14 @@ class _DGMRecivedState extends State<DGMRecived> {
     String OfficerName = Sent['timberReportheadlines']['OfficerName'] ?? "N/A";
     String OfficerPositionAndName =
         Sent['timberReportheadlines']['OfficerPosition&name'] ?? "N/A";
-    String donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
+    String donor_details =
+        Sent['timberReportheadlines']['donor_details'] ?? "N/A";
     String Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
     String treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
     String CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
     String Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
-    String Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
+    String Outcome =
+        Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
     String RM = Sent['timberReportheadlines']['From'] ?? "N/A";
 
     Color activeColor1 = const Color(0xFFE2ECFF);
@@ -94,34 +95,34 @@ class _DGMRecivedState extends State<DGMRecived> {
       padding: EdgeInsets.zero,
       onPressed: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => AgmRecivedview(
-                ARM_Branch_Name: branchName,
-                poc: poc,
-                DateInformed: DateInformed,
-                LetterNo: LetterNo,
-                SerialNum: SerialNum,
-                OfficerPositionAndName: OfficerPositionAndName,
-                donor_details: donor_details,
-                Condition: Condition,
-                treeCount: treeCount,
-                office_location: widget.office_location,
-                PlaceOfCoupe_exact_from_arm: poc,
-                OfficerName: OfficerName,
-                user_name: widget.username,
-                CO_name: CO_name,
-                Income: Income,
-                Outcome: Outcome,
-                RM: RM,
-                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
-                    ? (((double.tryParse(Income) ?? 0) -
-                              (double.tryParse(Outcome) ?? 0))
-                          .toString())
-                    : "N/A",
-              ),
+          context,
+          MaterialPageRoute(
+            builder: (_) => DgmRecivedview(
+              ARM_Branch_Name: branchName,
+              poc: poc,
+              DateInformed: DateInformed,
+              LetterNo: LetterNo,
+              SerialNum: SerialNum,
+              OfficerPositionAndName: OfficerPositionAndName,
+              donor_details: donor_details,
+              Condition: Condition,
+              treeCount: treeCount,
+              office_location: widget.office_location,
+              PlaceOfCoupe_exact_from_arm: poc,
+              OfficerName: OfficerName,
+              user_name: widget.username,
+              CO_name: CO_name,
+              Income: Income,
+              Outcome: Outcome,
+              RM: RM,
+              Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
+                  ? (((double.tryParse(Income) ?? 0) -
+                            (double.tryParse(Outcome) ?? 0))
+                        .toString())
+                  : "N/A",
             ),
-          );
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

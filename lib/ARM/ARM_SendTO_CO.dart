@@ -14,6 +14,7 @@ class ARM_SentTO_CO extends StatefulWidget {
   final String CO_Name;
   final String CO_ID;
   final String office_location;
+  final String RM_office;
 
   const ARM_SentTO_CO({
     super.key,
@@ -24,6 +25,7 @@ class ARM_SentTO_CO extends StatefulWidget {
     required this.CO_Name,
     required this.CO_ID,
     required this.office_location,
+    required this.RM_office,
   });
 
   @override
@@ -180,7 +182,8 @@ class _ARM_SentTO_COState extends State<ARM_SentTO_CO> {
                             "arm_office_location": widget.office_location
                                 .toString(),
                             "from": "CO ${widget.CO_Name}",
-                            "Reciver":"CO"
+                            "Reciver": "CO",
+                            "RM_office": widget.RM_office.toString(),
                           };
                           FirebaseDatabase.instance
                               .ref()

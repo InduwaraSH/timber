@@ -137,7 +137,7 @@ class ARMNavigControll extends GetxController {
   late final List<Widget> screens = [
     ARM_Home(office_location: office_location, username: username),
     ARM_Sent(office_location: office_location),
-    ARMReceived(office_location: office_location),
+    ARMReceived(office_location: office_location, username: username),
     pgfour(office_location: office_location),
   ];
 }

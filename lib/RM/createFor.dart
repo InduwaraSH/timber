@@ -411,7 +411,7 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                 ).toString(),
                                 'ARM_Branch_Name': widget.branch_name
                                     .toString(),
-                                "office_location": widget.office_location
+                                "RM_location": widget.office_location
                                     .toString(),
                                 "from": "RM",
                               };

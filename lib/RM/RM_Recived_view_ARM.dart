@@ -34,7 +34,9 @@ class RmRecivedViewArm extends StatefulWidget {
   final String Income;
   final String Outcome;
   final String Profit;
-  final String CO_Name;
+  final String ARM_Id;
+  final String CO_id;
+  final String CO_name;
 
   const RmRecivedViewArm({
     super.key,
@@ -55,7 +57,9 @@ class RmRecivedViewArm extends StatefulWidget {
     required this.Income,
     required this.Outcome,
     required this.Profit,
-    required this.CO_Name,
+    required this.ARM_Id,
+    required this.CO_id,
+    required this.CO_name,
   });
 
   @override
@@ -263,9 +267,11 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
       final pdf = pw.Document();
 
       final infoItems = [
-        {"label": "ARM Office", "value": widget.ARM_Office},
         {"label": "RM", "value": widget.user_name},
-        {"label": "CO", "value": widget.CO_Name},
+        {"label": "ARM Office", "value": widget.ARM_Office},
+        {"label": "ARM ID", "value": widget.ARM_Id},
+        {"label": "CO", "value": widget.CO_name},
+        {"label": "CO ID", "value": widget.CO_id},
         {"label": "POC", "value": widget.poc},
         {"label": "POC Exact", "value": widget.PlaceOfCoupe_exact_from_arm},
         {"label": "Date Informed", "value": widget.DateInformed},
@@ -411,9 +417,11 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
   @override
   Widget build(BuildContext context) {
     final infoItems = [
-      {"label": "ARM Office", "value": widget.ARM_Office},
       {"label": "RM", "value": widget.user_name},
-      {"label": "CO", "value": widget.CO_Name},
+      {"label": "ARM Office", "value": widget.ARM_Office},
+      {"label": "ARM ID", "value": widget.ARM_Id},
+      {"label": "CO", "value": widget.CO_name},
+      {"label": "CO ID", "value": widget.CO_id},
       {"label": "POC", "value": widget.poc},
       {"label": "POC Exact", "value": widget.PlaceOfCoupe_exact_from_arm},
       {"label": "Date Informed", "value": widget.DateInformed},
@@ -527,8 +535,11 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "TreeCount": widget.treeCount.toString(),
                               "Date": widget.DateInformed,
                               "ARM_location": widget.ARM_Office,
-                              "From_CO": widget.CO_Name,
+                              "CO_name": widget.CO_name,
+                              "CO_id": widget.CO_id,
+                              "ARM_Id": widget.ARM_Id,
                               "From": widget.user_name,
+                              "Relevent_RM_Branch": widget.office_location,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
 
@@ -574,7 +585,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "TreeCount": widget.treeCount.toString(),
                               "Date": widget.DateInformed,
                               "ARM_location": widget.ARM_Office,
-                              "From_CO": widget.CO_Name,
+                              "CO_name": widget.CO_name,
+                              "CO_id": widget.CO_id,
+                              "ARM_Id": widget.ARM_Id,
                               "From": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
@@ -711,7 +724,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "TreeCount": widget.treeCount.toString(),
                               "Date": widget.DateInformed,
                               "ARM_location": widget.ARM_Office,
-                              "From_CO": widget.CO_Name,
+                              "CO_name": widget.CO_name,
+                              "CO_id": widget.CO_id,
+                              "ARM_Id": widget.ARM_Id,
                               "From": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
@@ -756,7 +771,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "TreeCount": widget.treeCount.toString(),
                               "Date": widget.DateInformed,
                               "ARM_location": widget.ARM_Office,
-                              "From_CO": widget.CO_Name,
+                              "CO_name": widget.CO_name,
+                              "CO_id": widget.CO_id,
+                              "ARM_Id": widget.ARM_Id,
                               "From": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
@@ -893,7 +910,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "TreeCount": widget.treeCount.toString(),
                               "Date": widget.DateInformed,
                               "ARM_location": widget.ARM_Office,
-                              "From_CO": widget.CO_Name,
+                              "CO_name": widget.CO_name,
+                              "CO_id": widget.CO_id,
+                              "ARM_Id": widget.ARM_Id,
                               "From": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
@@ -938,7 +957,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "TreeCount": widget.treeCount.toString(),
                               "Date": widget.DateInformed,
                               "ARM_location": widget.ARM_Office,
-                              "From_CO": widget.CO_Name,
+                              "CO_name": widget.CO_name,
+                              "CO_id": widget.CO_id,
+                              "ARM_Id": widget.ARM_Id,
                               "From": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,

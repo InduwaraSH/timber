@@ -19,6 +19,9 @@ class ArmProcumentAdd extends StatefulWidget {
   final String treeCount;
   final String office_location;
   final String PlaceOfCoupe_exact_from_arm;
+  final String RM_office;
+  final String CO_name;
+  final String CO_id;
 
   const ArmProcumentAdd({
     super.key,
@@ -37,6 +40,9 @@ class ArmProcumentAdd extends StatefulWidget {
     required this.treeCount,
     required this.office_location,
     required this.PlaceOfCoupe_exact_from_arm,
+    required this.RM_office,
+    required this.CO_name,
+    required this.CO_id,
   });
 
   @override
@@ -229,8 +235,9 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
           .child("info")
           .set({
             "ARM_Office": widget.ARM_Office,
-            "user_name": widget.user_name,
-            "ARM_Branch_Name": widget.ARM_Branch_Name,
+            "arm_id": widget.user_name,
+            "CO_name": widget.CO_name,
+            "CO_id": widget.CO_id,
             "poc": widget.poc,
             "DateInformed": widget.DateInformed,
             "LetterNo": widget.LetterNo,
@@ -240,7 +247,6 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
             "Condition": widget.Condition,
             "SerialNum": widget.SerialNum,
             "treeCount": widget.treeCount,
-            "office_location": widget.office_location,
             "PlaceOfCoupe_exact_from_arm": widget.PlaceOfCoupe_exact_from_arm,
             "Income": _incomeController.text.trim(),
             "Outcome": _outcomeController.text.trim(),
@@ -262,14 +268,14 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
 
       await database
           .child('RM_branch_data_saved')
-          .child(widget.office_location)
+          .child(widget.RM_office)
           .child("Recived")
           .child(widget.SerialNum)
           .set({"Reciver": "RM"});
 
       await database
           .child('RM_branch_data_saved')
-          .child(widget.office_location)
+          .child(widget.RM_office)
           .child("Recived")
           .child(widget.SerialNum)
           .child("allTrees")
@@ -277,14 +283,15 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
 
       await database
           .child('RM_branch_data_saved')
-          .child(widget.office_location)
+          .child(widget.RM_office)
           .child("Recived")
           .child(widget.SerialNum)
           .child("info")
           .set({
             "ARM_Office": widget.ARM_Office,
-            "user_name": widget.user_name,
-            "ARM_Branch_Name": widget.ARM_Branch_Name,
+            "ARM_ID": widget.user_name,
+            "CO_name": widget.CO_name,
+            "CO_id": widget.CO_id,
             "poc": widget.poc,
             "DateInformed": widget.DateInformed,
             "LetterNo": widget.LetterNo,
@@ -294,7 +301,6 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
             "Condition": widget.Condition,
             "SerialNum": widget.SerialNum,
             "treeCount": widget.treeCount,
-            "office_location": widget.office_location,
             "PlaceOfCoupe_exact_from_arm": widget.PlaceOfCoupe_exact_from_arm,
             "Income": _incomeController.text.trim(),
             "Outcome": _outcomeController.text.trim(),
@@ -317,7 +323,7 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
             FirebaseDatabase.instance
                 .ref()
                 .child("Status_of_job")
-                .child(widget.office_location.toString())
+                .child(widget.RM_office.toString())
                 .child(widget.SerialNum.toString())
                 .child("Status")
                 .set("RM_R_D_two");
@@ -326,7 +332,7 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
             FirebaseDatabase.instance
                 .ref()
                 .child("Status_of_job")
-                .child(widget.office_location.toString())
+                .child(widget.RM_office.toString())
                 .child(widget.SerialNum.toString())
                 .child("RM_R_D_two")
                 .set(
@@ -340,6 +346,19 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
                   .child("ARM_branch_data_saved")
                   .child(widget.office_location.toString())
                   .child("Recived")
+                  .child(widget.SerialNum.toString())
+                  .remove();
+              print('Data deleted successfully');
+            } catch (e) {
+              print('Error deleting data: $e');
+            }
+          }).then((_) {
+            try {
+              FirebaseDatabase.instance
+                  .ref()
+                  .child("RM_branch_data_saved")
+                  .child(widget.RM_office.toString())
+                  .child("Sent")
                   .child(widget.SerialNum.toString())
                   .remove();
               print('Data deleted successfully');
