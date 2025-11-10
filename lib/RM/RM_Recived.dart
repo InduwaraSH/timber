@@ -92,10 +92,12 @@ class _RMRecivedState extends State<RMRecived> {
     String Profit = "";
     String ARM_Id = "";
     String CO_id = "";
+    String poc_exact = "";
 
     if (Reciver == "RM") {
       branchName = Sent['info']['ARM_Branch_Name'] ?? "Not Available";
       poc = Sent['info']['poc'] ?? "N/A";
+      poc_exact = Sent['info']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
       DateInformed = Sent['info']['DateInformed'] ?? "N/A";
       LetterNo = Sent['info']['LetterNo'] ?? "N/A";
       SerialNum = Sent['info']['SerialNum'] ?? "N/A";
@@ -147,9 +149,9 @@ class _RMRecivedState extends State<RMRecived> {
                 Condition: Condition,
                 treeCount: treeCount,
                 office_location: widget.office_location,
-                PlaceOfCoupe_exact_from_arm: poc,
+                PlaceOfCoupe_exact_from_arm: poc_exact,
                 OfficerName: OfficerName,
-                
+
                 user_name: widget.username,
                 ARM_Office: ARM_office,
                 Income: Income.toString(),
@@ -158,8 +160,6 @@ class _RMRecivedState extends State<RMRecived> {
                 ARM_Id: ARM_Id,
                 CO_id: CO_id,
                 CO_name: CO_name,
-
-
               ),
             ),
           );

@@ -69,6 +69,8 @@ class _DGMRecivedState extends State<DGMRecived> {
     String branchName =
         Sent['timberReportheadlines']['ARM_location'] ?? "Not Available";
     String poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
+    String poc_exact =
+        Sent['timberReportheadlines']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
     String DateInformed =
         Sent['timberReportheadlines']['dateinformed_from_rm'] ?? "N/A";
     String LetterNo = Sent['timberReportheadlines']['LetterNo'] ?? "N/A";
@@ -80,11 +82,14 @@ class _DGMRecivedState extends State<DGMRecived> {
         Sent['timberReportheadlines']['donor_details'] ?? "N/A";
     String Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
     String treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
-    String CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
+    String CO_name = Sent['timberReportheadlines']['CO_name'] ?? "N/A";
+    String CO_id = Sent['timberReportheadlines']['CO_id'] ?? "N/A";
+    String ARM_id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
     String Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
     String Outcome =
         Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
-    String RM = Sent['timberReportheadlines']['From'] ?? "N/A";
+    String RM = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
+    String RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
 
     Color activeColor1 = const Color(0xFFE2ECFF);
     Color activeColor2 = const Color(0xFFD6E4FA);
@@ -108,12 +113,15 @@ class _DGMRecivedState extends State<DGMRecived> {
               Condition: Condition,
               treeCount: treeCount,
               office_location: widget.office_location,
-              PlaceOfCoupe_exact_from_arm: poc,
+              PlaceOfCoupe_exact_from_arm: poc_exact,
               OfficerName: OfficerName,
               user_name: widget.username,
               CO_name: CO_name,
               Income: Income,
               Outcome: Outcome,
+              CO_id: CO_id,
+              ARM_id: ARM_id,
+              RM_office: RM_office,
               RM: RM,
               Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
                   ? (((double.tryParse(Income) ?? 0) -

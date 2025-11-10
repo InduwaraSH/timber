@@ -267,6 +267,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
       final pdf = pw.Document();
 
       final infoItems = [
+        {"label": "RM Office", "value": widget.office_location},
         {"label": "RM", "value": widget.user_name},
         {"label": "ARM Office", "value": widget.ARM_Office},
         {"label": "ARM ID", "value": widget.ARM_Id},
@@ -417,6 +418,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
   @override
   Widget build(BuildContext context) {
     final infoItems = [
+      {"label": "RM Office", "value": widget.office_location},
       {"label": "RM", "value": widget.user_name},
       {"label": "ARM Office", "value": widget.ARM_Office},
       {"label": "ARM ID", "value": widget.ARM_Id},
@@ -461,7 +463,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                     ),
                   ),
                   content: const Text(
-                    'This action requires higher permissions. So it will be sent to the AGM.',
+                    'This action requires higher permissions. So it will be sent to the DGM.',
                     style: TextStyle(
                       fontFamily: 'sfproRoundRegular',
                       fontWeight: FontWeight.w600,
@@ -529,6 +531,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                                   widget.PlaceOfCoupe_exact_from_arm,
                               "LetterNo": widget.LetterNo,
                               "Condition": widget.Condition,
+                              "RM Office": widget.office_location,
                               "OfficerName": widget.OfficerName,
                               "OfficerPosition&name":
                                   widget.OfficerPositionAndName,
@@ -538,7 +541,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "CO_name": widget.CO_name,
                               "CO_id": widget.CO_id,
                               "ARM_Id": widget.ARM_Id,
-                              "From": widget.user_name,
+                              "RM_Id": widget.user_name,
                               "Relevent_RM_Branch": widget.office_location,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
@@ -552,7 +555,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.office_location)
                             .child("Sent")
                             .child(widget.SerialNum)
-                            .set({"from": "RM_Approved"});
+                            .set({"from": "RM_N_Approved"});
 
                         if (event.snapshot.value != null) {
                           await database
@@ -588,44 +591,42 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "CO_name": widget.CO_name,
                               "CO_id": widget.CO_id,
                               "ARM_Id": widget.ARM_Id,
-                              "From": widget.user_name,
+                              "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
-                            });
-
-                        // Update status_of_job_test
-                        await FirebaseDatabase.instance
-                            .ref()
-                            .child("Status_of_job")
-                            .child(widget.office_location.toString())
-                            .child(widget.SerialNum.toString())
-                            .child("Status")
-                            .set("approved");
-
-                        await FirebaseDatabase.instance
-                            .ref()
-                            .child("Status_of_job")
-                            .child(widget.office_location.toString())
-                            .child(widget.SerialNum.toString())
-                            .child("approved")
-                            .set(
-                              DateFormat(
-                                'yyyy-MM-dd',
-                              ).format(DateTime.now()).toString(),
-                            )
+                            })
+                            // Update status_of_job_test
+                            // await FirebaseDatabase.instance
+                            //     .ref()
+                            //     .child("Status_of_job")
+                            //     .child(widget.office_location.toString())
+                            //     .child(widget.SerialNum.toString())
+                            //     .child("Status")
+                            //     .set("approved");
+                            // await FirebaseDatabase.instance
+                            //     .ref()
+                            //     .child("Status_of_job")
+                            //     .child(widget.office_location.toString())
+                            //     .child(widget.SerialNum.toString())
+                            //     .child("approved")
+                            //     .set(
+                            //       DateFormat(
+                            //         'yyyy-MM-dd',
+                            //       ).format(DateTime.now()).toString(),
+                            //     )
                             .then((_) {
-                              // try {
-                              //   FirebaseDatabase.instance
-                              //       .ref()
-                              //       .child("RM_branch_data_saved")
-                              //       .child(widget.office_location.toString())
-                              //       .child("Recived")
-                              //       .child(widget.SerialNum.toString())
-                              //       .remove();
-                              //   print('Data deleted successfully');
-                              // } catch (e) {
-                              //   print('Error deleting data: $e');
-                              // }
+                              try {
+                                FirebaseDatabase.instance
+                                    .ref()
+                                    .child("RM_branch_data_saved")
+                                    .child(widget.office_location.toString())
+                                    .child("Recived")
+                                    .child(widget.SerialNum.toString())
+                                    .remove();
+                                print('Data deleted successfully');
+                              } catch (e) {
+                                print('Error deleting data: $e');
+                              }
                             });
 
                         Navigator.of(dialogContext).pop();
@@ -688,7 +689,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child("AGM")
                             .child("Recived")
                             .child(widget.SerialNum)
-                            .set({"from": "RM_Approved"});
+                            .set({"from": "RM_N_Approved"});
 
                         // Copy allTrees if present
                         DatabaseEvent event = await dbref.once();
@@ -721,13 +722,14 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "OfficerName": widget.OfficerName,
                               "OfficerPosition&name":
                                   widget.OfficerPositionAndName,
+                              "RM Office": widget.office_location,
                               "TreeCount": widget.treeCount.toString(),
                               "Date": widget.DateInformed,
                               "ARM_location": widget.ARM_Office,
                               "CO_name": widget.CO_name,
                               "CO_id": widget.CO_id,
                               "ARM_Id": widget.ARM_Id,
-                              "From": widget.user_name,
+                              "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
                             });
@@ -738,7 +740,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.office_location)
                             .child("Sent")
                             .child(widget.SerialNum)
-                            .set({"from": "RM_Approved"});
+                            .set({"from": "RM_N_Approved"});
 
                         if (event.snapshot.value != null) {
                           await database
@@ -774,44 +776,42 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "CO_name": widget.CO_name,
                               "CO_id": widget.CO_id,
                               "ARM_Id": widget.ARM_Id,
-                              "From": widget.user_name,
+                              "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
-                            });
-
-                        // Update status_of_job_test
-                        await FirebaseDatabase.instance
-                            .ref()
-                            .child("Status_of_job")
-                            .child(widget.office_location.toString())
-                            .child(widget.SerialNum.toString())
-                            .child("Status")
-                            .set("approved");
-
-                        await FirebaseDatabase.instance
-                            .ref()
-                            .child("Status_of_job")
-                            .child(widget.office_location.toString())
-                            .child(widget.SerialNum.toString())
-                            .child("approved")
-                            .set(
-                              DateFormat(
-                                'yyyy-MM-dd',
-                              ).format(DateTime.now()).toString(),
-                            )
+                            })
+                            // Update status_of_job_test
+                            // await FirebaseDatabase.instance
+                            //     .ref()
+                            //     .child("Status_of_job")
+                            //     .child(widget.office_location.toString())
+                            //     .child(widget.SerialNum.toString())
+                            //     .child("Status")
+                            //     .set("approved");
+                            // await FirebaseDatabase.instance
+                            //     .ref()
+                            //     .child("Status_of_job")
+                            //     .child(widget.office_location.toString())
+                            //     .child(widget.SerialNum.toString())
+                            //     .child("approved")
+                            //     .set(
+                            //       DateFormat(
+                            //         'yyyy-MM-dd',
+                            //       ).format(DateTime.now()).toString(),
+                            //     )
                             .then((_) {
-                              // try {
-                              //   FirebaseDatabase.instance
-                              //       .ref()
-                              //       .child("RM_branch_data_saved")
-                              //       .child(widget.office_location.toString())
-                              //       .child("Recived")
-                              //       .child(widget.SerialNum.toString())
-                              //       .remove();
-                              //   print('Data deleted successfully');
-                              // } catch (e) {
-                              //   print('Error deleting data: $e');
-                              // }
+                              try {
+                                FirebaseDatabase.instance
+                                    .ref()
+                                    .child("RM_branch_data_saved")
+                                    .child(widget.office_location.toString())
+                                    .child("Recived")
+                                    .child(widget.SerialNum.toString())
+                                    .remove();
+                                print('Data deleted successfully');
+                              } catch (e) {
+                                print('Error deleting data: $e');
+                              }
                             });
 
                         Navigator.of(dialogContext).pop();
@@ -904,6 +904,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                                   widget.PlaceOfCoupe_exact_from_arm,
                               "LetterNo": widget.LetterNo,
                               "Condition": widget.Condition,
+                              "RM Office": widget.office_location,
                               "OfficerName": widget.OfficerName,
                               "OfficerPosition&name":
                                   widget.OfficerPositionAndName,
@@ -913,7 +914,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "CO_name": widget.CO_name,
                               "CO_id": widget.CO_id,
                               "ARM_Id": widget.ARM_Id,
-                              "From": widget.user_name,
+                              "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
                             });
@@ -960,7 +961,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "CO_name": widget.CO_name,
                               "CO_id": widget.CO_id,
                               "ARM_Id": widget.ARM_Id,
-                              "From": widget.user_name,
+                              "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
                             });
@@ -986,32 +987,32 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               ).format(DateTime.now()).toString(),
                             )
                             .then((_) {
-                              // try {
-                              //   FirebaseDatabase.instance
-                              //       .ref()
-                              //       .child("RM_branch_data_saved")
-                              //       .child(widget.office_location.toString())
-                              //       .child("Recived")
-                              //       .child(widget.SerialNum.toString())
-                              //       .remove();
-                              //   print('Data deleted successfully');
-                              // } catch (e) {
-                              //   print('Error deleting data: $e');
-                              // }
+                              try {
+                                FirebaseDatabase.instance
+                                    .ref()
+                                    .child("RM_branch_data_saved")
+                                    .child(widget.office_location.toString())
+                                    .child("Recived")
+                                    .child(widget.SerialNum.toString())
+                                    .remove();
+                                print('Data deleted successfully');
+                              } catch (e) {
+                                print('Error deleting data: $e');
+                              }
                             })
                             .then((_) {
-                              // try {
-                              //   FirebaseDatabase.instance
-                              //       .ref()
-                              //       .child("ARM_branch_data_saved")
-                              //       .child(widget.office_location.toString())
-                              //       .child("Sent")
-                              //       .child(widget.SerialNum.toString())
-                              //       .remove();
-                              //   print('Data deleted successfully');
-                              // } catch (e) {
-                              //   print('Error deleting data: $e');
-                              // }
+                              try {
+                                FirebaseDatabase.instance
+                                    .ref()
+                                    .child("ARM_branch_data_saved")
+                                    .child(widget.office_location.toString())
+                                    .child("Sent")
+                                    .child(widget.SerialNum.toString())
+                                    .remove();
+                                print('Data deleted successfully');
+                              } catch (e) {
+                                print('Error deleting data: $e');
+                              }
                             });
 
                         Navigator.of(dialogContext).pop();

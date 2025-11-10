@@ -13,7 +13,6 @@ import 'package:printing/printing.dart';
 import 'package:timber_app/ARM/ARMSentImageView.dart';
 import 'package:timber_app/ARM/ARM_Sent_timeline.dart';
 
-
 class AgmRecivedview extends StatefulWidget {
   final String poc;
   final String DateInformed;
@@ -27,12 +26,16 @@ class AgmRecivedview extends StatefulWidget {
   final String office_location;
   final String PlaceOfCoupe_exact_from_arm;
   final String user_name;
+  final String CO_id;
   final String ARM_Branch_Name;
   // final String ARM_Office;
   final String Income;
   final String Outcome;
   final String Profit;
   final String CO_name;
+  final String RM;
+  final String ARM_id;
+  final String RM_office;
   // final String CO_Name;
 
   const AgmRecivedview({
@@ -55,7 +58,10 @@ class AgmRecivedview extends StatefulWidget {
     required this.Outcome,
     required this.Profit,
     required this.CO_name,
-    required String RM,
+    required this.RM,
+    required this.CO_id,
+    required this.ARM_id,
+    required this.RM_office,
   });
 
   @override
@@ -263,9 +269,14 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
       final pdf = pw.Document();
 
       final infoItems = [
+        {"label": "AGM ID", "value": widget.user_name},
+        {"label": "RM Office", "value": widget.RM_office},
+        {"label": "RM", "value": widget.RM},
         {"label": "ARM Office", "value": widget.ARM_Branch_Name},
-        {"label": "RM", "value": widget.user_name},
-        {"label": "CO", "value": widget.CO_name},
+        {"label": "ARM ID", "value": widget.ARM_id},
+        {"label": "CO ID", "value": widget.CO_id},
+        {"label": "CO Name", "value": widget.CO_name},
+
         {"label": "POC", "value": widget.poc},
         {"label": "POC Exact", "value": widget.PlaceOfCoupe_exact_from_arm},
         {"label": "Date Informed", "value": widget.DateInformed},
@@ -411,9 +422,15 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
   @override
   Widget build(BuildContext context) {
     final infoItems = [
+      {"label": "AGM ID", "value": widget.user_name},
+      {"label": "RM Office", "value": widget.RM_office},
+      {"label": "RM", "value": widget.RM},
       {"label": "ARM Office", "value": widget.ARM_Branch_Name},
-      {"label": "RM", "value": widget.user_name},
-      {"label": "CO", "value": widget.CO_name},
+
+      {"label": "ARM ID", "value": widget.ARM_id},
+      {"label": "CO ID", "value": widget.CO_id},
+      {"label": "CO Name", "value": widget.CO_name},
+
       {"label": "POC", "value": widget.poc},
       {"label": "POC Exact", "value": widget.PlaceOfCoupe_exact_from_arm},
       {"label": "Date Informed", "value": widget.DateInformed},
@@ -448,8 +465,8 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                     fontSize: 20,
                   ),
                 ),
-                content: const Text(
-                  'This action requires higher permissions. So it will be sent to the AGM.',
+                content: Text(
+                  'Once you confirm, the deal will be marked as approved and forwarded to the ${widget.RM_office} RM.',
                   style: TextStyle(
                     fontFamily: 'sfproRoundRegular',
                     fontWeight: FontWeight.w600,
@@ -484,7 +501,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                       // Write to ARM_branch_data_saved_test
                       await database
                           .child('RM_branch_data_saved')
-                          .child(widget.office_location)
+                          .child(widget.RM_office)
                           .child("Recived")
                           .child(widget.SerialNum)
                           .set({"from": "AGM_Approved"});
@@ -494,7 +511,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                       if (event.snapshot.value != null) {
                         await database
                             .child('RM_branch_data_saved')
-                            .child(widget.office_location)
+                            .child(widget.RM_office)
                             .child("Recived")
                             .child(widget.SerialNum)
                             .child("allTrees")
@@ -504,7 +521,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                       // Set info under ARM_branch_data_saved_test
                       await database
                           .child('RM_branch_data_saved')
-                          .child(widget.office_location)
+                          .child(widget.RM_office)
                           .child("Recived")
                           .child(widget.SerialNum)
                           .child("timberReportheadlines")
@@ -523,8 +540,11 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                             "TreeCount": widget.treeCount.toString(),
                             "Date": widget.DateInformed,
                             "ARM_location": widget.ARM_Branch_Name,
-                            "From_CO": widget.CO_name,
-                            "From": widget.user_name,
+                            "CO_name": widget.CO_name,
+                            "CO_id": widget.CO_id,
+                            "ARM_Id": widget.ARM_id,
+                            "RM_Id": widget.user_name,
+                            "ADGM_id": "${widget.user_name} (AGM)",
                             "income": widget.Income,
                             "outcome": widget.Outcome,
                           });
@@ -533,7 +553,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
 
                       if (event.snapshot.value != null) {
                         await database
-                            .child('Head_office_data_saved') 
+                            .child('Head_office_data_saved')
                             .child("AGM")
                             .child("Send")
                             .child(widget.SerialNum)
@@ -562,8 +582,12 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                             "TreeCount": widget.treeCount.toString(),
                             "Date": widget.DateInformed,
                             "ARM_location": widget.ARM_Branch_Name,
-                            "From_CO": widget.CO_name,
-                            "From": widget.user_name,
+                            "RM_office": widget.RM_office,
+                            "CO_name": widget.CO_name,
+                            "CO_id": widget.CO_id,
+                            "ARM_Id": widget.ARM_id,
+                            "RM_Id": widget.user_name,
+                            "ADGM_id": "${widget.user_name} (AGM)",
                             "income": widget.Income,
                             "outcome": widget.Outcome,
                           });
@@ -572,7 +596,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                       await FirebaseDatabase.instance
                           .ref()
                           .child("Status_of_job")
-                          .child(widget.office_location.toString())
+                          .child(widget.RM_office.toString())
                           .child(widget.SerialNum.toString())
                           .child("Status")
                           .set("approved");
@@ -580,7 +604,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                       await FirebaseDatabase.instance
                           .ref()
                           .child("Status_of_job")
-                          .child(widget.office_location.toString())
+                          .child(widget.RM_office.toString())
                           .child(widget.SerialNum.toString())
                           .child("approved")
                           .set(
@@ -589,32 +613,32 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                             ).format(DateTime.now()).toString(),
                           )
                           .then((_) {
-                            // try {
-                            //   FirebaseDatabase.instance
-                            //       .ref()
-                            //       .child("RM_branch_data_saved")
-                            //       .child(widget.office_location.toString())
-                            //       .child("Recived")
-                            //       .child(widget.SerialNum.toString())
-                            //       .remove();
-                            //   print('Data deleted successfully');
-                            // } catch (e) {
-                            //   print('Error deleting data: $e');
-                            // }
+                            try {
+                              FirebaseDatabase.instance
+                                  .ref()
+                                  .child('Head_office_data_saved')
+                                  .child("AGM")
+                                  .child("Recived")
+                                  .child(widget.SerialNum.toString())
+                                  .remove();
+                              print('Data deleted successfully');
+                            } catch (e) {
+                              print('Error deleting data: $e');
+                            }
                           })
                           .then((_) {
-                            // try {
-                            //   FirebaseDatabase.instance
-                            //       .ref()
-                            //       .child("ARM_branch_data_saved")
-                            //       .child(widget.office_location.toString())
-                            //       .child("Sent")
-                            //       .child(widget.SerialNum.toString())
-                            //       .remove();
-                            //   print('Data deleted successfully');
-                            // } catch (e) {
-                            //   print('Error deleting data: $e');
-                            // }
+                            try {
+                              FirebaseDatabase.instance
+                                  .ref()
+                                  .child("RM_branch_data_saved")
+                                  .child(widget.RM_office.toString())
+                                  .child("Sent")
+                                  .child(widget.SerialNum.toString())
+                                  .remove();
+                              print('Data deleted successfully');
+                            } catch (e) {
+                              print('Error deleting data: $e');
+                            }
                           });
 
                       Navigator.of(dialogContext).pop();

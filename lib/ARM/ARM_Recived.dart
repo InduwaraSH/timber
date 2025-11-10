@@ -90,10 +90,13 @@ class _ARMReceivedState extends State<ARMReceived> {
     String Profit = "";
     String RM_office = "";
     String CO_id = "";
+    String poc_exact = "";
 
     if (from == "CO") {
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
       poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
+      poc_exact =
+          Sent['timberReportheadlines']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
       DateInformed = Sent['timberReportheadlines']['Date'] ?? "N/A";
       LetterNo = Sent['timberReportheadlines']['LetterNo'] ?? "N/A";
       SerialNum = Sent['timberReportheadlines']['serialnum'] ?? "N/A";
@@ -165,13 +168,11 @@ class _ARMReceivedState extends State<ARMReceived> {
                 Condition: Condition,
                 treeCount: treeCount,
                 office_location: widget.office_location,
-                PlaceOfCoupe_exact_from_arm: poc,
+                PlaceOfCoupe_exact_from_arm: poc_exact,
                 OfficerName: OfficerName,
                 user_name: widget.username,
                 ARM_Office: ARM_office,
                 RM_office: RM_office,
-              
-
               ),
             ),
           );
