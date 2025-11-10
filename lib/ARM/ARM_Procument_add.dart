@@ -251,6 +251,9 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
             "Income": _incomeController.text.trim(),
             "Outcome": _outcomeController.text.trim(),
             "Reciver": "RM",
+            "latest_update": DateFormat(
+              'yyyy-MM-dd HH:mm:ss',
+            ).format(DateTime.now()).toString(),
             "profitValue":
                 (double.tryParse(
                       _incomeController.text.trim().isNotEmpty
@@ -305,6 +308,9 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
             "Income": _incomeController.text.trim(),
             "Outcome": _outcomeController.text.trim(),
             "Reciver": "RM",
+            "latest_update": DateFormat(
+              'yyyy-MM-dd HH:mm:ss',
+            ).format(DateTime.now()).toString(),
             "profitValue":
                 (double.tryParse(
                       _incomeController.text.trim().isNotEmpty
@@ -352,7 +358,8 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
             } catch (e) {
               print('Error deleting data: $e');
             }
-          }).then((_) {
+          })
+          .then((_) {
             try {
               FirebaseDatabase.instance
                   .ref()

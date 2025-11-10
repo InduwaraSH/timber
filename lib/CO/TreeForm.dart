@@ -201,7 +201,6 @@ class _TreeQuesFormState extends State<TreeQuesForm> {
           serialnum: widget.serialnum,
           placeofcoupe: widget.placeofcoupe,
           dateinformed_from_rm: widget.dateinformed_from_rm,
-          
 
           onEdit: (index) {
             Navigator.pop(context);
@@ -245,6 +244,9 @@ class _TreeQuesFormState extends State<TreeQuesForm> {
       "From": "CO",
       "CO_id": widget.user_name,
       "RM_office": widget.RM_office,
+      "latest_update": DateFormat(
+        'yyyy-MM-dd HH:mm:ss',
+      ).format(DateTime.now()).toString(),
     };
 
     try {

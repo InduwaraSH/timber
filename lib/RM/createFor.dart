@@ -422,7 +422,7 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                 "from": "RM",
                                 "RM_Id": widget.username.toString(),
                                 "latest_update": DateFormat(
-                                  'yyyy-MM-dd',
+                                  'yyyy-MM-dd HH:mm:ss',
                                 ).format(DateTime.now()).toString(),
                               };
                               FirebaseDatabase.instance

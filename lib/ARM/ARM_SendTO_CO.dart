@@ -184,6 +184,9 @@ class _ARM_SentTO_COState extends State<ARM_SentTO_CO> {
                             "from": "CO ${widget.CO_Name}",
                             "Reciver": "CO",
                             "RM_office": widget.RM_office.toString(),
+                            "latest_update": DateFormat(
+                              'yyyy-MM-dd HH:mm:ss',
+                            ).format(DateTime.now()).toString(),
                           };
                           FirebaseDatabase.instance
                               .ref()

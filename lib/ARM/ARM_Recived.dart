@@ -1,8 +1,11 @@
+import 'package:avatar_plus/avatar_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:timber_app/ARM/ARM_RecivedViewApproved.dart';
 import 'package:timber_app/ARM/ARM_RecivedView_CO.dart';
 import 'package:timber_app/ARM/ARM_Recived_view.dart';
@@ -25,7 +28,8 @@ class _ARMReceivedState extends State<ARMReceived> {
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
   int messageCount = 0;
-  String searchQuery = ""; // Added search query variable
+  String searchQuery = "";
+  List<Map> allItems = []; // store all items temporarily
 
   @override
   void initState() {
@@ -36,7 +40,6 @@ class _ARMReceivedState extends State<ARMReceived> {
         .child(widget.office_location)
         .child("Recived");
 
-    // Listen for changes to update message count dynamically
     dbref.onValue.listen((event) {
       final data = event.snapshot.value;
       setState(() {
@@ -77,6 +80,7 @@ class _ARMReceivedState extends State<ARMReceived> {
     Color activeColor2 = const Color(0xFFD6E4FA);
     Color textPrimary = const Color(0xFF5065D8);
     Color iconPrimary = const Color(0xFF5065D8);
+    Color statusColour = Colors.grey;
 
     String OfficerName = "";
     String OfficerPositionAndName = "";
@@ -91,6 +95,9 @@ class _ARMReceivedState extends State<ARMReceived> {
     String RM_office = "";
     String CO_id = "";
     String poc_exact = "";
+    String latestUpdate = "";
+    String from_doc = Sent['to'] ?? "N/A";
+    String RM_Id = Sent['RM_id'] ?? "N/A";
 
     if (from == "CO") {
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
@@ -109,6 +116,10 @@ class _ARMReceivedState extends State<ARMReceived> {
       CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
       ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
       RM_office = Sent['timberReportheadlines']['RM_office'] ?? "N/A";
+      latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
+      from_doc = "CO $CO_name";
+      statusColour = Colors.blueAccent;
+
       activeColor1 = const Color(0xFFE9FBE7);
       activeColor2 = const Color(0xFFC8E6C9);
       textPrimary = const Color(0xFF4CAF50);
@@ -120,6 +131,10 @@ class _ARMReceivedState extends State<ARMReceived> {
       LetterNo = Sent['LetterNo'] ?? "N/A";
       SerialNum = Sent['Serial Number'] ?? "N/A";
       RM_office = Sent['RM_location'] ?? "N/A";
+      latestUpdate = Sent['latest_update'] ?? "N/A";
+
+      from_doc = "RM $RM_office";
+      statusColour = const Color(0xFFFFCB77);
 
       activeColor1 = const Color(0xFFE2ECFF);
       activeColor2 = const Color(0xFFD6E4FA);
@@ -142,6 +157,11 @@ class _ARMReceivedState extends State<ARMReceived> {
       CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
       Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
       Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
+      latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
+      RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
+
+      from_doc = "RM $RM_office";
+      statusColour = const Color(0xFF17C3B2);
 
       activeColor1 = const Color(0xFFFFF3E0);
       activeColor2 = const Color(0xFFFFE0B2);
@@ -223,71 +243,164 @@ class _ARMReceivedState extends State<ARMReceived> {
         }
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [activeColor1, activeColor2],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: Colors.white70,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: activeColor1.withOpacity(0.5),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  poc,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'sfproRoundSemiB',
-                    color: textPrimary,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(height: 6),
                 Row(
                   children: [
-                    Icon(
-                      Icons.double_arrow,
-                      color: textPrimary.withOpacity(0.6),
-                      size: 16,
+                    const CircleAvatar(
+                      radius: 26,
+                      backgroundColor: Color.fromARGB(16, 0, 0, 0),
+                      child: Center(
+                        child: Icon(
+                          Iconsax.location5,
+                          color: Colors.black,
+                          size: 35,
+                        ),
+                      ),
                     ),
+                    const SizedBox(width: 12),
                     Text(
-                      branchName,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'sfproRoundSemiB',
-                        color: textPrimary.withOpacity(0.6),
+                      poc,
+                      style: const TextStyle(
+                        fontSize: 33,
+                        fontFamily: "sfproRoundSemiB",
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
                       ),
                     ),
                   ],
                 ),
               ],
             ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: iconPrimary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
+            const SizedBox(height: 20),
+            const Text(
+              "Serial Number",
+              style: TextStyle(
+                fontFamily: "sfproRoundSemiB",
+                fontSize: 14,
+                color: Colors.grey,
+                fontWeight: FontWeight.w400,
               ),
-              child: Icon(
-                Icons.apartment_rounded,
-                color: iconPrimary,
-                size: 30,
-              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      Iconsax.hashtag,
+                      size: 20,
+                      color: Colors.black45,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      SerialNum.toString(),
+                      style: const TextStyle(
+                        fontFamily: "sfproRoundSemiB",
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black45,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    latestUpdate != ""
+                        ? DateFormat(
+                            'yyyy-MM-dd',
+                          ).format(DateTime.parse(latestUpdate))
+                        : "",
+                    style: const TextStyle(
+                      fontFamily: "sfproRoundSemiB",
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            const Divider(thickness: 0.6, color: Colors.black12),
+            const SizedBox(height: 10),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Document Recived From :",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: "sfproRoundSemiB",
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 17,
+                      backgroundColor: Colors.transparent,
+                      child: ClipOval(
+                        child: AvatarPlus(from_doc, height: 40, width: 40),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: statusColour,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        from_doc,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'sfproRoundSemiB',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
@@ -301,114 +414,156 @@ class _ARMReceivedState extends State<ARMReceived> {
       body: SafeArea(
         top: true,
         bottom: false,
-        child: Column(
-          children: [
-            // Animated Header with message count
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              height: _showHeader ? 100 : 1,
-              curve: Curves.easeInOut,
-              child: _showHeader
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 16,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Inbox",
-                            style: TextStyle(
-                              fontSize: 50,
-                              fontFamily: "sfproRoundSemiB",
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              "$messageCount",
-                              style: const TextStyle(
-                                fontSize: 18,
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFFFDFBFF), Color(0xFFEDEBFF)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: Column(
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                height: _showHeader ? 100 : 1,
+                curve: Curves.easeInOut,
+                child: _showHeader
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 16,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Inbox",
+                              style: TextStyle(
+                                fontSize: 50,
+                                fontFamily: "sfproRoundSemiB",
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: 'sfproRoundSemiB',
+                                color: Colors.black,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : null,
-            ),
-
-            // Search bar
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(15),
+                            const SizedBox(width: 12),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                "$messageCount",
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontFamily: 'sfproRoundSemiB',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : null,
               ),
-              child: TextField(
-                decoration: const InputDecoration(
-                  hintText: "Search by POC",
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontFamily: "sfproRoundSemiB",
-                  ),
-                  border: InputBorder.none,
-                  icon: Icon(Icons.search, color: Colors.grey),
+              Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
                 ),
-                onChanged: (val) {
-                  setState(() {
-                    searchQuery = val.toLowerCase();
-                  });
-                },
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: TextField(
+                  decoration: const InputDecoration(
+                    hintText: "Search by POC",
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontFamily: "sfproRoundSemiB",
+                    ),
+                    border: InputBorder.none,
+                    icon: Icon(Icons.search, color: Colors.grey),
+                  ),
+                  onChanged: (val) {
+                    setState(() {
+                      searchQuery = val.toLowerCase();
+                    });
+                  },
+                ),
               ),
-            ),
+              Expanded(
+                child: StreamBuilder(
+                  stream: dbref.onValue,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData ||
+                        snapshot.data?.snapshot.value == null) {
+                      return const Center(child: Text("No records found"));
+                    }
+                    final data = Map<String, dynamic>.from(
+                      snapshot.data!.snapshot.value as Map,
+                    );
+                    final items = data.entries
+                        .map(
+                          (e) => {
+                            ...Map<String, dynamic>.from(e.value),
+                            "key": e.key,
+                          },
+                        )
+                        .toList();
 
-            // Firebase list
-            Expanded(
-              child: FirebaseAnimatedList(
-                controller: _scrollController,
-                query: dbref,
-                itemBuilder:
-                    (
-                      BuildContext context,
-                      DataSnapshot snapshot,
-                      Animation<double> animation,
-                      int index,
-                    ) {
-                      Map sent = snapshot.value as Map;
-                      sent['key'] = snapshot.key;
+                    // sort by latestUpdate (descending)
+                    items.sort((a, b) {
+                      final aDate =
+                          DateTime.tryParse(
+                            (a['latest_update'] ??
+                                    a['timberReportheadlines']?['latest_update'] ??
+                                    "")
+                                .toString(),
+                          ) ??
+                          DateTime(1970);
+                      final bDate =
+                          DateTime.tryParse(
+                            (b['latest_update'] ??
+                                    b['timberReportheadlines']?['latest_update'] ??
+                                    "")
+                                .toString(),
+                          ) ??
+                          DateTime(1970);
+                      return bDate.compareTo(aDate);
+                    });
 
-                      // Filter by POC
-                      final String poc =
+                    // filter by search
+                    final filtered = items.where((sent) {
+                      final poc =
                           (sent['timberReportheadlines']?['placeofcoupe'] ??
                                   sent['placeOfCoupe'] ??
                                   "")
-                              .toString();
-                      if (searchQuery.isNotEmpty &&
-                          !poc.toLowerCase().contains(searchQuery)) {
-                        return const SizedBox.shrink();
-                      }
+                              .toString()
+                              .toLowerCase() ??
+                          "";
+                      return searchQuery.isEmpty ||
+                          poc.contains(searchQuery.toLowerCase());
+                    }).toList();
 
-                      return listItem(Sent: sent, index: index);
-                    },
+                    return ListView.builder(
+                      controller: _scrollController,
+                      itemCount: filtered.length,
+                      itemBuilder: (context, index) {
+                        return listItem(Sent: filtered[index], index: index);
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

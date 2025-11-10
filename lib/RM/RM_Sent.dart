@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:timber_app/PositionPicker.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
 import 'package:timber_app/RM/createFor.dart';
@@ -218,7 +219,11 @@ class _RmSentState extends State<RmSent> {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    latestUpdate != "" ? "$latestUpdate" : "",
+                    latestUpdate != ""
+                        ? DateFormat(
+                            'yyyy-MM-dd',
+                          ).format(DateTime.parse(latestUpdate))
+                        : "",
                     style: const TextStyle(
                       fontFamily: "sfproRoundSemiB",
                       fontSize: 13,

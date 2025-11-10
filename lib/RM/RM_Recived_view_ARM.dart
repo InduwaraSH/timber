@@ -448,6 +448,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
           int total =
               (int.tryParse(widget.Income) ?? 0) +
               (int.tryParse(widget.Outcome) ?? 0);
+
           if (total > 60000) {
             showCupertinoDialog(
               context: context,
@@ -545,6 +546,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "Relevent_RM_Branch": widget.office_location,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
+                              "latest_update": DateFormat(
+                                'yyyy-MM-dd HH:mm:ss',
+                              ).format(DateTime.now()).toString(),
 
                               // "CO_id": widget.user_name,
                             });
@@ -594,6 +598,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
+                              "latest_update": DateFormat(
+                                'yyyy-MM-dd HH:mm:ss',
+                              ).format(DateTime.now()).toString(),
                             })
                             // Update status_of_job_test
                             // await FirebaseDatabase.instance
@@ -732,6 +739,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
+                              "latest_update": DateFormat(
+                                'yyyy-MM-dd HH:mm:ss',
+                              ).format(DateTime.now()).toString(),
                             });
 
                         // Also mirror to RM_branch_data_saved_test
@@ -779,6 +789,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
+                              "latest_update": DateFormat(
+                                'yyyy-MM-dd HH:mm:ss',
+                              ).format(DateTime.now()).toString(),
                             })
                             // Update status_of_job_test
                             // await FirebaseDatabase.instance
@@ -836,7 +849,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                     ),
                   ),
                   content: const Text(
-                    'This action requires higher permissions. So it will be sent to the AGM.',
+                    'This sent job will be approved and recorded under ARM Received.',
                     style: TextStyle(
                       fontFamily: 'sfproRoundRegular',
                       fontWeight: FontWeight.w600,
@@ -871,7 +884,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                         // Write to ARM_branch_data_saved_test
                         await database
                             .child('ARM_branch_data_saved')
-                            .child(widget.office_location)
+                            .child(widget.ARM_Office)
                             .child("Recived")
                             .child(widget.SerialNum)
                             .set({"from": "RM_Approved"});
@@ -881,7 +894,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                         if (event.snapshot.value != null) {
                           await database
                               .child('ARM_branch_data_saved')
-                              .child(widget.office_location)
+                              .child(widget.ARM_Office)
                               .child("Recived")
                               .child(widget.SerialNum)
                               .child("allTrees")
@@ -891,7 +904,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                         // Set info under ARM_branch_data_saved_test
                         await database
                             .child('ARM_branch_data_saved')
-                            .child(widget.office_location)
+                            .child(widget.ARM_Office)
                             .child("Recived")
                             .child(widget.SerialNum)
                             .child("timberReportheadlines")
@@ -917,6 +930,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
+                              "latest_update": DateFormat(
+                                'yyyy-MM-dd HH:mm:ss',
+                              ).format(DateTime.now()).toString(),
                             });
 
                         // Also mirror to RM_branch_data_saved_test
@@ -964,6 +980,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
+                              "latest_update": DateFormat(
+                                'yyyy-MM-dd HH:mm:ss',
+                              ).format(DateTime.now()).toString(),
                             });
 
                         // Update status_of_job_test
