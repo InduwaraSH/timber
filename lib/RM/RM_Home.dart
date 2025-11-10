@@ -162,6 +162,7 @@ class _RMHomepageState extends State<RMHomepage> {
                             MaterialPageRoute(
                               builder: (context) => ARM_OfficeIN_RM(
                                 office_location: widget.office_location,
+                                username: widget.username,
                               ),
                             ),
                           );
@@ -496,9 +497,7 @@ class alert_button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-      onPressed: () {
-        
-      },
+      onPressed: () {},
       child: Container(
         margin: const EdgeInsets.only(top: 20),
         alignment: Alignment.topRight,

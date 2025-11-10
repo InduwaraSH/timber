@@ -7,7 +7,8 @@ import 'package:timber_app/RM/createFor.dart';
 
 class ARM_OfficeIN_RM extends StatefulWidget {
   final String office_location;
-  const ARM_OfficeIN_RM({super.key, required this.office_location});
+  final String username;
+  const ARM_OfficeIN_RM({super.key, required this.office_location, required this.username});
 
   @override
   State<ARM_OfficeIN_RM> createState() => _ARM_OfficeIN_RMState();
@@ -254,6 +255,7 @@ class _ARM_OfficeIN_RMState extends State<ARM_OfficeIN_RM> {
                               builder: (context) => Create_Form_Rm(
                                 widget.office_location.toString(),
                                 _townName[_selectedTown].toString(),
+                                widget.username.toString(),
                               ),
                             ),
                           );

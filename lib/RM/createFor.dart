@@ -8,7 +8,13 @@ import 'package:intl/intl.dart';
 class Create_Form_Rm extends StatefulWidget {
   final String office_location;
   final String branch_name;
-  const Create_Form_Rm(this.office_location, this.branch_name, {super.key});
+  final String username;
+  const Create_Form_Rm(
+    this.office_location,
+    this.branch_name,
+    this.username, {
+    super.key,
+  });
 
   @override
   State<Create_Form_Rm> createState() => _Create_Form_RmState();
@@ -414,6 +420,10 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                 "RM_location": widget.office_location
                                     .toString(),
                                 "from": "RM",
+                                "RM_Id": widget.username.toString(),
+                                "latest_update": DateFormat(
+                                  'yyyy-MM-dd',
+                                ).format(DateTime.now()).toString(),
                               };
                               FirebaseDatabase.instance
                                   .ref()
