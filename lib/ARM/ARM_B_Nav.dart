@@ -66,7 +66,7 @@ class _arm_b_nav_barState extends State<arm_b_nav_bar> {
               curve: Curves.easeOut,
               left: 16,
               right: 16,
-              bottom: _isVisible ? 0 : -120,
+              bottom: _isVisible ? -15 : -120,
               child: SafeArea(
                 child: Container(
                   height: 80,

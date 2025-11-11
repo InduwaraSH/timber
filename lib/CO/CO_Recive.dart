@@ -130,7 +130,7 @@ class _CORecivedState extends State<CORecived> {
       },
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,

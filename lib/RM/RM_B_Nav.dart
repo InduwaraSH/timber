@@ -59,7 +59,7 @@ class _RmBNavbarState extends State<RmBNavbar> {
             Positioned(
               left: 16,
               right: 16,
-              bottom: 0,
+              bottom: -10,
               child: SafeArea(
                 child: AnimatedSlide(
                   duration: const Duration(milliseconds: 300),
@@ -174,7 +174,7 @@ class RMNavigControll extends GetxController {
   late final List<Widget> screens = [
     RMHomepage(office_location: office_location, username: username),
     RmSent(office_location: office_location, username: username),
-    RMRecived(office_location: office_location,username: username),
+    RMRecived(office_location: office_location, username: username),
     pgfour(office_location: office_location),
   ];
 }

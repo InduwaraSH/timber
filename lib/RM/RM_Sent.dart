@@ -40,6 +40,8 @@ class _RmSentState extends State<RmSent> {
   Color statusColour = const Color(0xFFEDEBFF);
   String latestUpdate = "";
 
+  List<Map> _sentList = []; // Added to store and sort items
+
   @override
   void initState() {
     super.initState();
@@ -58,6 +60,48 @@ class _RmSentState extends State<RmSent> {
         if (_showHeader) setState(() => _showHeader = false);
       }
     });
+
+    // Fetch once and listen for changes to apply sorting
+    dbref.onValue.listen((event) {
+      if (event.snapshot.value != null) {
+        Map data = event.snapshot.value as Map;
+        List<Map> tempList = [];
+
+        data.forEach((key, value) {
+          Map sent = value as Map;
+          sent['key'] = key;
+          tempList.add(sent);
+        });
+
+        tempList.sort((a, b) {
+          final aDateStr = _extractLatestUpdate(a);
+          final bDateStr = _extractLatestUpdate(b);
+
+          final aDate = aDateStr.isNotEmpty
+              ? DateTime.tryParse(aDateStr) ?? DateTime(1900)
+              : DateTime(1900);
+          final bDate = bDateStr.isNotEmpty
+              ? DateTime.tryParse(bDateStr) ?? DateTime(1900)
+              : DateTime(1900);
+
+          return bDate.compareTo(aDate); // latest first
+        });
+
+        setState(() {
+          _sentList = tempList;
+        });
+      }
+    });
+  }
+
+  String _extractLatestUpdate(Map sent) {
+    if (sent['from'] == 'RM') {
+      return sent['latest_update'] ?? '';
+    } else if (sent['from'] == 'RM_Approved' ||
+        sent['from'] == 'RM_N_Approved') {
+      return sent['info']?['latest_update'] ?? '';
+    }
+    return '';
   }
 
   @override
@@ -88,7 +132,6 @@ class _RmSentState extends State<RmSent> {
       RM_Id = Sent['info']['RM_Id'] ?? "N/A";
       latestUpdate = Sent['info']['latest_update'] ?? "N/A";
       To = "ARM $branchName";
-
       statusColour = const Color(0xFF17C3B2);
     } else if (key == "RM_N_Approved") {
       branchName = Sent['info']['ARM_location'] ?? "Not Available";
@@ -101,9 +144,6 @@ class _RmSentState extends State<RmSent> {
       To = "AGM";
       statusColour = const Color(0xFFFE6D73);
     }
-
-    Color activeColor1 = const Color(0xFFEDEBFF);
-    Color activeColor2 = const Color(0xFFDAD6FF);
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
@@ -124,7 +164,7 @@ class _RmSentState extends State<RmSent> {
       },
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -140,7 +180,7 @@ class _RmSentState extends State<RmSent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Row: Profile + Switch Account
+            // Top Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -160,7 +200,7 @@ class _RmSentState extends State<RmSent> {
                     const SizedBox(width: 12),
                     Text(
                       poc,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 33,
                         fontFamily: "sfproRoundSemiB",
                         fontWeight: FontWeight.w600,
@@ -174,7 +214,6 @@ class _RmSentState extends State<RmSent> {
 
             const SizedBox(height: 20),
 
-            // Balance section
             const Text(
               "Serial Number",
               style: TextStyle(
@@ -186,7 +225,6 @@ class _RmSentState extends State<RmSent> {
             ),
             const SizedBox(height: 8),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
@@ -208,7 +246,6 @@ class _RmSentState extends State<RmSent> {
                     ),
                   ],
                 ),
-
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 14,
@@ -235,23 +272,13 @@ class _RmSentState extends State<RmSent> {
               ],
             ),
 
-            // // Action buttons
-            // // Row(
-            // //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // //   children: [
-            // //     _ActionButton(icon: Icons.add, label: "Top Up"),
-            // //     _ActionButton(icon: Icons.arrow_forward, label: "Transfer"),
-            // //     _ActionButton(icon: Icons.history, label: "History"),
-            // //   ],
-            // // ),
             const SizedBox(height: 10),
             const Divider(thickness: 0.6, color: Colors.black12),
             const SizedBox(height: 10),
 
-            // Last Transaction
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   "Document Sent To :",
                   style: TextStyle(
@@ -265,26 +292,16 @@ class _RmSentState extends State<RmSent> {
             ),
             const SizedBox(height: 10),
 
-            // Transaction Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                      ),
-                      alignment: Alignment.topLeft,
-                      child: CircleAvatar(
-                        radius: 17,
-                        backgroundColor: const Color.fromARGB(0, 238, 238, 238),
-                        child: ClipOval(
-                          child: AvatarPlus(To, height: 40, width: 40),
-                        ),
+                    CircleAvatar(
+                      radius: 17,
+                      backgroundColor: const Color.fromARGB(0, 238, 238, 238),
+                      child: ClipOval(
+                        child: AvatarPlus(To, height: 40, width: 40),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -299,7 +316,7 @@ class _RmSentState extends State<RmSent> {
                       ),
                       child: Text(
                         To,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                           fontFamily: 'sfproRoundSemiB',
                           fontWeight: FontWeight.bold,
@@ -312,7 +329,7 @@ class _RmSentState extends State<RmSent> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
+                    const Text(
                       "From",
                       style: TextStyle(
                         fontSize: 14,
@@ -321,10 +338,10 @@ class _RmSentState extends State<RmSent> {
                         color: Colors.black87,
                       ),
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Text(
                       RM_Id,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         color: Colors.grey,
                         fontFamily: "sfproRoundSemiB",
@@ -355,20 +372,14 @@ class _RmSentState extends State<RmSent> {
           top: true,
           bottom: false,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // Animated Header
               AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 height: _showHeader ? 100 : 1,
                 curve: Curves.easeInOut,
                 child: _showHeader
                     ? Padding(
-                        padding: const EdgeInsets.only(
-                          top: 0,
-                          left: 28,
-                          right: 16,
-                        ),
+                        padding: const EdgeInsets.only(left: 28, right: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -394,7 +405,7 @@ class _RmSentState extends State<RmSent> {
                                 );
                               },
                               backgroundColor: Colors.black,
-                              child: Icon(
+                              child: const Icon(
                                 Iconsax.pen_add,
                                 color: Colors.white,
                                 size: 30,
@@ -406,7 +417,6 @@ class _RmSentState extends State<RmSent> {
                     : null,
               ),
 
-              // Search bar below header
               Container(
                 margin: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -435,31 +445,24 @@ class _RmSentState extends State<RmSent> {
                 ),
               ),
 
-              // Firebase list
               Expanded(
-                child: FirebaseAnimatedList(
+                child: ListView.builder(
                   controller: _scrollController,
-                  query: dbref,
+                  itemCount: _sentList.length,
+                  itemBuilder: (context, index) {
+                    Map sent = _sentList[index];
 
-                  itemBuilder:
-                      (
-                        BuildContext context,
-                        DataSnapshot snapshot,
-                        Animation<double> animation,
-                        int index,
-                      ) {
-                        Map sent = snapshot.value as Map;
-                        sent['key'] = snapshot.key;
+                    final String pocVal =
+                        sent['placeOfCoupe'] ??
+                        sent['info']?['placeofcoupe'] ??
+                        "";
+                    if (searchQuery.isNotEmpty &&
+                        !pocVal.toLowerCase().contains(searchQuery)) {
+                      return const SizedBox.shrink();
+                    }
 
-                        // Filter by POC
-                        final String poc = sent['placeOfCoupe'] ?? "";
-                        if (searchQuery.isNotEmpty &&
-                            !poc.toLowerCase().contains(searchQuery)) {
-                          return const SizedBox.shrink();
-                        }
-
-                        return listItem(Sent: sent, index: index);
-                      },
+                    return listItem(Sent: sent, index: index);
+                  },
                 ),
               ),
             ],

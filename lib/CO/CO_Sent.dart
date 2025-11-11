@@ -107,7 +107,7 @@ class _CO_SentState extends State<CO_Sent> {
       },
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
