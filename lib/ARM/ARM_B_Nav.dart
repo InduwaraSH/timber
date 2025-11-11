@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -22,7 +23,7 @@ class arm_b_nav_bar extends StatefulWidget {
 
 class _arm_b_nav_barState extends State<arm_b_nav_bar> {
   late final ARMNavigControll arm_controller;
-  bool _isVisible = true; // bottom bar visibility
+  bool _isNavVisible = true;
 
   @override
   void initState() {
@@ -33,14 +34,24 @@ class _arm_b_nav_barState extends State<arm_b_nav_bar> {
     );
   }
 
-  void _onUserScroll(ScrollNotification notification) {
-    if (notification is UserScrollNotification) {
-      final direction = notification.direction;
-      if (direction == ScrollDirection.reverse && _isVisible) {
-        setState(() => _isVisible = false);
-      } else if (direction == ScrollDirection.forward && !_isVisible) {
-        setState(() => _isVisible = true);
-      }
+  /// Wrap screen with scroll detection
+  Widget _attachScrollListener(Widget screen) {
+    return NotificationListener<UserScrollNotification>(
+      onNotification: (notification) {
+        if (notification.direction == ScrollDirection.reverse) {
+          _toggleNavBar(false); // Hide on scroll down
+        } else if (notification.direction == ScrollDirection.forward) {
+          _toggleNavBar(true); // Show on scroll up
+        }
+        return false;
+      },
+      child: screen,
+    );
+  }
+
+  void _toggleNavBar(bool visible) {
+    if (_isNavVisible != visible) {
+      setState(() => _isNavVisible = visible);
     }
   }
 
@@ -48,78 +59,168 @@ class _arm_b_nav_barState extends State<arm_b_nav_bar> {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
+        extendBody: true,
         backgroundColor: Colors.white,
         body: Stack(
           children: [
-            // Wrap your screen content with NotificationListener
-            NotificationListener<ScrollNotification>(
-              onNotification: (scrollNotification) {
-                _onUserScroll(scrollNotification);
-                return false;
-              },
-              child: arm_controller.screens[arm_controller.selectedIndex.value],
+            // Active screen with scroll detection
+            _attachScrollListener(
+              arm_controller.screens[arm_controller.selectedIndex.value],
             ),
 
-            // Floating bottom navigation bar with animation
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-              left: 16,
-              right: 16,
-              bottom: _isVisible ? -15 : -120,
-              child: SafeArea(
-                child: Container(
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(240, 255, 255, 255),
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
+            // Glass-style floating navigation bar
+            Positioned(
+              left: 18,
+              right: 18,
+              bottom: 20,
+              child: AnimatedSlide(
+                offset: _isNavVisible ? Offset.zero : const Offset(0, 2),
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+                child: AnimatedOpacity(
+                  opacity: _isNavVisible ? 1 : 0,
+                  duration: const Duration(milliseconds: 300),
+                  child: SizedBox(
+                    height: 90,
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(38),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                          child: Container(
+                            height: 82,
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.85),
+                              borderRadius: BorderRadius.circular(38),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.35),
+                                  blurRadius: 24,
+                                  offset: const Offset(0, 12),
+                                ),
+                              ],
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.03),
+                              ),
+                            ),
+
+                            child: Row(
+                              children: List.generate(
+                                arm_controller.items.length,
+                                (index) {
+                                  final item = arm_controller.items[index];
+                                  final bool active =
+                                      arm_controller.selectedIndex.value ==
+                                      index;
+                                  final int flex = active ? 2 : 1;
+
+                                  return Expanded(
+                                    flex: flex,
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      onTap: () =>
+                                          arm_controller.selectedIndex.value =
+                                              index,
+                                      child: AnimatedContainer(
+                                        duration: const Duration(
+                                          milliseconds: 420,
+                                        ),
+                                        curve: Curves.easeOutCubic,
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: active
+                                              ? Colors.white.withOpacity(0.06)
+                                              : Colors.transparent,
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            AnimatedContainer(
+                                              duration: const Duration(
+                                                milliseconds: 320,
+                                              ),
+                                              curve: Curves.easeOut,
+                                              padding: EdgeInsets.all(
+                                                active ? 8 : 4,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: active
+                                                    ? Colors.white.withOpacity(
+                                                        0.08,
+                                                      )
+                                                    : Colors.transparent,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: AnimatedScale(
+                                                scale: active ? 1.25 : 1.0,
+                                                duration: const Duration(
+                                                  milliseconds: 280,
+                                                ),
+                                                curve: Curves.easeOutBack,
+                                                child: Icon(
+                                                  item['icon'],
+                                                  size: 24,
+                                                  color: active
+                                                      ? Colors.white
+                                                      : Colors.grey[400],
+                                                ),
+                                              ),
+                                            ),
+
+                                            Flexible(
+                                              child: AnimatedSize(
+                                                duration: const Duration(
+                                                  milliseconds: 300,
+                                                ),
+                                                curve: Curves.easeInOut,
+                                                child: AnimatedOpacity(
+                                                  opacity: active ? 1 : 0,
+                                                  duration: const Duration(
+                                                    milliseconds: 300,
+                                                  ),
+                                                  curve: Curves.easeInOut,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                      left: active ? 7 : 0,
+                                                    ),
+                                                    child: Text(
+                                                      active
+                                                          ? item['label']
+                                                          : '',
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.fade,
+                                                      softWrap: false,
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 14,
+                                                        letterSpacing: 0.2,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: BottomNavigationBar(
-                      currentIndex: arm_controller.selectedIndex.value,
-                      onTap: (index) =>
-                          arm_controller.selectedIndex.value = index,
-                      backgroundColor: Colors.white,
-                      type: BottomNavigationBarType.fixed,
-                      elevation: 0,
-                      selectedItemColor: Colors.black,
-                      unselectedItemColor: Colors.grey,
-                      showUnselectedLabels: true,
-                      selectedFontSize: 12,
-                      selectedLabelStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      unselectedFontSize: 12,
-                      items: [
-                        _navItem(
-                          Iconsax.home,
-                          "Home",
-                          arm_controller.selectedIndex.value == 0,
-                        ),
-                        _navItem(
-                          Iconsax.send_24,
-                          "Sent",
-                          arm_controller.selectedIndex.value == 1,
-                        ),
-                        _navItem(
-                          Iconsax.arrow_down_24,
-                          "Inbox",
-                          arm_controller.selectedIndex.value == 2,
-                        ),
-                        _navItem(
-                          Iconsax.chart_2,
-                          "Statistics",
-                          arm_controller.selectedIndex.value == 3,
-                        ),
-                      ],
                     ),
                   ),
                 ),
@@ -128,21 +229,6 @@ class _arm_b_nav_barState extends State<arm_b_nav_bar> {
           ],
         ),
       ),
-    );
-  }
-
-  BottomNavigationBarItem _navItem(IconData icon, String label, bool active) {
-    return BottomNavigationBarItem(
-      icon: TweenAnimationBuilder<double>(
-        tween: Tween(begin: 1.0, end: active ? 1.3 : 1.0),
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
-        builder: (context, scale, child) => Transform.scale(
-          scale: scale,
-          child: Icon(icon, color: active ? Colors.black : Colors.grey),
-        ),
-      ),
-      label: label,
     );
   }
 }
@@ -154,10 +240,15 @@ class ARMNavigControll extends GetxController {
 
   ARMNavigControll(this.office_location, this.username);
 
+  late final List<Map<String, dynamic>> items = [
+    {'icon': Iconsax.home, 'label': 'Home'},
+    {'icon': Iconsax.send_24, 'label': 'Sent'},
+    {'icon': Iconsax.arrow_down_24, 'label': 'Inbox'},
+  ];
+
   late final List<Widget> screens = [
     ARM_Home(office_location: office_location, username: username),
     ARM_Sent(office_location: office_location),
     ARMReceived(office_location: office_location, username: username),
-    pgfour(office_location: office_location),
   ];
 }

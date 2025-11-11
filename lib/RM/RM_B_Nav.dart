@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -26,6 +27,7 @@ class RmBNavbar extends StatefulWidget {
 class _RmBNavbarState extends State<RmBNavbar> {
   late final RMNavigControll rm_controller;
   bool _isNavVisible = true;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -36,90 +38,194 @@ class _RmBNavbarState extends State<RmBNavbar> {
     );
   }
 
-  /// This method allows each child page to call hide/show based on its scroll
-  void toggleNavBarVisibility(bool visible) {
+  void _toggleNavBarVisibility(bool visible) {
     if (_isNavVisible != visible) {
       setState(() => _isNavVisible = visible);
     }
+  }
+
+  /// Wrap screen with scroll detection
+  Widget _attachScrollListener(Widget screen) {
+    return NotificationListener<UserScrollNotification>(
+      onNotification: (notification) {
+        if (notification.direction == ScrollDirection.reverse) {
+          _toggleNavBarVisibility(false); // Hide on scroll down
+        } else if (notification.direction == ScrollDirection.forward) {
+          _toggleNavBarVisibility(true); // Show on scroll up
+        }
+        return false;
+      },
+      child: screen,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        backgroundColor: Colors.white,
+        extendBody: true,
+        backgroundColor: const Color(0xFFF5F6FA),
         body: Stack(
           children: [
-            // current active screen
+            // Active screen with scroll detection
             _attachScrollListener(
               rm_controller.screens[rm_controller.selectedIndex.value],
             ),
 
-            // Animated floating nav bar
+            // Floating glass navigation bar
             Positioned(
-              left: 16,
-              right: 16,
-              bottom: -10,
-              child: SafeArea(
-                child: AnimatedSlide(
+              left: 18,
+              right: 18,
+              bottom: 20,
+              child: AnimatedSlide(
+                offset: _isNavVisible ? Offset.zero : const Offset(0, 2),
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+                child: AnimatedOpacity(
+                  opacity: _isNavVisible ? 1 : 0,
                   duration: const Duration(milliseconds: 300),
-                  offset: _isNavVisible ? Offset.zero : const Offset(0, 2),
-                  curve: Curves.easeOut,
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 300),
-                    opacity: _isNavVisible ? 1 : 0,
-                    child: Container(
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(240, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
+                  child: SizedBox(
+                    height: 90,
+                    child: Center(
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: BottomNavigationBar(
-                          currentIndex: rm_controller.selectedIndex.value,
-                          onTap: (index) =>
-                              rm_controller.selectedIndex.value = index,
-                          backgroundColor: Colors.white,
-                          type: BottomNavigationBarType.fixed,
-                          elevation: 0,
-                          selectedItemColor: Colors.black,
-                          unselectedItemColor: Colors.grey,
-                          showUnselectedLabels: true,
-                          selectedFontSize: 12,
-                          selectedLabelStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                        borderRadius: BorderRadius.circular(38),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                          child: Container(
+                            height: 82,
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.85),
+                              borderRadius: BorderRadius.circular(38),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.35),
+                                  blurRadius: 24,
+                                  offset: const Offset(0, 12),
+                                ),
+                              ],
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.03),
+                              ),
+                            ),
+
+                            // Navigation Row
+                            child: Row(
+                              children: List.generate(
+                                rm_controller.items.length,
+                                (index) {
+                                  final item = rm_controller.items[index];
+                                  final bool active =
+                                      rm_controller.selectedIndex.value ==
+                                      index;
+                                  final int flex = active ? 2 : 1;
+
+                                  return Expanded(
+                                    flex: flex,
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      onTap: () =>
+                                          rm_controller.selectedIndex.value =
+                                              index,
+                                      child: AnimatedContainer(
+                                        duration: const Duration(
+                                          milliseconds: 420,
+                                        ),
+                                        curve: Curves.easeOutCubic,
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: active
+                                              ? Colors.white.withOpacity(0.06)
+                                              : Colors.transparent,
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            // Icon animation
+                                            AnimatedContainer(
+                                              duration: const Duration(
+                                                milliseconds: 320,
+                                              ),
+                                              curve: Curves.easeOut,
+                                              padding: EdgeInsets.all(
+                                                active ? 8 : 4,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: active
+                                                    ? Colors.white.withOpacity(
+                                                        0.08,
+                                                      )
+                                                    : Colors.transparent,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: AnimatedScale(
+                                                scale: active ? 1.25 : 1.0,
+                                                duration: const Duration(
+                                                  milliseconds: 280,
+                                                ),
+                                                curve: Curves.easeOutBack,
+                                                child: Icon(
+                                                  item['icon'],
+                                                  size: 24,
+                                                  color: active
+                                                      ? Colors.white
+                                                      : Colors.grey[400],
+                                                ),
+                                              ),
+                                            ),
+
+                                            // Label animation
+                                            Flexible(
+                                              child: AnimatedSize(
+                                                duration: const Duration(
+                                                  milliseconds: 300,
+                                                ),
+                                                curve: Curves.easeInOut,
+                                                child: AnimatedOpacity(
+                                                  opacity: active ? 1 : 0,
+                                                  duration: const Duration(
+                                                    milliseconds: 300,
+                                                  ),
+                                                  curve: Curves.easeInOut,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                      left: active ? 7 : 0,
+                                                    ),
+                                                    child: Text(
+                                                      active
+                                                          ? item['label']
+                                                          : '',
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.fade,
+                                                      softWrap: false,
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 14,
+                                                        letterSpacing: 0.2,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
-                          unselectedFontSize: 12,
-                          items: [
-                            _navItem(
-                              Iconsax.home,
-                              "Home",
-                              rm_controller.selectedIndex.value == 0,
-                            ),
-                            _navItem(
-                              Iconsax.send_24,
-                              "Sent",
-                              rm_controller.selectedIndex.value == 1,
-                            ),
-                            _navItem(
-                              Iconsax.arrow_down_24,
-                              "Inbox",
-                              rm_controller.selectedIndex.value == 2,
-                            ),
-                            _navItem(
-                              Iconsax.chart_2,
-                              "Statistics",
-                              rm_controller.selectedIndex.value == 3,
-                            ),
-                          ],
                         ),
                       ),
                     ),
@@ -132,36 +238,6 @@ class _RmBNavbarState extends State<RmBNavbar> {
       ),
     );
   }
-
-  /// Attach scroll detection to the screen (works if that screen uses ListView/SingleChildScrollView)
-  Widget _attachScrollListener(Widget screen) {
-    return NotificationListener<UserScrollNotification>(
-      onNotification: (notification) {
-        if (notification.direction == ScrollDirection.reverse) {
-          toggleNavBarVisibility(false);
-        } else if (notification.direction == ScrollDirection.forward) {
-          toggleNavBarVisibility(true);
-        }
-        return false;
-      },
-      child: screen,
-    );
-  }
-
-  BottomNavigationBarItem _navItem(IconData icon, String label, bool active) {
-    return BottomNavigationBarItem(
-      icon: TweenAnimationBuilder<double>(
-        tween: Tween(begin: 1.0, end: active ? 1.3 : 1.0),
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
-        builder: (context, scale, child) => Transform.scale(
-          scale: scale,
-          child: Icon(icon, color: active ? Colors.black : Colors.grey),
-        ),
-      ),
-      label: label,
-    );
-  }
 }
 
 class RMNavigControll extends GetxController {
@@ -171,10 +247,17 @@ class RMNavigControll extends GetxController {
 
   RMNavigControll(this.office_location, this.username);
 
+  late final List<Map<String, dynamic>> items = [
+    {'icon': Iconsax.home, 'label': 'Home'},
+    {'icon': Iconsax.send_24, 'label': 'Sent'},
+    {'icon': Iconsax.arrow_down_24, 'label': 'Inbox'},
+   
+  ];
+
   late final List<Widget> screens = [
     RMHomepage(office_location: office_location, username: username),
     RmSent(office_location: office_location, username: username),
     RMRecived(office_location: office_location, username: username),
-    pgfour(office_location: office_location),
+   
   ];
 }
