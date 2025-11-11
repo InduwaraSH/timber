@@ -1,9 +1,10 @@
 import 'package:avatar_plus/avatar_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:timber_app/CO/CO_Recived_View.dart';
 import 'package:timber_app/RM/RM_ProfilePage.dart';
 
@@ -21,11 +22,12 @@ class CORecived extends StatefulWidget {
 }
 
 class _CORecivedState extends State<CORecived> {
-  late Query dbref;
+  late DatabaseReference dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
-  int messageCount = 0; // New message count variable
-  String searchQuery = ""; // For search filtering
+  int messageCount = 0;
+  String searchQuery = "";
+  List<Map> allItems = [];
 
   @override
   void initState() {
@@ -36,16 +38,44 @@ class _CORecivedState extends State<CORecived> {
         .child(widget.username)
         .child("Recived");
 
-    // Listen to changes in the database to dynamically update the message count
     dbref.onValue.listen((event) {
       final data = event.snapshot.value;
-      setState(() {
-        if (data is Map) {
-          messageCount = data.length;
-        } else {
+      if (data is Map) {
+        List<Map> tempList = [];
+        data.forEach((key, value) {
+          if (value is Map) {
+            value['key'] = key;
+            tempList.add(value);
+          }
+        });
+
+        tempList.sort((a, b) {
+          final aUpdate = a['latest_update'] ?? '';
+          final bUpdate = b['latest_update'] ?? '';
+          DateTime aDate, bDate;
+          try {
+            aDate = DateTime.parse(aUpdate);
+          } catch (_) {
+            aDate = DateTime.fromMillisecondsSinceEpoch(0);
+          }
+          try {
+            bDate = DateTime.parse(bUpdate);
+          } catch (_) {
+            bDate = DateTime.fromMillisecondsSinceEpoch(0);
+          }
+          return bDate.compareTo(aDate);
+        });
+
+        setState(() {
+          allItems = tempList;
+          messageCount = tempList.length;
+        });
+      } else {
+        setState(() {
+          allItems = [];
           messageCount = 0;
-        }
-      });
+        });
+      }
     });
 
     _scrollController.addListener(() {
@@ -73,11 +103,11 @@ class _CORecivedState extends State<CORecived> {
     final String SerialNum = Sent['Serial Number'] ?? "N/A";
     final String about_me = Sent['from'] ?? "Not Available";
     final String RM_office = Sent['RM_office'] ?? "Not Available";
+    final String ARM_ID = Sent['ARM_id'] ?? "";
 
-    Color activeColor1 = const Color(0xFFE2ECFF);
-    Color activeColor2 = const Color(0xFFD6E4FA);
-    Color textPrimary = const Color(0xFF5065D8);
-    Color iconPrimary = const Color(0xFF5065D8);
+    String latestUpdate = Sent['latest_update'] ?? "";
+    String from_doc = "ARM $ARM_ID";
+    Color statusColour = Color.fromRGBO(255, 204, 0, 1);
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
@@ -99,71 +129,159 @@ class _CORecivedState extends State<CORecived> {
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [activeColor1, activeColor2],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: activeColor1.withOpacity(0.5),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  poc,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'sfproRoundSemiB',
-                    color: textPrimary,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(height: 6),
                 Row(
                   children: [
-                    Icon(
-                      Icons.double_arrow,
-                      color: textPrimary.withOpacity(0.6),
-                      size: 16,
+                    const CircleAvatar(
+                      radius: 26,
+                      backgroundColor: Color.fromARGB(16, 0, 0, 0),
+                      child: Center(
+                        child: Icon(
+                          Iconsax.location5,
+                          color: Colors.black,
+                          size: 35,
+                        ),
+                      ),
                     ),
+                    const SizedBox(width: 12),
                     Text(
-                      branchName,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'sfproRoundSemiB',
-                        color: textPrimary.withOpacity(0.6),
+                      poc,
+                      style: const TextStyle(
+                        fontSize: 33,
+                        fontFamily: "sfproRoundSemiB",
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
                       ),
                     ),
                   ],
                 ),
               ],
             ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: iconPrimary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
+            const SizedBox(height: 20),
+            const Text(
+              "Serial Number",
+              style: TextStyle(
+                fontFamily: "sfproRoundSemiB",
+                fontSize: 14,
+                color: Colors.grey,
+                fontWeight: FontWeight.w400,
               ),
-              child: Icon(
-                Icons.apartment_rounded,
-                color: iconPrimary,
-                size: 30,
-              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      Iconsax.hashtag,
+                      size: 20,
+                      color: Colors.black45,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      SerialNum.toString(),
+                      style: const TextStyle(
+                        fontFamily: "sfproRoundSemiB",
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black45,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    latestUpdate != ""
+                        ? DateFormat(
+                            'yyyy-MM-dd',
+                          ).format(DateTime.parse(latestUpdate))
+                        : "",
+                    style: const TextStyle(
+                      fontFamily: "sfproRoundSemiB",
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            const Divider(thickness: 0.6, color: Colors.black12),
+            const SizedBox(height: 10),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Document Recived From :",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: "sfproRoundSemiB",
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 17,
+                  backgroundColor: Colors.transparent,
+                  child: ClipOval(
+                    child: AvatarPlus(from_doc, height: 40, width: 40),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: statusColour,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    from_doc,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'sfproRoundSemiB',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -173,138 +291,127 @@ class _CORecivedState extends State<CORecived> {
 
   @override
   Widget build(BuildContext context) {
+    final filteredItems = allItems.where((item) {
+      final poc = item['placeOfCoupe']?.toString().toLowerCase() ?? "";
+      return searchQuery.isEmpty || poc.contains(searchQuery);
+    }).toList();
+
     return Scaffold(
       body: SafeArea(
         top: true,
         bottom: false,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            // Animated Header
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              height: _showHeader ? 180 : 1,
-              curve: Curves.easeInOut,
-              child: _showHeader
-                  ? Padding(
-                      padding: const EdgeInsets.only(
-                        top: 10,
-                        left: 5,
-                        right: 10,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFFFDFBFF), Color(0xFFEDEBFF)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              SliverToBoxAdapter(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  height: _showHeader ? 180 : 1,
+                  curve: Curves.easeInOut,
+                  child: _showHeader
+                      ? Padding(
+                          padding: const EdgeInsets.only(
+                            top: 30,
+                            left: 5,
+                            right: 10,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  profile_button(username: widget.username),
-
-                                  const Text(
-                                    "Inbox",
-                                    style: TextStyle(
-                                      fontSize: 50,
-                                      fontFamily: "sfproRoundSemiB",
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-
-                                  // Message count
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 15,
-                                        vertical: 7,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Text(
-                                        "$messageCount",
-                                        style: const TextStyle(
-                                          fontSize: 18,
+                                  Row(
+                                    children: [
+                                      profile_button(username: widget.username),
+                                      const Text(
+                                        "Inbox",
+                                        style: TextStyle(
+                                          fontSize: 50,
                                           fontFamily: "sfproRoundSemiB",
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 18),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 15,
+                                      vertical: 7,
                                     ),
-                                    const SizedBox(width: 16),
-                                  ],
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      "$messageCount",
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: "sfproRoundSemiB",
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: TextField(
+                                  decoration: const InputDecoration(
+                                    hintText: "Search by POC",
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey,
+                                      fontFamily: "sfproRoundSemiB",
+                                    ),
+                                    border: InputBorder.none,
+                                    icon: Icon(
+                                      Icons.search,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      searchQuery = val.toLowerCase();
+                                    });
+                                  },
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
-                          // Modern Search Bar
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: TextField(
-                              decoration: const InputDecoration(
-                                hintText: "Search by POC",
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: "sfproRoundSemiB",
-                                ),
-                                border: InputBorder.none,
-                                icon: Icon(Icons.search, color: Colors.grey),
-                              ),
-                              onChanged: (val) {
-                                setState(() {
-                                  searchQuery = val.toLowerCase();
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : null,
-            ),
-            //const SizedBox(height: 10),
-
-            // Firebase list
-            Expanded(
-              child: FirebaseAnimatedList(
-                controller: _scrollController,
-                query: dbref,
-                itemBuilder:
-                    (
-                      BuildContext context,
-                      DataSnapshot snapshot,
-                      Animation<double> animation,
-                      int index,
-                    ) {
-                      Map sent = snapshot.value as Map;
-                      sent['key'] = snapshot.key;
-
-                      // Filter by POC
-                      final String poc = sent['placeOfCoupe'] ?? "";
-                      if (searchQuery.isNotEmpty &&
-                          !poc.toLowerCase().contains(searchQuery)) {
-                        return const SizedBox.shrink();
-                      }
-
-                      return listItem(Sent: sent, index: index);
-                    },
+                        )
+                      : null,
+                ),
               ),
-            ),
-          ],
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) =>
+                      listItem(Sent: filteredItems[index], index: index),
+                  childCount: filteredItems.length,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -324,14 +431,10 @@ class profile_button extends StatelessWidget {
           MaterialPageRoute(builder: (context) => UserProfilePage()),
         );
       },
-      child: Container(
-        margin: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
-        alignment: Alignment.topLeft,
-        child: CircleAvatar(
-          radius: 30,
-          backgroundColor: const Color.fromARGB(0, 238, 238, 238),
-          child: ClipOval(child: AvatarPlus(username, height: 60, width: 60)),
-        ),
+      child: CircleAvatar(
+        radius: 30,
+        backgroundColor: const Color.fromARGB(0, 238, 238, 238),
+        child: ClipOval(child: AvatarPlus(username, height: 60, width: 60)),
       ),
     );
   }
