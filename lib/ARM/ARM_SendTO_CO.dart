@@ -15,6 +15,7 @@ class ARM_SentTO_CO extends StatefulWidget {
   final String CO_ID;
   final String office_location;
   final String RM_office;
+  final String user_name;
 
   const ARM_SentTO_CO({
     super.key,
@@ -26,6 +27,7 @@ class ARM_SentTO_CO extends StatefulWidget {
     required this.CO_ID,
     required this.office_location,
     required this.RM_office,
+    required this.user_name,
   });
 
   @override
@@ -183,6 +185,9 @@ class _ARM_SentTO_COState extends State<ARM_SentTO_CO> {
                                 .toString(),
                             "from": "CO ${widget.CO_Name}",
                             "Reciver": "CO",
+                            "ARM_id": widget.user_name.toString(),
+                            "CO_Name": widget.CO_Name.toString(),
+                            "CO_ID": widget.CO_ID.toString(),
                             "RM_office": widget.RM_office.toString(),
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/ARM/ARM_Home.dart';
 import 'package:timber_app/ARM/ARM_Recived.dart';
 import 'package:timber_app/ARM/ARM_Sent.dart';
-
 import 'package:timber_app/d.dart';
 
 class arm_b_nav_bar extends StatefulWidget {
@@ -22,6 +22,7 @@ class arm_b_nav_bar extends StatefulWidget {
 
 class _arm_b_nav_barState extends State<arm_b_nav_bar> {
   late final ARMNavigControll arm_controller;
+  bool _isVisible = true; // bottom bar visibility
 
   @override
   void initState() {
@@ -32,6 +33,17 @@ class _arm_b_nav_barState extends State<arm_b_nav_bar> {
     );
   }
 
+  void _onUserScroll(ScrollNotification notification) {
+    if (notification is UserScrollNotification) {
+      final direction = notification.direction;
+      if (direction == ScrollDirection.reverse && _isVisible) {
+        setState(() => _isVisible = false);
+      } else if (direction == ScrollDirection.forward && !_isVisible) {
+        setState(() => _isVisible = true);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -39,19 +51,27 @@ class _arm_b_nav_barState extends State<arm_b_nav_bar> {
         backgroundColor: Colors.white,
         body: Stack(
           children: [
-            // Page content
-            arm_controller.screens[arm_controller.selectedIndex.value],
+            // Wrap your screen content with NotificationListener
+            NotificationListener<ScrollNotification>(
+              onNotification: (scrollNotification) {
+                _onUserScroll(scrollNotification);
+                return false;
+              },
+              child: arm_controller.screens[arm_controller.selectedIndex.value],
+            ),
 
-            // Floating bottom nav bar
-            Positioned(
+            // Floating bottom navigation bar with animation
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
               left: 16,
               right: 16,
-              bottom: 0,
+              bottom: _isVisible ? 0 : -120,
               child: SafeArea(
                 child: Container(
                   height: 80,
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(150, 255, 255, 255),
+                    color: const Color.fromARGB(240, 255, 255, 255),
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(

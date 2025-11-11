@@ -1,8 +1,11 @@
+import 'package:avatar_plus/avatar_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:timber_app/ARM/ARM_Sent_Cardview.dart';
 import 'package:timber_app/ARM/ARM_SentView_RM.dart';
 
@@ -18,7 +21,7 @@ class _ARM_SentState extends State<ARM_Sent> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
-  String searchQuery = ""; // Added search variable
+  String searchQuery = "";
 
   @override
   void initState() {
@@ -67,6 +70,12 @@ class _ARM_SentState extends State<ARM_Sent> {
     String CO_name = "";
     String ARM_office = "";
     String to = "";
+    String ARM_ID = "";
+    String co_id = "";
+    String latestUpdate = "";
+    String To_Doc = Sent['To'] ?? "N/A";
+    String RM_Id = Sent['From_RM_ID'] ?? "N/A";
+    Color statusColour = Colors.green;
 
     if (Reciver == "RM") {
       branchName = Sent['info']['ARM_Office'] ?? "Not Available";
@@ -80,23 +89,41 @@ class _ARM_SentState extends State<ARM_Sent> {
       Condition = Sent['info']['Condition'] ?? "N/A";
       treeCount = Sent['info']['TreeCount'] ?? "N/A";
       CO_name = Sent['info']['From_CO'] ?? "N/A";
+      ARM_ID = Sent['info']['arm_id'] ?? "N/A";
       ARM_office = Sent['info']['ARM_location'] ?? "N/A";
-      activeColor1 = const Color(0xFFFFE4F0); // very soft pink
-      activeColor2 = const Color(0xFFFFCCE0); // slightly deeper pastel pink
-      textPrimary = const Color(0xFFEC83B0); // gentle pink for text
-      iconPrimary = const Color(0xFFEC83B0); // matching pink for icons
+      latestUpdate = Sent['info']['latest_update'] ?? "";
+      To_Doc = "RM";
+      statusColour = Color.fromRGBO(52, 199, 89, 1);
     } else if (Reciver == "CO") {
       branchName = Sent['arm_office_location'] ?? "Not Available";
       poc = Sent['placeOfCoupe'] ?? "N/A";
       DateInformed = Sent['DateInformed'] ?? "N/A";
       LetterNo = Sent['LetterNo'] ?? "N/A";
       SerialNum = Sent['Serial Number'] ?? "N/A";
+      latestUpdate = Sent['latest_update'] ?? "";
       to = Sent['from'] ?? "N/A";
+      co_id = Sent['CO_ID'] ?? "N/A";
+      ARM_ID = Sent['ARM_id'] ?? "N/A";
+      To_Doc = to;
 
-      activeColor1 = const Color(0xFFF2E2FF); // soft pastel purple
-      activeColor2 = const Color(0xFFE6D6FA); // slightly deeper pastel
-      textPrimary = const Color(0xFF8A4ED8); // medium purple for text
-      iconPrimary = const Color(0xFF8A4ED8); // matching purple for icons
+      statusColour = Color.fromRGBO(255, 204, 0, 1);
+
+      activeColor1 = const Color(0xFFF2E2FF);
+      activeColor2 = const Color(0xFFE6D6FA);
+      textPrimary = const Color(0xFF8A4ED8);
+      iconPrimary = const Color(0xFF8A4ED8);
+    }
+
+    // format only date
+    String formattedDate = "";
+    if (latestUpdate != "" && latestUpdate != "N/A") {
+      try {
+        formattedDate = DateFormat(
+          'yyyy-MM-dd',
+        ).format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(latestUpdate));
+      } catch (e) {
+        formattedDate = "";
+      }
     }
 
     return CupertinoButton(
@@ -142,71 +169,189 @@ class _ARM_SentState extends State<ARM_Sent> {
         }
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [activeColor1, activeColor2],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: activeColor1.withOpacity(0.5),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  poc,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'sfproRoundSemiB',
-                    color: textPrimary,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(height: 6),
                 Row(
                   children: [
-                    Icon(
-                      Icons.double_arrow,
-                      color: textPrimary.withOpacity(0.6),
-                      size: 16,
+                    const CircleAvatar(
+                      radius: 26,
+                      backgroundColor: Color.fromARGB(16, 0, 0, 0),
+                      child: Center(
+                        child: Icon(
+                          Iconsax.location5,
+                          color: Colors.black,
+                          size: 35,
+                        ),
+                      ),
                     ),
+                    const SizedBox(width: 12),
                     Text(
-                      branchName,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'sfproRoundSemiB',
-                        color: textPrimary.withOpacity(0.6),
+                      poc,
+                      style: const TextStyle(
+                        fontSize: 33,
+                        fontFamily: "sfproRoundSemiB",
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
                       ),
                     ),
                   ],
                 ),
               ],
             ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: iconPrimary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
+
+            const SizedBox(height: 20),
+
+            const Text(
+              "Serial Number",
+              style: TextStyle(
+                fontFamily: "sfproRoundSemiB",
+                fontSize: 14,
+                color: Colors.grey,
+                fontWeight: FontWeight.w400,
               ),
-              child: Icon(
-                Icons.apartment_rounded,
-                color: iconPrimary,
-                size: 30,
-              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      Iconsax.hashtag,
+                      size: 20,
+                      color: Colors.black45,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      SerialNum.toString(),
+                      style: const TextStyle(
+                        fontFamily: "sfproRoundSemiB",
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black45,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    formattedDate,
+                    style: const TextStyle(
+                      fontFamily: "sfproRoundSemiB",
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 10),
+            const Divider(thickness: 0.6, color: Colors.black12),
+            const SizedBox(height: 10),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  "Document Sent To :",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: "sfproRoundSemiB",
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 17,
+                      backgroundColor: const Color.fromARGB(0, 238, 238, 238),
+                      child: ClipOval(
+                        child: AvatarPlus(To_Doc, height: 40, width: 40),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: statusColour,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        To_Doc,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'sfproRoundSemiB',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      "From",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "sfproRoundSemiB",
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      ARM_ID,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                        fontFamily: "sfproRoundSemiB",
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
@@ -221,23 +366,17 @@ class _ARM_SentState extends State<ARM_Sent> {
         top: true,
         bottom: false,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Animated Header
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               height: _showHeader ? 100 : 1,
               curve: Curves.easeInOut,
               child: _showHeader
-                  ? Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        left: 28,
-                        right: 16,
-                      ),
+                  ? const Padding(
+                      padding: EdgeInsets.only(top: 0, left: 28, right: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children: [
                           Text(
                             "Sent",
                             style: TextStyle(
@@ -252,8 +391,6 @@ class _ARM_SentState extends State<ARM_Sent> {
                     )
                   : null,
             ),
-
-            // Search Bar
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -279,32 +416,71 @@ class _ARM_SentState extends State<ARM_Sent> {
               ),
             ),
 
-            // Firebase List
+            // 🔥 Sorted List
             Expanded(
-              child: FirebaseAnimatedList(
-                controller: _scrollController,
-                query: dbref,
-                itemBuilder:
-                    (
-                      BuildContext context,
-                      DataSnapshot snapshot,
-                      Animation<double> animation,
-                      int index,
-                    ) {
-                      Map sent = snapshot.value as Map;
-                      sent['key'] = snapshot.key;
+              child: StreamBuilder(
+                stream: dbref.onValue,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData ||
+                      snapshot.data?.snapshot.value == null) {
+                    return const Center(child: CupertinoActivityIndicator());
+                  }
 
-                      // Filter by POC
-                      final String poc =
-                          (sent['info']?['poc'] ?? sent['placeOfCoupe'] ?? "")
-                              .toString();
-                      if (searchQuery.isNotEmpty &&
-                          !poc.toLowerCase().contains(searchQuery)) {
-                        return const SizedBox.shrink();
-                      }
+                  Map data =
+                      snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+                  List<Map> items = [];
 
-                      return listItem(Sent: sent, index: index);
+                  data.forEach((key, value) {
+                    Map item = value;
+                    item['key'] = key;
+                    items.add(item);
+                  });
+
+                  // ✅ Sort by latest_update descending
+                  items.sort((a, b) {
+                    String aDate =
+                        (a['info']?['latest_update'] ??
+                                a['latest_update'] ??
+                                "")
+                            .toString();
+                    String bDate =
+                        (b['info']?['latest_update'] ??
+                                b['latest_update'] ??
+                                "")
+                            .toString();
+
+                    DateTime aParsed, bParsed;
+                    try {
+                      aParsed = DateFormat('yyyy-MM-dd HH:mm:ss').parse(aDate);
+                    } catch (e) {
+                      aParsed = DateTime.fromMillisecondsSinceEpoch(0);
+                    }
+                    try {
+                      bParsed = DateFormat('yyyy-MM-dd HH:mm:ss').parse(bDate);
+                    } catch (e) {
+                      bParsed = DateTime.fromMillisecondsSinceEpoch(0);
+                    }
+                    return bParsed.compareTo(aParsed);
+                  });
+
+                  // ✅ Filter by POC
+                  final filtered = items.where((sent) {
+                    final String poc =
+                        (sent['info']?['poc'] ?? sent['placeOfCoupe'] ?? "")
+                            .toString()
+                            .toLowerCase();
+                    return searchQuery.isEmpty ||
+                        poc.contains(searchQuery.toLowerCase());
+                  }).toList();
+
+                  return ListView.builder(
+                    controller: _scrollController,
+                    itemCount: filtered.length,
+                    itemBuilder: (context, index) {
+                      return listItem(Sent: filtered[index], index: index);
                     },
+                  );
+                },
               ),
             ),
           ],

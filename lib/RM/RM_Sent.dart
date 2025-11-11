@@ -127,7 +127,7 @@ class _RmSentState extends State<RmSent> {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white70,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(

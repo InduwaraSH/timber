@@ -118,7 +118,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       RM_office = Sent['timberReportheadlines']['RM_office'] ?? "N/A";
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
       from_doc = "CO $CO_name";
-      statusColour = Colors.blueAccent;
+      statusColour = Color.fromRGBO(30, 110, 244, 1);
 
       activeColor1 = const Color(0xFFE9FBE7);
       activeColor2 = const Color(0xFFC8E6C9);
@@ -134,7 +134,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       latestUpdate = Sent['latest_update'] ?? "N/A";
 
       from_doc = "RM $RM_office";
-      statusColour = const Color(0xFFFFCB77);
+      statusColour = Color.fromRGBO(255, 204, 0, 1);
 
       activeColor1 = const Color(0xFFE2ECFF);
       activeColor2 = const Color(0xFFD6E4FA);
@@ -161,7 +161,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
 
       from_doc = "RM $RM_office";
-      statusColour = const Color(0xFF17C3B2);
+      statusColour = Color.fromRGBO(52, 199, 89, 1);
 
       activeColor1 = const Color(0xFFFFF3E0);
       activeColor2 = const Color(0xFFFFE0B2);
@@ -208,6 +208,7 @@ class _ARMReceivedState extends State<ARMReceived> {
                 SerialNum: SerialNum,
                 office_location: widget.office_location,
                 RM_office: RM_office,
+                user_name: widget.username,
               ),
             ),
           );
@@ -247,7 +248,7 @@ class _ARMReceivedState extends State<ARMReceived> {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white70,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(

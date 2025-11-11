@@ -12,6 +12,7 @@ class Find_CO_for_ARM extends StatefulWidget {
   final String SerialNum;
   final String office_location;
   final String RM_office;
+  final String user_name;
 
   const Find_CO_for_ARM({
     super.key,
@@ -20,7 +21,7 @@ class Find_CO_for_ARM extends StatefulWidget {
     required this.LetterNo,
     required this.SerialNum,
     required this.office_location,
-    required this.RM_office,
+    required this.RM_office, required this.user_name,
   });
 
   @override
@@ -82,7 +83,9 @@ class _Find_CO_for_ARMState extends State<Find_CO_for_ARM>
                     CO_ID: user["CO_ID"].toString(),
                     office_location: widget.office_location.toString(),
                     RM_office: widget.RM_office.toString(),
+                    user_name: widget.user_name.toString(),
                   ),
+
                 ),
               );
             },

@@ -12,6 +12,7 @@ class ARM_Received_View extends StatelessWidget {
   final String SerialNum;
   final String office_location;
   final String RM_office;
+  final String user_name;
 
   const ARM_Received_View({
     super.key,
@@ -22,6 +23,7 @@ class ARM_Received_View extends StatelessWidget {
     required this.SerialNum,
     required this.office_location,
     required this.RM_office,
+    required this.user_name,
   });
 
   @override
@@ -98,6 +100,7 @@ class ARM_Received_View extends StatelessWidget {
                                     SerialNum: SerialNum,
                                     office_location: office_location,
                                     RM_office: RM_office,
+                                    user_name: user_name,
                                   ),
                                 ),
                               );
@@ -212,7 +215,7 @@ class ARM_Received_View extends StatelessWidget {
                     fontFamily: "sfproRoundSemiB",
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
-                   ),
+                  ),
                 ),
               ],
             ),
