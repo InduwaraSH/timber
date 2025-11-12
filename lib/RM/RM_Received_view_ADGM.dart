@@ -609,28 +609,28 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
                             ).format(DateTime.now()).toString(),
-                          });
+                          })
 
                       // Update status_of_job_test
-                      await FirebaseDatabase.instance
-                          .ref()
-                          .child("Status_of_job")
-                          .child(widget.office_location.toString())
-                          .child(widget.SerialNum.toString())
-                          .child("Status")
-                          .set("approved");
+                      // await FirebaseDatabase.instance
+                      //     .ref()
+                      //     .child("Status_of_job")
+                      //     .child(widget.office_location.toString())
+                      //     .child(widget.SerialNum.toString())
+                      //     .child("Status")
+                      //     .set("approved");
 
-                      await FirebaseDatabase.instance
-                          .ref()
-                          .child("Status_of_job")
-                          .child(widget.office_location.toString())
-                          .child(widget.SerialNum.toString())
-                          .child("approved")
-                          .set(
-                            DateFormat(
-                              'yyyy-MM-dd',
-                            ).format(DateTime.now()).toString(),
-                          )
+                      // await FirebaseDatabase.instance
+                      //     .ref()
+                      //     .child("Status_of_job")
+                      //     .child(widget.office_location.toString())
+                      //     .child(widget.SerialNum.toString())
+                      //     .child("approved")
+                      //     .set(
+                      //       DateFormat(
+                      //         'yyyy-MM-dd',
+                      //       ).format(DateTime.now()).toString(),
+                      //     )
                           .then((_) {
                             try {
                               FirebaseDatabase.instance
@@ -650,7 +650,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                               FirebaseDatabase.instance
                                   .ref()
                                   .child("ARM_branch_data_saved")
-                                  .child(widget.office_location.toString())
+                                  .child(widget.ARM_Office.toString())
                                   .child("Sent")
                                   .child(widget.SerialNum.toString())
                                   .remove();
