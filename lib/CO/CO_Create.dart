@@ -3,7 +3,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/CO/TreeForm.dart';
 
 class NoGlowBehavior extends ScrollBehavior {
-  @override
   Widget buildViewportChrome(
     BuildContext context,
     Widget child,

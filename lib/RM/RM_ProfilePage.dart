@@ -12,7 +12,6 @@ class UserProfilePage extends StatelessWidget {
   static const Color _backgroundColor = Color(0xFFF8FAFC);
   static const Color _textDark = Color(0xFF1E293B);
   static const Color _textLight = Color(0xFF64748B);
-  static const Color _cardColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -103,48 +102,6 @@ class UserProfilePage extends StatelessWidget {
     );
   }
 
-  // Stats row (projects, followers, etc.)
-
-  Widget _statCard(String title, String value) {
-    return Expanded(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 6),
-        decoration: BoxDecoration(
-          color: _cardColor,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 18),
-        child: Column(
-          children: [
-            Text(
-              value,
-              style: const TextStyle(
-                color: _primaryColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              title,
-              style: const TextStyle(color: _textLight, fontSize: 14),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // About / Info section
-
-  // Modern activity/task overview
 
   // Bottom buttons
   Widget _buildActionButtons(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:avatar_plus/avatar_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -57,10 +56,7 @@ class _ARM_SentState extends State<ARM_Sent> {
     String DateInformed = "";
     String LetterNo = "";
     String SerialNum = "";
-    Color activeColor1 = const Color(0xFFE2ECFF);
-    Color activeColor2 = const Color(0xFFD6E4FA);
-    Color textPrimary = const Color(0xFF5065D8);
-    Color iconPrimary = const Color(0xFF5065D8);
+
 
     String OfficerName = "";
     String OfficerPositionAndName = "";
@@ -108,10 +104,7 @@ class _ARM_SentState extends State<ARM_Sent> {
 
       statusColour = Color.fromRGBO(255, 204, 0, 1);
 
-      activeColor1 = const Color(0xFFF2E2FF);
-      activeColor2 = const Color(0xFFE6D6FA);
-      textPrimary = const Color(0xFF8A4ED8);
-      iconPrimary = const Color(0xFF8A4ED8);
+      
     }
 
     // format only date

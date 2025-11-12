@@ -1,10 +1,6 @@
-import 'package:avatar_plus/avatar_plus.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:intl/intl.dart';
 
 class RM_SentDetail extends StatefulWidget {
   final String poc;

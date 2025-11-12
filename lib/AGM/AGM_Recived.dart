@@ -7,7 +7,6 @@ import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:timber_app/AGM/AGM_RecivedView.dart';
-import 'package:timber_app/CO/CO_Recived_View.dart';
 import 'package:timber_app/RM/RM_ProfilePage.dart';
 
 class AGMRecived extends StatefulWidget {
@@ -88,13 +87,14 @@ class _AGMRecivedState extends State<AGMRecived> {
     String CO_name = Sent['timberReportheadlines']['CO_name'] ?? "N/A";
     String CO_id = Sent['timberReportheadlines']['CO_id'] ?? "N/A";
     String ARM_id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
-    String Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
+    String Income = Sent['timberReportheadlines']['income'].toString();
     String Outcome =
-        Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
+        Sent['timberReportheadlines']['outcome'].toString();
     String RM = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
     String RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
 
-    String latestUpdate = Sent['timberReportheadlines']['latestUpdate'] ?? "";
+    String latestUpdate =
+        Sent['timberReportheadlines']['latest_update'] ?? "N/A";
     String from_doc = "RM Office $RM_office";
     Color statusColour = Color(0xFF5065D8);
 

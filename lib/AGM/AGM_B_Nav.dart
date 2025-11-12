@@ -4,8 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/AGM/AGM_Recived.dart';
-import 'package:timber_app/CO/CO_Sent.dart';
-import 'package:timber_app/d.dart';
+import 'package:timber_app/AGM/AGM_Sent.dart';
 
 class agm_b_navbar extends StatefulWidget {
   final String office_location;
@@ -237,6 +236,6 @@ class AGMNavigControll extends GetxController {
 
   late final List<Widget> screens = [
     AGMRecived(office_location: office_location, username: username),
-    CO_Sent(office_location: office_location, username: username),
+    AgmSent(office_location: office_location, username: username),
   ];
 }

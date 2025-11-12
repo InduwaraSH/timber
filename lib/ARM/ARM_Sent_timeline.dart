@@ -80,7 +80,7 @@ class _ArmSentTimeline_sentState extends State<ArmSentTimeline_sent> {
   }
 
   String getStepDate(String step) {
-    return data != null && data[step] != null ? data[step] : '';
+    return data[step] != null ? data[step] : '';
   }
 
   @override
@@ -246,7 +246,7 @@ class _ArmSentTimeline_sentState extends State<ArmSentTimeline_sent> {
                               horizontal: 16,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.black!.withOpacity(0.03),
+                              color: Colors.black.withOpacity(0.03),
                               borderRadius: BorderRadius.circular(12),
                               // boxShadow: [
                               //   BoxShadow(

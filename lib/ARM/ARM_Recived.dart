@@ -1,6 +1,5 @@
 import 'package:avatar_plus/avatar_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -76,10 +75,7 @@ class _ARMReceivedState extends State<ARMReceived> {
     String DateInformed = "";
     String LetterNo = "";
     String SerialNum = "";
-    Color activeColor1 = const Color(0xFFE2ECFF);
-    Color activeColor2 = const Color(0xFFD6E4FA);
-    Color textPrimary = const Color(0xFF5065D8);
-    Color iconPrimary = const Color(0xFF5065D8);
+    
     Color statusColour = Colors.grey;
 
     String OfficerName = "";
@@ -91,13 +87,12 @@ class _ARMReceivedState extends State<ARMReceived> {
     String ARM_office = "";
     String Income = "";
     String Outcome = "";
-    String Profit = "";
     String RM_office = "";
     String CO_id = "";
     String poc_exact = "";
     String latestUpdate = "";
     String from_doc = Sent['to'] ?? "N/A";
-    String RM_Id = Sent['RM_id'] ?? "N/A";
+  
 
     if (from == "CO") {
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
@@ -120,10 +115,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       from_doc = "CO $CO_name";
       statusColour = Color.fromRGBO(30, 110, 244, 1);
 
-      activeColor1 = const Color(0xFFE9FBE7);
-      activeColor2 = const Color(0xFFC8E6C9);
-      textPrimary = const Color(0xFF4CAF50);
-      iconPrimary = const Color(0xFF4CAF50);
+      
     } else if (from == "RM") {
       branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
       poc = Sent['placeOfCoupe'] ?? "N/A";
@@ -136,10 +128,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       from_doc = "RM $RM_office";
       statusColour = Color.fromRGBO(255, 204, 0, 1);
 
-      activeColor1 = const Color(0xFFE2ECFF);
-      activeColor2 = const Color(0xFFD6E4FA);
-      textPrimary = const Color(0xFF5065D8);
-      iconPrimary = const Color(0xFF5065D8);
+     
     } else if (from == "RM_Approved") {
       branchName =
           Sent['timberReportheadlines']['ARM_location'] ?? "Not Available";
@@ -155,18 +144,15 @@ class _ARMReceivedState extends State<ARMReceived> {
       Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
       treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
       CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
-      Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
-      Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
+      Income = Sent['timberReportheadlines']['income'].toString();
+      Outcome = Sent['timberReportheadlines']['outcome'].toString();
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
       RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
 
       from_doc = "RM $RM_office";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
 
-      activeColor1 = const Color(0xFFFFF3E0);
-      activeColor2 = const Color(0xFFFFE0B2);
-      textPrimary = const Color(0xFFFF9800);
-      iconPrimary = const Color(0xFFFF9800);
+      
     }
 
     return CupertinoButton(
@@ -547,8 +533,7 @@ class _ARMReceivedState extends State<ARMReceived> {
                                   sent['placeOfCoupe'] ??
                                   "")
                               .toString()
-                              .toLowerCase() ??
-                          "";
+                              .toLowerCase();
                       return searchQuery.isEmpty ||
                           poc.contains(searchQuery.toLowerCase());
                     }).toList();

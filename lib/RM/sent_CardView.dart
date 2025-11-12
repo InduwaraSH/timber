@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/RM/RM_SentDetail.dart';
-import 'package:timber_app/RM/sent_detail.dart';
 
 class SentCardview extends StatefulWidget {
   final String branchName;
@@ -85,7 +83,7 @@ class _SentCardviewState extends State<SentCardview> {
   }
 
   String getStepDate(String step) {
-    return data != null && data[step] != null ? data[step] : '';
+    return data[step] != null ? data[step] : '';
   }
 
   @override
@@ -272,7 +270,7 @@ class _SentCardviewState extends State<SentCardview> {
                               horizontal: 16,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.black!.withOpacity(0.03),
+                              color: Colors.black.withOpacity(0.03),
                               borderRadius: BorderRadius.circular(12),
                               // boxShadow: [
                               //   BoxShadow(

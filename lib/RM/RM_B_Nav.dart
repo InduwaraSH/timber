@@ -7,8 +7,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/RM/RM_Home.dart';
 import 'package:timber_app/RM/RM_Recived.dart';
 import 'package:timber_app/RM/RM_Sent.dart';
-import 'package:timber_app/c.dart';
-import 'package:timber_app/d.dart';
+
 
 class RmBNavbar extends StatefulWidget {
   final String office_location;
@@ -27,7 +26,6 @@ class RmBNavbar extends StatefulWidget {
 class _RmBNavbarState extends State<RmBNavbar> {
   late final RMNavigControll rm_controller;
   bool _isNavVisible = true;
-  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {

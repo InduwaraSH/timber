@@ -3,14 +3,8 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:timber_app/ARM/ARM_RecivedView_CO.dart';
-import 'package:timber_app/ARM/ARM_Recived_view.dart';
-import 'package:timber_app/PositionPicker.dart';
-import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
 import 'package:timber_app/RM/RM_Recived_view_ARM.dart';
-import 'package:timber_app/RM/createFor.dart';
-import 'package:timber_app/RM/sent_CardView.dart';
+
 
 class RMRecived extends StatefulWidget {
   final String office_location;
@@ -109,7 +103,7 @@ class _RMRecivedState extends State<RMRecived> {
       CO_name = Sent['info']['CO_name'] ?? "N/A";
       CO_id = Sent['info']['CO_id'] ?? "N/A";
       ARM_Id = Sent['info']['ARM_ID'] ?? "N/A";
-      Income = Sent['info']['Income'].toString() ?? "N/A";
+      Income = Sent['info']['Income'].toString() ?? "N/A" ;
       Outcome = Sent['info']['Outcome'].toString() ?? "N/A";
       Profit = Sent['info']['profitValue'].toString() ?? "N/A";
       ARM_office = Sent['info']['ARM_Office'] ?? "N/A";

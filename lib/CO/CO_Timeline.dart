@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:iconsax/iconsax.dart';
 
-
 class CO_timeline extends StatefulWidget {
   final String branchName;
 
@@ -78,7 +77,7 @@ class _CO_timelineState extends State<CO_timeline> {
   }
 
   String getStepDate(String step) {
-    return data != null && data[step] != null ? data[step] : '';
+    return data[step] ?? '';
   }
 
   @override
@@ -266,7 +265,7 @@ class _CO_timelineState extends State<CO_timeline> {
                               horizontal: 16,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.black!.withOpacity(0.03),
+                              color: Colors.black.withOpacity(0.03),
                               borderRadius: BorderRadius.circular(12),
                               // boxShadow: [
                               //   BoxShadow(
