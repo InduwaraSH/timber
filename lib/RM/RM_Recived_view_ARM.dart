@@ -593,6 +593,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "CO_id": widget.CO_id,
                               "ARM_Id": widget.ARM_Id,
                               "RM_Id": widget.user_name,
+                              "Sent_To": "DGM",
                               "income": widget.Income,
                               "outcome": widget.Outcome,
                               "latest_update": DateFormat(
@@ -784,6 +785,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "CO_id": widget.CO_id,
                               "ARM_Id": widget.ARM_Id,
                               "RM_Id": widget.user_name,
+                              "Sent_To": "AGM",
                               "income": widget.Income,
                               "outcome": widget.Outcome,
                               "latest_update": DateFormat(
@@ -990,7 +992,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                         await FirebaseDatabase.instance
                             .ref()
                             .child("Status_of_job")
-                            .child(widget.office_location.toString())
+                            .child(widget.ARM_Office.toString())
                             .child(widget.SerialNum.toString())
                             .child("Status")
                             .set("approved");
@@ -998,7 +1000,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                         await FirebaseDatabase.instance
                             .ref()
                             .child("Status_of_job")
-                            .child(widget.office_location.toString())
+                            .child(widget.ARM_Office.toString())
                             .child(widget.SerialNum.toString())
                             .child("approved")
                             .set(

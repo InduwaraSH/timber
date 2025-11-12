@@ -57,7 +57,6 @@ class _ARM_SentState extends State<ARM_Sent> {
     String LetterNo = "";
     String SerialNum = "";
 
-
     String OfficerName = "";
     String OfficerPositionAndName = "";
     String donor_details = "";
@@ -76,15 +75,15 @@ class _ARM_SentState extends State<ARM_Sent> {
     if (Reciver == "RM") {
       branchName = Sent['info']['ARM_Office'] ?? "Not Available";
       poc = Sent['info']['poc'] ?? "N/A";
-      DateInformed = Sent['info']['Date'] ?? "N/A";
+      DateInformed = Sent['info']['DateInformed'] ?? "N/A";
       LetterNo = Sent['info']['LetterNo'] ?? "N/A";
       SerialNum = Sent['info']['SerialNum'] ?? "N/A";
       OfficerName = Sent['info']['OfficerName'] ?? "N/A";
-      OfficerPositionAndName = Sent['info']['OfficerPosition&name'] ?? "N/A";
+      OfficerPositionAndName = Sent['info']['OfficerPositionAndName'] ?? "N/A";
       donor_details = Sent['info']['donor_details'] ?? "N/A";
       Condition = Sent['info']['Condition'] ?? "N/A";
-      treeCount = Sent['info']['TreeCount'] ?? "N/A";
-      CO_name = Sent['info']['From_CO'] ?? "N/A";
+      treeCount = Sent['info']['treeCount'] ?? "N/A";
+      CO_name = Sent['info']['CO_id'] ?? "N/A";
       ARM_ID = Sent['info']['arm_id'] ?? "N/A";
       ARM_office = Sent['info']['ARM_location'] ?? "N/A";
       latestUpdate = Sent['info']['latest_update'] ?? "";
@@ -103,8 +102,6 @@ class _ARM_SentState extends State<ARM_Sent> {
       To_Doc = to;
 
       statusColour = Color.fromRGBO(255, 204, 0, 1);
-
-      
     }
 
     // format only date
@@ -180,32 +177,34 @@ class _ARM_SentState extends State<ARM_Sent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 26,
-                      backgroundColor: Color.fromARGB(16, 0, 0, 0),
-                      child: Center(
-                        child: Icon(
-                          Iconsax.location5,
-                          color: Colors.black,
-                          size: 35,
-                        ),
-                      ),
+                const CircleAvatar(
+                  radius: 26,
+                  backgroundColor: Color.fromARGB(16, 0, 0, 0),
+                  child: Center(
+                    child: Icon(
+                      Iconsax.location5,
+                      color: Colors.black,
+                      size: 35,
                     ),
-                    const SizedBox(width: 12),
-                    Text(
-                      poc,
-                      style: const TextStyle(
-                        fontSize: 33,
-                        fontFamily: "sfproRoundSemiB",
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Text(
+                    poc,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: const TextStyle(
+                      fontSize: 26, // reduce from 33 to fit better
+                      fontFamily: "sfproRoundSemiB",
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),

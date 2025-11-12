@@ -128,6 +128,7 @@ class _CO_SentState extends State<CO_Sent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const CircleAvatar(
                       radius: 26,
@@ -141,13 +142,19 @@ class _CO_SentState extends State<CO_Sent> {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Text(
-                      poc,
-                      style: TextStyle(
-                        fontSize: 33,
-                        fontFamily: "sfproRoundSemiB",
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Text(
+                        poc,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: const TextStyle(
+                          fontSize: 26, // reduce from 33 to fit better
+                          fontFamily: "sfproRoundSemiB",
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ],

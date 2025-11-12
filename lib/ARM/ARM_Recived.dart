@@ -75,7 +75,7 @@ class _ARMReceivedState extends State<ARMReceived> {
     String DateInformed = "";
     String LetterNo = "";
     String SerialNum = "";
-    
+
     Color statusColour = Colors.grey;
 
     String OfficerName = "";
@@ -94,9 +94,8 @@ class _ARMReceivedState extends State<ARMReceived> {
     String from_doc = Sent['to'] ?? "N/A";
     String Status = "";
     String ADGM_ID = "";
-      String RM_ID = "";
-      String ARM_ID = "";
-  
+    String RM_ID = "";
+    String ARM_ID = "";
 
     if (from == "CO") {
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
@@ -118,8 +117,6 @@ class _ARMReceivedState extends State<ARMReceived> {
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
       from_doc = "CO $CO_name";
       statusColour = Color.fromRGBO(30, 110, 244, 1);
-
-      
     } else if (from == "RM") {
       branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
       poc = Sent['placeOfCoupe'] ?? "N/A";
@@ -131,8 +128,6 @@ class _ARMReceivedState extends State<ARMReceived> {
 
       from_doc = "RM $RM_office";
       statusColour = Color.fromRGBO(255, 204, 0, 1);
-
-     
     } else if (from == "RM_Approved") {
       Status = Sent['timberReportheadlines']['Status'] ?? "N/A";
       ADGM_ID = Sent['timberReportheadlines']['ADGM_ID'] ?? "N/A";
@@ -159,8 +154,6 @@ class _ARMReceivedState extends State<ARMReceived> {
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
-
-      
     }
 
     return CupertinoButton(
@@ -263,32 +256,34 @@ class _ARMReceivedState extends State<ARMReceived> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 26,
-                      backgroundColor: Color.fromARGB(16, 0, 0, 0),
-                      child: Center(
-                        child: Icon(
-                          Iconsax.location5,
-                          color: Colors.black,
-                          size: 35,
-                        ),
-                      ),
+                const CircleAvatar(
+                  radius: 26,
+                  backgroundColor: Color.fromARGB(16, 0, 0, 0),
+                  child: Center(
+                    child: Icon(
+                      Iconsax.location5,
+                      color: Colors.black,
+                      size: 35,
                     ),
-                    const SizedBox(width: 12),
-                    Text(
-                      poc,
-                      style: const TextStyle(
-                        fontSize: 33,
-                        fontFamily: "sfproRoundSemiB",
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Text(
+                    poc,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: const TextStyle(
+                      fontSize: 26, // reduce from 33 to fit better
+                      fontFamily: "sfproRoundSemiB",
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),

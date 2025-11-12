@@ -6,6 +6,8 @@ import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
+import 'package:timber_app/RM/RM_SentView_Approve.dart';
+import 'package:timber_app/RM/RM_SentView_NotApprove.dart';
 import 'package:timber_app/RM/sent_CardView.dart';
 
 class RmSent extends StatefulWidget {
@@ -26,16 +28,6 @@ class _RmSentState extends State<RmSent> {
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
   String searchQuery = ""; // For search filtering
-  String branchName = "";
-  String poc = "";
-  String DateInformed = "";
-  String LetterNo = "";
-  String SerialNum = "";
-  String key = "";
-  String To = "";
-  String RM_Id = "";
-  Color statusColour = const Color(0xFFEDEBFF);
-  String latestUpdate = "";
 
   List<Map> _sentList = []; // Added to store and sort items
 
@@ -108,8 +100,35 @@ class _RmSentState extends State<RmSent> {
   }
 
   Widget listItem({required Map Sent, required int index}) {
-    final String key = Sent['from'];
-    if (key == "RM") {
+    String branchName = "";
+    String poc = "";
+    String DateInformed = "";
+    String LetterNo = "";
+    String SerialNum = "";
+    String key = "";
+    String To = "";
+    String RM_Id = "";
+    Color statusColour = const Color(0xFFEDEBFF);
+    String latestUpdate = "";
+    String poc_exact = "";
+    String OfficerName = "";
+    String OfficerPositionAndName = "";
+    String donor_details = "";
+    String Condition = "";
+    String treeCount = "";
+    String CO_name = "";
+    String CO_id = "";
+    String ARM_Id = "";
+    String Income = "";
+    String Outcome = "";
+    String Profit = "";
+    String ARM_office = "";
+    String AGM_ID = "";
+    String RM_ID = "";
+    String Sent_TO = "";
+    String Status = "";
+    String K = (Sent['from'] ?? "").toString().toUpperCase();
+    if (K == "RM") {
       branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
       poc = Sent['placeOfCoupe'] ?? "N/A";
       DateInformed = Sent['DateInformed'] ?? "N/A";
@@ -120,44 +139,143 @@ class _RmSentState extends State<RmSent> {
 
       To = "ARM $branchName";
       statusColour = const Color(0xFFFFCB77);
-    } else if (key == "RM_Approved") {
-      branchName = Sent['info']['ARM_location'] ?? "Not Available";
+    } else if (K == "RM_APPROVED") {
       poc = Sent['info']['placeofcoupe'] ?? "N/A";
-      DateInformed = Sent['dateinformed_from_rm'] ?? "N/A";
+      poc_exact = Sent['info']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
+      DateInformed = Sent['info']['dateinformed_from_rm'] ?? "N/A";
       LetterNo = Sent['info']['LetterNo'] ?? "N/A";
       SerialNum = Sent['info']['serialnum'] ?? "N/A";
-      RM_Id = Sent['info']['RM_Id'] ?? "N/A";
-      latestUpdate = Sent['info']['latest_update'] ?? "N/A";
-      To = "ARM $branchName";
-      statusColour = const Color(0xFF17C3B2);
-    } else if (key == "RM_N_Approved") {
-      branchName = Sent['info']['ARM_location'] ?? "Not Available";
+      OfficerName = Sent['info']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName = Sent['info']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['info']['donor_details'] ?? "N/A";
+      Condition = Sent['info']['Condition'] ?? "N/A";
+      treeCount = Sent['info']['TreeCount'] ?? "N/A";
+      CO_name = Sent['info']['CO_name'] ?? "N/A";
+      CO_id = Sent['info']['CO_id'] ?? "N/A";
+      ARM_Id = Sent['info']['ARM_Id'] ?? "N/A";
+      Income = Sent['info']['income'].toString() ?? "N/A";
+      Outcome = Sent['info']['outcome'].toString() ?? "N/A";
+      Profit =
+          ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
+              .toString();
+      ARM_office = Sent['info']['ARM_location'] ?? "N/A";
+      latestUpdate = Sent['info']['latest_update'] ?? "";
+      statusColour = Color.fromRGBO(52, 199, 89, 1);
+      To = "ARM - $ARM_Id";
+      AGM_ID = Sent['info']['ADGM_ID'] ?? "N/A";
+      if (AGM_ID == "N/A" || AGM_ID == "") {
+        Status = "RM Approved";
+        AGM_ID = "RM Approved";
+      } else {
+        Status = Sent['info']['Status'] ?? "N/A";
+      }
+    } else if (K == "RM_N_APPROVED") {
       poc = Sent['info']['placeofcoupe'] ?? "N/A";
-      DateInformed = Sent['dateinformed_from_rm'] ?? "N/A";
+      poc_exact = Sent['info']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
+      DateInformed = Sent['info']['dateinformed_from_rm'] ?? "N/A";
       LetterNo = Sent['info']['LetterNo'] ?? "N/A";
       SerialNum = Sent['info']['serialnum'] ?? "N/A";
-      RM_Id = Sent['info']['RM_Id'] ?? "N/A";
+      OfficerName = Sent['info']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName = Sent['info']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['info']['donor_details'] ?? "N/A";
+      Sent_TO = Sent['info']['Sent_To'] ?? "N/A";
+      Condition = Sent['info']['Condition'] ?? "N/A";
+      treeCount = Sent['info']['TreeCount'] ?? "N/A";
+      CO_name = Sent['info']['CO_name'] ?? "N/A";
+      CO_id = Sent['info']['CO_id'] ?? "N/A";
+      Income = Sent['info']['income'].toString() ?? "N/A";
+      Outcome = Sent['info']['outcome'].toString() ?? "N/A";
+      Profit =
+          ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
+              .toString() ??
+          "N/A";
+      ARM_office = Sent['info']['ARM_location'] ?? "N/A";
+      RM_ID = Sent['info']['RM_Id'] ?? "N/A";
+      ARM_Id = Sent['info']['ARM_Id'] ?? "N/A";
+
       latestUpdate = Sent['info']['latest_update'] ?? "N/A";
-      To = "AGM";
-      statusColour = const Color(0xFFFE6D73);
+      statusColour = Color.fromRGBO(255, 204, 0, 1);
+
+      To = Sent_TO;
+      RM_ID = Sent['info']['RM_Id'] ?? "N/A";
     }
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => SentCardview(
-              branchName: branchName,
-              poc: poc,
-              DateInformed: DateInformed,
-              LetterNo: LetterNo,
-              SerialNum: SerialNum,
-              office_location: widget.office_location,
+        if (K == "RM") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SentCardview(
+                branchName: branchName,
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                office_location: widget.office_location,
+              ),
             ),
-          ),
-        );
+          );
+        } else if (K == "RM_APPROVED") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RmSentviewApprove(
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc_exact,
+                OfficerName: OfficerName,
+
+                user_name: widget.username,
+                ARM_Office: ARM_office,
+                Income: Income.toString(),
+                Outcome: Outcome.toString(),
+                Profit: Profit.toString(),
+                ARM_Id: ARM_Id,
+                CO_id: CO_id,
+                CO_name: CO_name,
+                AGM_ID: AGM_ID,
+                Status: Status,
+              ),
+            ),
+          );
+        } else if (K == "RM_N_APPROVED") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RmSentviewNotapprove(
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc_exact,
+                OfficerName: OfficerName,
+                RM_ID: RM_ID,
+                user_name: widget.username,
+                ARM_Office: ARM_office,
+                Income: Income.toString(),
+                Outcome: Outcome.toString(),
+                Profit: Profit.toString(),
+                ARM_Id: ARM_Id,
+                CO_id: CO_id,
+                CO_name: CO_name,
+              ),
+            ),
+          );
+        }
       },
       child: Container(
         width: double.infinity,
@@ -179,32 +297,34 @@ class _RmSentState extends State<RmSent> {
           children: [
             // Top Row
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 26,
-                      backgroundColor: Color.fromARGB(16, 0, 0, 0),
-                      child: Center(
-                        child: Icon(
-                          Iconsax.location5,
-                          color: Colors.black,
-                          size: 35,
-                        ),
-                      ),
+                const CircleAvatar(
+                  radius: 26,
+                  backgroundColor: Color.fromARGB(16, 0, 0, 0),
+                  child: Center(
+                    child: Icon(
+                      Iconsax.location5,
+                      color: Colors.black,
+                      size: 35,
                     ),
-                    const SizedBox(width: 12),
-                    Text(
-                      poc,
-                      style: const TextStyle(
-                        fontSize: 33,
-                        fontFamily: "sfproRoundSemiB",
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Text(
+                    poc,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: const TextStyle(
+                      fontSize: 26, // reduce from 33 to fit better
+                      fontFamily: "sfproRoundSemiB",
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -337,7 +457,7 @@ class _RmSentState extends State<RmSent> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      RM_Id,
+                      RM_ID,
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.grey,

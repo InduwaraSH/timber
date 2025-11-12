@@ -147,32 +147,34 @@ class _CORecivedState extends State<CORecived> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 26,
-                      backgroundColor: Color.fromARGB(16, 0, 0, 0),
-                      child: Center(
-                        child: Icon(
-                          Iconsax.location5,
-                          color: Colors.black,
-                          size: 35,
-                        ),
-                      ),
+                const CircleAvatar(
+                  radius: 26,
+                  backgroundColor: Color.fromARGB(16, 0, 0, 0),
+                  child: Center(
+                    child: Icon(
+                      Iconsax.location5,
+                      color: Colors.black,
+                      size: 35,
                     ),
-                    const SizedBox(width: 12),
-                    Text(
-                      poc,
-                      style: const TextStyle(
-                        fontSize: 33,
-                        fontFamily: "sfproRoundSemiB",
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Text(
+                    poc,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: const TextStyle(
+                      fontSize: 26, // reduce from 33 to fit better
+                      fontFamily: "sfproRoundSemiB",
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),

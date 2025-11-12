@@ -329,7 +329,7 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
             FirebaseDatabase.instance
                 .ref()
                 .child("Status_of_job")
-                .child(widget.RM_office.toString())
+                .child(widget.ARM_Office.toString())
                 .child(widget.SerialNum.toString())
                 .child("Status")
                 .set("RM_R_D_two");
@@ -338,7 +338,7 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
             FirebaseDatabase.instance
                 .ref()
                 .child("Status_of_job")
-                .child(widget.RM_office.toString())
+                .child(widget.ARM_Office.toString())
                 .child(widget.SerialNum.toString())
                 .child("RM_R_D_two")
                 .set(
