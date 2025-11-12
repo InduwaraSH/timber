@@ -26,7 +26,7 @@ class RmRecivedViewArm extends StatefulWidget {
   final String office_location;
   final String PlaceOfCoupe_exact_from_arm;
   final String user_name;
-  
+
   final String ARM_Office;
   final String Income;
   final String Outcome;
@@ -49,7 +49,7 @@ class RmRecivedViewArm extends StatefulWidget {
     required this.office_location,
     required this.PlaceOfCoupe_exact_from_arm,
     required this.user_name,
-   
+
     required this.ARM_Office,
     required this.Income,
     required this.Outcome,
@@ -906,6 +906,8 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.SerialNum)
                             .child("timberReportheadlines")
                             .set({
+                              "Status": "RM Approved",
+                              "ADGM_ID": "",
                               "serialnum": widget.SerialNum,
                               "placeofcoupe": widget.poc,
                               "dateinformed_from_rm": widget.DateInformed,
@@ -957,6 +959,8 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                             .child(widget.SerialNum)
                             .child("info")
                             .set({
+                              "Status": "RM Approved",
+                              "ADGM_ID": "",
                               "serialnum": widget.SerialNum,
                               "placeofcoupe": widget.poc,
                               "dateinformed_from_rm": widget.DateInformed,

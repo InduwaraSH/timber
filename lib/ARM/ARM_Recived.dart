@@ -92,6 +92,10 @@ class _ARMReceivedState extends State<ARMReceived> {
     String poc_exact = "";
     String latestUpdate = "";
     String from_doc = Sent['to'] ?? "N/A";
+    String Status = "";
+    String ADGM_ID = "";
+      String RM_ID = "";
+      String ARM_ID = "";
   
 
     if (from == "CO") {
@@ -130,6 +134,8 @@ class _ARMReceivedState extends State<ARMReceived> {
 
      
     } else if (from == "RM_Approved") {
+      Status = Sent['timberReportheadlines']['Status'] ?? "N/A";
+      ADGM_ID = Sent['timberReportheadlines']['ADGM_ID'] ?? "N/A";
       branchName =
           Sent['timberReportheadlines']['ARM_location'] ?? "Not Available";
       poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
@@ -148,8 +154,10 @@ class _ARMReceivedState extends State<ARMReceived> {
       Outcome = Sent['timberReportheadlines']['outcome'].toString();
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
       RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
-
+      CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
       from_doc = "RM $RM_office";
+      RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
+      ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
 
       
@@ -219,6 +227,13 @@ class _ARMReceivedState extends State<ARMReceived> {
                 ARM_Office: ARM_office,
                 Income: Income,
                 Outcome: Outcome,
+                RM_office: RM_office,
+                CO_id: CO_id,
+                CO_name: CO_name,
+                ARM_ID: ARM_ID,
+                RM_ID: RM_ID,
+                Status: Status,
+                ADGM_ID: ADGM_ID,
                 Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
                     ? (((double.tryParse(Income) ?? 0) -
                               (double.tryParse(Outcome) ?? 0))

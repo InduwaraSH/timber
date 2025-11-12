@@ -1,4 +1,3 @@
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,6 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:timber_app/ARM/ARMSentImageView.dart';
 import 'package:timber_app/ARM/ARM_Sent_timeline.dart';
-
 
 class ArmRecivedviewapproved extends StatefulWidget {
   final String poc;
@@ -29,6 +27,13 @@ class ArmRecivedviewapproved extends StatefulWidget {
   final String Income;
   final String Outcome;
   final String Profit;
+  final String Status;
+  final String ADGM_ID;
+  final String RM_office;
+  final String CO_id;
+  final String CO_name;
+  final String ARM_ID;
+  final String RM_ID;
 
   const ArmRecivedviewapproved({
     super.key,
@@ -49,6 +54,13 @@ class ArmRecivedviewapproved extends StatefulWidget {
     required this.Income,
     required this.Outcome,
     required this.Profit,
+    required this.Status,
+    required this.ADGM_ID,
+    required this.RM_office,
+    required this.CO_id,
+    required this.CO_name,
+    required this.ARM_ID,
+    required this.RM_ID,
   });
 
   @override
@@ -256,8 +268,14 @@ class _ArmRecivedviewapprovedState extends State<ArmRecivedviewapproved> {
       final pdf = pw.Document();
 
       final infoItems = [
+        {"label": "Status", "value": widget.Status},
+        {"label": "ADGM ID", "value": widget.ADGM_ID},
+        {"label": "RM ID", "value": widget.RM_ID},
+        {"label": "RM Office", "value": widget.RM_office},
+        {"label": "ARM ID", "value": widget.ARM_ID},
         {"label": "ARM Office", "value": widget.ARM_Office},
-        {"label": "CO", "value": widget.user_name},
+        {"label": "CO ID", "value": widget.CO_id},
+        {"label": "CO Name", "value": widget.CO_name},
         {"label": "POC", "value": widget.poc},
         {
           "label": "Place of Coupe",
@@ -406,8 +424,14 @@ class _ArmRecivedviewapprovedState extends State<ArmRecivedviewapproved> {
   @override
   Widget build(BuildContext context) {
     final infoItems = [
-      {"label": "ARM Office", "value": widget.ARM_Branch_Name},
-      {"label": "CO", "value": widget.user_name},
+      {"label": "Status", "value": widget.Status},
+      {"label": "ADGM ID", "value": widget.ADGM_ID},
+      {"label": "RM ID", "value": widget.RM_ID},
+      {"label": "RM Office", "value": widget.RM_office},
+      {"label": "ARM ID", "value": widget.ARM_ID},
+      {"label": "ARM Office", "value": widget.ARM_Office},
+      {"label": "CO ID", "value": widget.CO_id},
+      {"label": "CO Name", "value": widget.CO_name},
       {"label": "POC", "value": widget.poc},
       {"label": "Place of Coupe", "value": widget.PlaceOfCoupe_exact_from_arm},
       {"label": "Date Informed", "value": widget.DateInformed},
