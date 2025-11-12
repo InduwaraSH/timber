@@ -230,7 +230,7 @@ class AGMNavigControll extends GetxController {
   AGMNavigControll(this.office_location, this.username);
 
   late final List<Map<String, dynamic>> items = [
-    {'icon': Iconsax.arrow_down_24, 'label': 'Inbox'},
+    {'icon': Iconsax.message4, 'label': 'Inbox'},
     {'icon': Iconsax.send_24, 'label': 'Sent'},
   ];
 

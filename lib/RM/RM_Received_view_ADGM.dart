@@ -13,7 +13,7 @@ import 'package:printing/printing.dart';
 import 'package:timber_app/ARM/ARMSentImageView.dart';
 import 'package:timber_app/ARM/ARM_Sent_timeline.dart';
 
-class RmRecivedViewArm extends StatefulWidget {
+class RmRecivedView_ADGM extends StatefulWidget {
   final String poc;
   final String DateInformed;
   final String LetterNo;
@@ -26,7 +26,7 @@ class RmRecivedViewArm extends StatefulWidget {
   final String office_location;
   final String PlaceOfCoupe_exact_from_arm;
   final String user_name;
-  
+
   final String ARM_Office;
   final String Income;
   final String Outcome;
@@ -34,8 +34,11 @@ class RmRecivedViewArm extends StatefulWidget {
   final String ARM_Id;
   final String CO_id;
   final String CO_name;
+  final String AGM_ID;
+  final String Status;
+  final String RM_ID;
 
-  const RmRecivedViewArm({
+  const RmRecivedView_ADGM({
     super.key,
     required this.poc,
     required this.DateInformed,
@@ -49,7 +52,7 @@ class RmRecivedViewArm extends StatefulWidget {
     required this.office_location,
     required this.PlaceOfCoupe_exact_from_arm,
     required this.user_name,
-   
+    required this.RM_ID,
     required this.ARM_Office,
     required this.Income,
     required this.Outcome,
@@ -57,13 +60,15 @@ class RmRecivedViewArm extends StatefulWidget {
     required this.ARM_Id,
     required this.CO_id,
     required this.CO_name,
+    required this.AGM_ID,
+    required this.Status,
   });
 
   @override
-  State<RmRecivedViewArm> createState() => _RmRecivedViewArmState();
+  State<RmRecivedView_ADGM> createState() => _RmRecivedView_ADGMState();
 }
 
-class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
+class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
@@ -264,8 +269,11 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
       final pdf = pw.Document();
 
       final infoItems = [
+        {"label": "Status", "value": widget.Status},
+        {"label": "Approved By", "value": widget.AGM_ID},
+        {"label": "AGM ID", "value": widget.AGM_ID},
         {"label": "RM Office", "value": widget.office_location},
-        {"label": "RM", "value": widget.user_name},
+        {"label": "RM", "value": widget.RM_ID},
         {"label": "ARM Office", "value": widget.ARM_Office},
         {"label": "ARM ID", "value": widget.ARM_Id},
         {"label": "CO", "value": widget.CO_name},
@@ -415,8 +423,11 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
   @override
   Widget build(BuildContext context) {
     final infoItems = [
+      {"label": "Status", "value": widget.Status},
+      {"label": "Approved By", "value": widget.AGM_ID},
+      {"label": "AGM ID", "value": widget.AGM_ID},
       {"label": "RM Office", "value": widget.office_location},
-      {"label": "RM", "value": widget.user_name},
+      {"label": "RM", "value": widget.RM_ID},
       {"label": "ARM Office", "value": widget.ARM_Office},
       {"label": "ARM ID", "value": widget.ARM_Id},
       {"label": "CO", "value": widget.CO_name},

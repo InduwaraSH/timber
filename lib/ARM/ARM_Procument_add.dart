@@ -274,7 +274,7 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd> {
           .child(widget.RM_office)
           .child("Recived")
           .child(widget.SerialNum)
-          .set({"Reciver": "RM"});
+          .set({"from": "ARM"});
 
       await database
           .child('RM_branch_data_saved')

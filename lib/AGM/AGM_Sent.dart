@@ -118,14 +118,13 @@ class _AgmSentState extends State<AgmSent> {
     String Income = Sent['info']['income'].toString();
     String Outcome = Sent['info']['outcome'].toString();
     String RM = Sent['info']['RM_Id'] ?? "N/A";
-    String RM_office = Sent['info']['RM Office'] ?? "N/A";
+    String RM_office = Sent['info']['RM_office'] ?? "N/A";
     String latestUpdate = Sent['info']['latest_update'] ?? "N/A";
-    String from_doc = "RM Office $RM_office";
+    String TO_DOC = "RM Office $RM_office";
     String ADGM_Id = Sent['info']['RM_Id'] ?? "N/A";
     Color statusColour = Color(0xFF5065D8);
 
-    String To = "RM ";
-    statusColour = const Color(0xFFFE6D73);
+    statusColour = Color.fromRGBO(52, 199, 89, 1);
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
@@ -302,7 +301,7 @@ class _AgmSentState extends State<AgmSent> {
                       radius: 17,
                       backgroundColor: const Color.fromARGB(0, 238, 238, 238),
                       child: ClipOval(
-                        child: AvatarPlus(To, height: 40, width: 40),
+                        child: AvatarPlus(TO_DOC, height: 40, width: 40),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -316,7 +315,7 @@ class _AgmSentState extends State<AgmSent> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        To,
+                        TO_DOC,
                         style: const TextStyle(
                           fontSize: 15,
                           fontFamily: 'sfproRoundSemiB',

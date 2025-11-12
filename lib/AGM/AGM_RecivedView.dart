@@ -1,4 +1,3 @@
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
@@ -542,8 +541,8 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                             "CO_name": widget.CO_name,
                             "CO_id": widget.CO_id,
                             "ARM_Id": widget.ARM_id,
-                            "RM_Id": widget.user_name,
-                            "ADGM_id": "${widget.user_name} (AGM)",
+                            "RM_Id": widget.RM,
+                            "ADGM_id": widget.user_name,
                             "income": widget.Income,
                             "outcome": widget.Outcome,
                             "latest_update": DateFormat(
@@ -595,8 +594,8 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                             "CO_name": widget.CO_name,
                             "CO_id": widget.CO_id,
                             "ARM_Id": widget.ARM_id,
-                            "RM_Id": widget.user_name,
-                            "ADGM_id": "${widget.user_name} (AGM)",
+                            "RM_Id": widget.RM,
+                            "ADGM_id": widget.user_name,
                             "income": widget.Income,
                             "outcome": widget.Outcome,
                             "latest_update": DateFormat(
@@ -624,20 +623,20 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                               'yyyy-MM-dd',
                             ).format(DateTime.now()).toString(),
                           )
-                          // .then((_) {
-                          //   try {
-                          //     FirebaseDatabase.instance
-                          //         .ref()
-                          //         .child('Head_office_data_saved')
-                          //         .child("AGM")
-                          //         .child("Recived")
-                          //         .child(widget.SerialNum.toString())
-                          //         .remove();
-                          //     print('Data deleted successfully');
-                          //   } catch (e) {
-                          //     print('Error deleting data: $e');
-                          //   }
-                          // })
+                          .then((_) {
+                            try {
+                              FirebaseDatabase.instance
+                                  .ref()
+                                  .child('Head_office_data_saved')
+                                  .child("AGM")
+                                  .child("Recived")
+                                  .child(widget.SerialNum.toString())
+                                  .remove();
+                              print('Data deleted successfully');
+                            } catch (e) {
+                              print('Error deleting data: $e');
+                            }
+                          })
                           .then((_) {
                             try {
                               FirebaseDatabase.instance

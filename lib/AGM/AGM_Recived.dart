@@ -88,15 +88,14 @@ class _AGMRecivedState extends State<AGMRecived> {
     String CO_id = Sent['timberReportheadlines']['CO_id'] ?? "N/A";
     String ARM_id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
     String Income = Sent['timberReportheadlines']['income'].toString();
-    String Outcome =
-        Sent['timberReportheadlines']['outcome'].toString();
+    String Outcome = Sent['timberReportheadlines']['outcome'].toString();
     String RM = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
     String RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
 
     String latestUpdate =
         Sent['timberReportheadlines']['latest_update'] ?? "N/A";
     String from_doc = "RM Office $RM_office";
-    Color statusColour = Color(0xFF5065D8);
+    Color statusColour = Color.fromRGBO(255, 204, 0, 1);
 
     return CupertinoButton(
       padding: EdgeInsets.zero,

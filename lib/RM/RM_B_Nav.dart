@@ -8,7 +8,6 @@ import 'package:timber_app/RM/RM_Home.dart';
 import 'package:timber_app/RM/RM_Recived.dart';
 import 'package:timber_app/RM/RM_Sent.dart';
 
-
 class RmBNavbar extends StatefulWidget {
   final String office_location;
   final String username;
@@ -247,15 +246,13 @@ class RMNavigControll extends GetxController {
 
   late final List<Map<String, dynamic>> items = [
     {'icon': Iconsax.home, 'label': 'Home'},
+    {'icon': Iconsax.message4, 'label': 'Inbox'},
     {'icon': Iconsax.send_24, 'label': 'Sent'},
-    {'icon': Iconsax.arrow_down_24, 'label': 'Inbox'},
-   
   ];
 
   late final List<Widget> screens = [
     RMHomepage(office_location: office_location, username: username),
-    RmSent(office_location: office_location, username: username),
     RMRecived(office_location: office_location, username: username),
-   
+    RmSent(office_location: office_location, username: username),
   ];
 }
