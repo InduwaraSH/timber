@@ -1,6 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
 class TreeCutStatus extends StatefulWidget {
@@ -22,12 +22,12 @@ class TreeCutStatus extends StatefulWidget {
 class _TreeCutStatusState extends State<TreeCutStatus> {
   final database = FirebaseDatabase.instance.ref();
   bool _isLoading = false;
-  bool _isUpdated = false;
 
   Future<void> _updateStatus() async {
     setState(() => _isLoading = true);
 
     try {
+      // Firebase updates
       await database
           .child('ARM_branch_data_saved')
           .child(widget.office)
@@ -49,15 +49,21 @@ class _TreeCutStatusState extends State<TreeCutStatus> {
           .child("tree_removal")
           .set(DateFormat('yyyy-MM-dd').format(DateTime.now()));
 
-      setState(() {
-        _isUpdated = true;
-      });
+      // Small delay for smooth UX
+      await Future.delayed(const Duration(seconds: 1));
+
+      if (mounted) {
+        Navigator.pop(context);
+        Navigator.pop(context); //  // Go back after success
+      }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error updating status: $e")));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Error updating status: $e")));
+      }
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -65,12 +71,22 @@ class _TreeCutStatusState extends State<TreeCutStatus> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: _isLoading
-            ? const CircularProgressIndicator()
-            : _isUpdated
-            ? _buildSuccessCard(context)
-            : _buildActionCard(context),
+      body: Stack(
+        children: [
+          Center(child: _buildActionCard(context)),
+
+          // Cupertino loader overlay
+          if (_isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.3),
+              child: const Center(
+                child: CupertinoActivityIndicator(
+                  radius: 18,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -123,73 +139,7 @@ class _TreeCutStatusState extends State<TreeCutStatus> {
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
-            onPressed: _updateStatus,
-            child: const Text(
-              "Continue",
-              style: TextStyle(fontSize: 16, color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSuccessCard(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(24),
-      padding: const EdgeInsets.all(32),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              color: Color(0xFFE8F5E9),
-              shape: BoxShape.circle,
-            ),
-            padding: const EdgeInsets.all(16),
-            child: const Icon(
-              Icons.check_rounded,
-              color: Colors.green,
-              size: 48,
-            ),
-          ),
-          const SizedBox(height: 24),
-          const Text(
-            "Account verified",
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            "Welcome to clandestine",
-            style: TextStyle(fontSize: 15, color: Colors.grey),
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-              minimumSize: const Size(double.infinity, 56),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: _isLoading ? null : _updateStatus,
             child: const Text(
               "Continue",
               style: TextStyle(fontSize: 16, color: Colors.white),

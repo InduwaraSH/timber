@@ -5,11 +5,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:timber_app/ARM/ARM_Complete.dart';
 import 'package:timber_app/ARM/ARM_RecivedViewApproved.dart';
 import 'package:timber_app/ARM/ARM_Tree_Cut_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ARM_Procumented_view extends StatefulWidget {
+class ArmCuttingView extends StatefulWidget {
   final String poc;
   final String DateInformed;
   final String LetterNo;
@@ -35,7 +36,7 @@ class ARM_Procumented_view extends StatefulWidget {
   final String ARM_ID;
   final String RM_ID;
 
-  const ARM_Procumented_view({
+  const ArmCuttingView({
     super.key,
     required this.poc,
     required this.DateInformed,
@@ -64,10 +65,10 @@ class ARM_Procumented_view extends StatefulWidget {
   });
 
   @override
-  State<ARM_Procumented_view> createState() => _ARM_Procumented_viewState();
+  State<ArmCuttingView> createState() => _ArmCuttingViewState();
 }
 
-class _ARM_Procumented_viewState extends State<ARM_Procumented_view> {
+class _ArmCuttingViewState extends State<ArmCuttingView> {
   final DatabaseReference _dbRef = FirebaseDatabase.instance.ref();
   final ScrollController _scrollController = ScrollController();
 
@@ -161,7 +162,7 @@ class _ARM_Procumented_viewState extends State<ARM_Procumented_view> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.40,
+              height: MediaQuery.of(context).size.height * 0.70,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.vertical(
@@ -192,7 +193,7 @@ class _ARM_Procumented_viewState extends State<ARM_Procumented_view> {
                     child: CupertinoPageScaffold(
                       backgroundColor: Colors.transparent,
 
-                      child: TreeCutStatus(
+                      child: ArmComplete(
                         office: widget.ARM_Branch_Name,
 
                         rm: widget.RM_office,

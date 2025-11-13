@@ -9,7 +9,7 @@ import 'package:timber_app/ARM/ARM_RecivedViewApproved.dart';
 import 'package:timber_app/ARM/ARM_Tree_Cut_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ARM_Procumented_view extends StatefulWidget {
+class ARM_Remove_view extends StatefulWidget {
   final String poc;
   final String DateInformed;
   final String LetterNo;
@@ -35,7 +35,7 @@ class ARM_Procumented_view extends StatefulWidget {
   final String ARM_ID;
   final String RM_ID;
 
-  const ARM_Procumented_view({
+  const ARM_Remove_view({
     super.key,
     required this.poc,
     required this.DateInformed,
@@ -64,10 +64,10 @@ class ARM_Procumented_view extends StatefulWidget {
   });
 
   @override
-  State<ARM_Procumented_view> createState() => _ARM_Procumented_viewState();
+  State<ARM_Remove_view> createState() => _ARM_Remove_viewState();
 }
 
-class _ARM_Procumented_viewState extends State<ARM_Procumented_view> {
+class _ARM_Remove_viewState extends State<ARM_Remove_view> {
   final DatabaseReference _dbRef = FirebaseDatabase.instance.ref();
   final ScrollController _scrollController = ScrollController();
 

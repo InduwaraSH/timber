@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:timber_app/ARM/ARM_Cutting_view.dart';
 import 'package:timber_app/ARM/ARM_Procumented%20View.dart';
 import 'package:timber_app/ARM/ARM_RecivedViewApproved.dart';
 import 'package:timber_app/ARM/ARM_RecivedView_CO.dart';
 import 'package:timber_app/ARM/ARM_Recived_view.dart';
+import 'package:timber_app/ARM/ARM_Remove_view.dart';
 import 'package:timber_app/ARM/Procument_call.dart';
 
 class ARMReceived extends StatefulWidget {
@@ -182,6 +184,32 @@ class _ARMReceivedState extends State<ARMReceived> {
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
+    } else if (from == "Removing") {
+      Status = Sent['timberReportheadlines']['Status'] ?? "N/A";
+      ADGM_ID = Sent['timberReportheadlines']['ADGM_ID'] ?? "N/A";
+      branchName =
+          Sent['timberReportheadlines']['ARM_location'] ?? "Not Available";
+      poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
+      DateInformed =
+          Sent['timberReportheadlines']['dateinformed_from_rm'] ?? "N/A";
+      LetterNo = Sent['timberReportheadlines']['LetterNo'] ?? "N/A";
+      SerialNum = Sent['timberReportheadlines']['serialnum'] ?? "N/A";
+      OfficerName = Sent['timberReportheadlines']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName =
+          Sent['timberReportheadlines']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
+      Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
+      treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
+      CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
+      Income = Sent['timberReportheadlines']['income'].toString();
+      Outcome = Sent['timberReportheadlines']['outcome'].toString();
+      latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
+      RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
+      CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
+      from_doc = "RM $RM_office - Tree Removing";
+      RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
+      ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
+      statusColour = Color.fromRGBO(255, 146, 48, 1);
     }
 
     return CupertinoButton(
@@ -263,11 +291,47 @@ class _ARMReceivedState extends State<ARMReceived> {
               ),
             ),
           );
-        }else if (from == "Procumented") {
+        } else if (from == "Procumented") {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => ARM_Procumented_view(
+                ARM_Branch_Name: branchName,
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc,
+                OfficerName: OfficerName,
+                user_name: CO_name,
+                ARM_Office: ARM_office,
+                Income: Income,
+                Outcome: Outcome,
+                RM_office: RM_office,
+                CO_id: CO_id,
+                CO_name: CO_name,
+                ARM_ID: ARM_ID,
+                RM_ID: RM_ID,
+                Status: Status,
+                ADGM_ID: ADGM_ID,
+                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
+                    ? (((double.tryParse(Income) ?? 0) -
+                              (double.tryParse(Outcome) ?? 0))
+                          .toString())
+                    : "N/A",
+              ),
+            ),
+          );
+        } else if (from == "Removing") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ArmCuttingView(
                 ARM_Branch_Name: branchName,
                 poc: poc,
                 DateInformed: DateInformed,
