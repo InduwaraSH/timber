@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:timber_app/CO/Review.dart';
+import 'package:timber_app/Snack_Message.dart';
 
 class TreeQuesForm extends StatefulWidget {
   final int treeCount;
@@ -143,19 +144,24 @@ class _TreeQuesFormState extends State<TreeQuesForm> {
     final currentFields = treeControllers[currentIndex];
     for (var f in fields) {
       if (currentFields[f]!.text.trim().isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Please fill "$f"',
-              style: const TextStyle(
-                color: Colors.white,
-                fontFamily: "sfproRoundRegular",
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            backgroundColor: Colors.redAccent.shade400,
-          ),
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(
+        //       'Please fill "$f"',
+        //       style: const TextStyle(
+        //         color: Colors.white,
+        //         fontFamily: "sfproRoundRegular",
+        //         fontWeight: FontWeight.bold,
+        //         fontSize: 16,
+        //       ),
+        //     ),
+        //     backgroundColor: Colors.redAccent.shade400,
+        //   ),
+        // );
+        showTopSnackBar(
+          context,
+          message: 'Please fill "$f"',
+          backgroundColor: Colors.redAccent.shade400,
         );
         return;
       }
@@ -320,27 +326,40 @@ class _TreeQuesFormState extends State<TreeQuesForm> {
           .remove();
 
       widget.onDone();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Saved successfully!",
-            style: TextStyle(
-              fontFamily: "sfproRoundRegular",
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.white,
-            ),
-          ),
-          duration: Duration(seconds: 1),
-        ),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //     content: Text(
+      //       "Saved successfully!",
+      //       style: TextStyle(
+      //         fontFamily: "sfproRoundRegular",
+      //         fontWeight: FontWeight.bold,
+      //         fontSize: 16,
+      //         color: Colors.white,
+      //       ),
+      //     ),
+      //     duration: Duration(seconds: 1),
+      //   ),
+      // );
+      showTopSnackBar(
+        context,
+        message: "Saved successfully!",
+        backgroundColor: Colors.green,
       );
       await Future.delayed(const Duration(milliseconds: 800));
       Navigator.pop(context);
       Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(
+      //   ScaffoldMessenger.of(
+      //     context,
+      //   ).showSnackBar(SnackBar(content: Text("Save failed: $e")));
+      // }
+      showTopSnackBar(
         context,
-      ).showSnackBar(SnackBar(content: Text("Save failed: $e")));
+        message: "Save failed: $e",
+        backgroundColor: Colors.red,
+      );
     }
   }
 

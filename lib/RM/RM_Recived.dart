@@ -525,30 +525,60 @@ class _RMRecivedState extends State<RMRecived> {
             ),
 
             // Firebase list
+            // Firebase list
             Expanded(
-              child: FirebaseAnimatedList(
-                controller: _scrollController,
-                query: dbref,
-                itemBuilder:
-                    (
-                      BuildContext context,
-                      DataSnapshot snapshot,
-                      Animation<double> animation,
-                      int index,
-                    ) {
-                      Map sent = snapshot.value as Map;
-                      sent['key'] = snapshot.key;
+              child: FutureBuilder<DatabaseEvent>(
+                future: dbref.once(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CupertinoActivityIndicator());
+                  }
 
-                      // Filter by POC
-                      final String poc =
-                          sent['info']?['poc'] ?? sent['poc'] ?? "";
-                      if (searchQuery.isNotEmpty &&
-                          !poc.toLowerCase().contains(searchQuery)) {
-                        return const SizedBox.shrink();
-                      }
+                  // Convert snapshot to list
+                  Map? values = snapshot.data!.snapshot.value as Map?;
+                  if (values == null)
+                    return const Center(child: Text("No data"));
 
-                      return listItem(Sent: sent, index: index);
+                  List<Map> items = [];
+                  values.forEach((key, value) {
+                    Map item = Map.from(value);
+                    item['key'] = key;
+                    items.add(item);
+                  });
+
+                  // Sort items by latest_update descending
+                  items.sort((a, b) {
+                    String dateA =
+                        a['info']?['latest_update'] ??
+                        a['timberReportheadlines']?['latest_update'] ??
+                        "";
+                    String dateB =
+                        b['info']?['latest_update'] ??
+                        b['timberReportheadlines']?['latest_update'] ??
+                        "";
+                    if (dateA.isEmpty) return 1;
+                    if (dateB.isEmpty) return -1;
+                    return DateTime.parse(
+                      dateB,
+                    ).compareTo(DateTime.parse(dateA));
+                  });
+
+                  // Apply search filter
+                  List<Map> filteredItems = items.where((sent) {
+                    final String poc =
+                        sent['info']?['poc'] ?? sent['poc'] ?? "";
+                    return searchQuery.isEmpty ||
+                        poc.toLowerCase().contains(searchQuery);
+                  }).toList();
+
+                  return ListView.builder(
+                    controller: _scrollController,
+                    itemCount: filteredItems.length,
+                    itemBuilder: (context, index) {
+                      return listItem(Sent: filteredItems[index], index: index);
                     },
+                  );
+                },
               ),
             ),
           ],

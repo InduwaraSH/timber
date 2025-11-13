@@ -12,6 +12,7 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:timber_app/ARM/ARMSentImageView.dart';
 import 'package:timber_app/ARM/ARM_Sent_timeline.dart';
+import 'package:timber_app/Snack_Message.dart';
 
 class RmRecivedView_ADGM extends StatefulWidget {
   final String poc;
@@ -642,6 +643,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                                   .child(widget.SerialNum.toString())
                                   .remove();
                               print('Data deleted successfully');
+                              
                             } catch (e) {
                               print('Error deleting data: $e');
                             }
@@ -656,8 +658,18 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                                   .child(widget.SerialNum.toString())
                                   .remove();
                               print('Data deleted successfully');
+                              showTopSnackBar(
+                                context,
+                                message: "Data sent to ARM successfully",
+                                backgroundColor: Colors.green,
+                              );
                             } catch (e) {
                               print('Error deleting data: $e');
+                              showTopSnackBar(
+                                context,
+                                message: "Error deleting data: $e",
+                                backgroundColor: Colors.red,
+                              );
                             }
                           });
 

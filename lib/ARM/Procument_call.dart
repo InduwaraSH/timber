@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
+import 'package:timber_app/Snack_Message.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -150,14 +151,19 @@ class _ARM_Pro_callState extends State<ARM_Pro_call> {
 
   Future<void> _saveData() async {
     if (selectedOptionIndex == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Please select a procurement option before saving.",
-            style: TextStyle(fontFamily: "sfproRoundSemiB"),
-          ),
-          backgroundColor: Colors.red,
-        ),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //     content: Text(
+      //       "Please select a procurement option before saving.",
+      //       style: TextStyle(fontFamily: "sfproRoundSemiB"),
+      //     ),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+      showTopSnackBar(
+        context,
+        message: "Please select a procurement option before saving.",
+        backgroundColor: Colors.red, // optional
       );
       return;
     }
@@ -168,11 +174,16 @@ class _ARM_Pro_callState extends State<ARM_Pro_call> {
     // Validate fields
     for (var f in fields) {
       if (controllers[f]!.text.trim().isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("$f is required!"),
-            backgroundColor: Colors.red,
-          ),
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text("$f is required!"),
+        //     backgroundColor: Colors.red,
+        //   ),
+        // );
+        showTopSnackBar(
+          context,
+          message: "$f is required!",
+          backgroundColor: Colors.red, // optional
         );
         return;
       }
@@ -223,12 +234,18 @@ class _ARM_Pro_callState extends State<ARM_Pro_call> {
         .set(DateFormat('yyyy-MM-dd').format(DateTime.now()));
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Procurement data saved successfully ✅"),
-          backgroundColor: Colors.black,
-        ),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //     content: Text("Procurement data saved successfully ✅"),
+      //     backgroundColor: Colors.black,
+      //   ),
+      // );
+      showTopSnackBar(
+        context,
+        message: "Procurement data saved successfully!",
+        backgroundColor: Colors.green, // optional
       );
+      Navigator.pop(context);
     }
   }
 

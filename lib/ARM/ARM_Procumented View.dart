@@ -7,7 +7,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:timber_app/ARM/ARM_RecivedViewApproved.dart';
 import 'package:timber_app/ARM/ARM_Tree_Cut_state.dart';
+import 'package:timber_app/Snack_Message.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../Snack_Message.dart' show showTopSnackBar;
 
 class ARM_Procumented_view extends StatefulWidget {
   final String poc;
@@ -140,14 +143,18 @@ class _ARM_Procumented_viewState extends State<ARM_Procumented_view> {
       if (await canLaunchUrl(uri)) {
         await launchUrl(uri, mode: LaunchMode.platformDefault);
       } else {
-        ScaffoldMessenger.of(
+        showTopSnackBar(
           context,
-        ).showSnackBar(SnackBar(content: Text("Cannot open dialer")));
+          message: "Cannot launch dialer",
+          backgroundColor: Colors.red, // optional
+        );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
+      showTopSnackBar(
         context,
-      ).showSnackBar(SnackBar(content: Text("Error launching dialer: $e")));
+        message: "Error launching dialer: $e",
+        backgroundColor: Colors.red, // optional
+      );
     }
   }
 

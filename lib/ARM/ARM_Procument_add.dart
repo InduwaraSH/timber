@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:timber_app/Snack_Message.dart';
 
 class ArmProcumentAdd extends StatefulWidget {
   final String ARM_Office;
@@ -283,17 +284,23 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd>
                         onPressed: () async {
                           if (_incomeController.text.trim().isEmpty ||
                               _outcomeController.text.trim().isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //   const SnackBar(
+                            //     content: Text(
+                            //       "Please fill both Income and Outcome fields.",
+                            //       style: TextStyle(
+                            //         fontWeight: FontWeight.bold,
+                            //         color: Colors.white,
+                            //       ),
+                            //     ),
+                            //     backgroundColor: Colors.redAccent,
+                            //   ),
+                            // );
+                            showTopSnackBar(
+                              context,
+                              message:
                                   "Please fill both Income and Outcome fields.",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                backgroundColor: Colors.redAccent,
-                              ),
+                              backgroundColor: Colors.redAccent,
                             );
                             return;
                           } else {
@@ -484,23 +491,33 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd>
 
                               Navigator.pop(context);
                               Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "Data saved successfully",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.green,
-                                ),
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(
+                              //     content: Text(
+                              //       "Data saved successfully",
+                              //       style: const TextStyle(
+                              //         fontWeight: FontWeight.bold,
+                              //         color: Colors.white,
+                              //       ),
+                              //     ),
+                              //     backgroundColor: Colors.green,
+                              //   ),
+                              // );
+                              showTopSnackBar(
+                                context,
+                                message: "Data saved successfully",
+                                backgroundColor: Colors.green,
                               );
                             } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("Error saving data: $e"),
-                                ),
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(
+                              //     content: Text("Error saving data: $e"),
+                              //   ),
+                              // );
+                              showTopSnackBar(
+                                context,
+                                message: "Error saving data: $e",
+                                backgroundColor: Colors.redAccent,
                               );
                             } finally {
                               setState(() => _saving = false);

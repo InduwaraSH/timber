@@ -7,6 +7,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:timber_app/ARM/ARM_RecivedViewApproved.dart';
 import 'package:timber_app/ARM/ARM_Tree_Cut_state.dart';
+import 'package:timber_app/Snack_Message.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ARM_Remove_view extends StatefulWidget {
@@ -119,16 +120,26 @@ class _ARM_Remove_viewState extends State<ARM_Remove_view> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(
+      // ScaffoldMessenger.of(
+      //   context,
+      // ).showSnackBar(SnackBar(content: Text("Error fetching data: $e")));
+      showTopSnackBar(
         context,
-      ).showSnackBar(SnackBar(content: Text("Error fetching data: $e")));
+        message: "Error fetching data: $e",
+        backgroundColor: Colors.red, // optional
+      );
     }
   }
 
   Future<void> _makePhoneCall(String? phoneNumber) async {
     if (phoneNumber == null || phoneNumber.isEmpty || phoneNumber == "N/A") {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Mobile number not available.")),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text("Mobile number not available.")),
+      // );
+      showTopSnackBar(
+        context,
+        message: "Mobile number not available.",
+        backgroundColor: Colors.red, // optional
       );
       return;
     }
@@ -140,14 +151,24 @@ class _ARM_Remove_viewState extends State<ARM_Remove_view> {
       if (await canLaunchUrl(uri)) {
         await launchUrl(uri, mode: LaunchMode.platformDefault);
       } else {
-        ScaffoldMessenger.of(
+        // ScaffoldMessenger.of(
+        //   context,
+        // ).showSnackBar(SnackBar(content: Text("Cannot open dialer")));
+        showTopSnackBar(
           context,
-        ).showSnackBar(SnackBar(content: Text("Cannot open dialer")));
+          message: "Cannot open dialer",
+          backgroundColor: Colors.red, // optional
+        );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
+      //  ScaffoldMessenger.of(
+      //   context,
+      // ).showSnackBar(SnackBar(content: Text("Error launching dialer: $e")));
+      showTopSnackBar(
         context,
-      ).showSnackBar(SnackBar(content: Text("Error launching dialer: $e")));
+        message: "Error launching dialer: $e",
+        backgroundColor: Colors.red, // optional
+      );
     }
   }
 

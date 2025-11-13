@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:timber_app/Snack_Message.dart';
 
 class ARM_SentTO_CO extends StatefulWidget {
   final String poc;
@@ -263,15 +264,20 @@ class _ARM_SentTO_COState extends State<ARM_SentTO_CO> {
                                 }
                               })
                               .then((_) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //   SnackBar(
+                                  //     backgroundColor: Colors.green,
+                                  //     content: Text(
+                                  //       "Job Placed Successfully",
+                                  //       style: TextStyle(color: Colors.white),
+                                  //     ),
+                                  //   ),
+                                  // );
+                                  showTopSnackBar(
+                                    context,
+                                    message: "Job Sent Successfully",
                                     backgroundColor: Colors.green,
-                                    content: Text(
-                                      "Job Placed Successfully",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                );
+                                  );
                               })
                               .then((_) {
                                 Navigator.pop(context);
@@ -279,12 +285,17 @@ class _ARM_SentTO_COState extends State<ARM_SentTO_CO> {
                                 Navigator.pop(context);
                               })
                               .catchError((error) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Failed to update data: $error',
-                                    ),
-                                  ),
+                                // ScaffoldMessenger.of(context).showSnackBar(
+                                //   SnackBar(
+                                //     content: Text(
+                                //       'Failed to update data: $error',
+                                //     ),
+                                //   ),
+                                // );
+                                showTopSnackBar(
+                                  context,
+                                  message: "Failed to update data: $error",
+                                  backgroundColor: Colors.red,
                                 );
                               });
                         }

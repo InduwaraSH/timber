@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:timber_app/Snack_Message.dart';
 
 class Create_Form_Rm extends StatefulWidget {
   final String office_location;
@@ -33,7 +34,6 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
     if (date == null) return '';
     return "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -360,15 +360,10 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                               await InternetConnection().hasInternetAccess;
 
                           if (result == false) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'No internet connection',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                duration: Duration(seconds: 3),
-                                backgroundColor: Colors.grey,
-                              ),
+                            showTopSnackBar(
+                              context,
+                              message: "No",
+                              backgroundColor: Colors.red, // optional
                             );
                             return;
                           } else {
@@ -376,15 +371,21 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                 SerialController.text.isEmpty ||
                                 LetterNumController.text.isEmpty ||
                                 _selectedDate == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Please fill all fields correctly ${getFormattedDate(_selectedDate)}.',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  duration: Duration(seconds: 5),
-                                  backgroundColor: Colors.red,
-                                ),
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(
+                              //     content: Text(
+                              //       'Please fill all fields correctly ${getFormattedDate(_selectedDate)}.',
+                              //       style: TextStyle(color: Colors.white),
+                              //     ),
+                              //     duration: Duration(seconds: 5),
+                              //     backgroundColor: Colors.red,
+                              //   ),
+                              // );
+                              showTopSnackBar(
+                                context,
+                                message:
+                                    "Please fill all fields correctly ${getFormattedDate(_selectedDate)}.",
+                                backgroundColor: Colors.red, // optional
                               );
                               return;
                             } else {
@@ -511,23 +512,33 @@ class _Create_Form_RmState extends State<Create_Form_Rm> {
                                   .then((_) {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        backgroundColor: Colors.green,
-                                        content: Text(
-                                          "Request Sent Successfully",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
+                                    // ScaffoldMessenger.of(context).showSnackBar(
+                                    //   SnackBar(
+                                    //     backgroundColor: Colors.green,
+                                    //     content: Text(
+                                    //       "Request Sent Successfully",
+                                    //       style: TextStyle(color: Colors.white),
+                                    //     ),
+                                    //   ),
+                                    // );
+                                    showTopSnackBar(
+                                      context,
+                                      message: "Request Sent Successfully",
+                                      backgroundColor: Colors.green, // optional
                                     );
                                   })
                                   .catchError((error) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Failed to update data: $error',
-                                        ),
-                                      ),
+                                    // ScaffoldMessenger.of(context).showSnackBar(
+                                    //   SnackBar(
+                                    //     content: Text(
+                                    //       'Failed to update data: $error',
+                                    //     ),
+                                    //   ),
+                                    // );
+                                    showTopSnackBar(
+                                      context,
+                                      message: "Failed to update data: $error",
+                                      backgroundColor: Colors.red, // optional
                                     );
                                   });
                             }
