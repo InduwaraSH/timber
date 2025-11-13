@@ -7,9 +7,11 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:timber_app/ARM/ARM_RecivedViewApproved.dart';
 import 'package:timber_app/ARM/ARM_Tree_Cut_state.dart';
+import 'package:timber_app/RM/RM_SentView_Approve.dart';
+import 'package:timber_app/RM/RM_SentView_NotApprove.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ARM_Procumented_view extends StatefulWidget {
+class RM_Procumented_view extends StatefulWidget {
   final String poc;
   final String DateInformed;
   final String LetterNo;
@@ -35,7 +37,7 @@ class ARM_Procumented_view extends StatefulWidget {
   final String ARM_ID;
   final String RM_ID;
 
-  const ARM_Procumented_view({
+  const RM_Procumented_view({
     super.key,
     required this.poc,
     required this.DateInformed,
@@ -64,10 +66,10 @@ class ARM_Procumented_view extends StatefulWidget {
   });
 
   @override
-  State<ARM_Procumented_view> createState() => _ARM_Procumented_viewState();
+  State<RM_Procumented_view> createState() => _RM_Procumented_viewState();
 }
 
-class _ARM_Procumented_viewState extends State<ARM_Procumented_view> {
+class _RM_Procumented_viewState extends State<RM_Procumented_view> {
   final DatabaseReference _dbRef = FirebaseDatabase.instance.ref();
   final ScrollController _scrollController = ScrollController();
 
@@ -297,27 +299,26 @@ class _ARM_Procumented_viewState extends State<ARM_Procumented_view> {
                     const SizedBox(width: 8),
                     Row(
                       children: [
-                        FloatingActionButton(
-                          onPressed: () => _openArmReceivedSheet(context),
-                          backgroundColor: Colors.black,
-                          child: const Icon(
-                            Icons.forest_rounded,
-                            size: 30,
-                            color: Colors.green,
-                          ),
-                        ),
+                        // FloatingActionButton(
+                        //   onPressed: () => _openArmReceivedSheet(context),
+                        //   backgroundColor: Colors.black,
+                        //   child: const Icon(
+                        //     Icons.forest_rounded,
+                        //     size: 30,
+                        //     color: Colors.green,
+                        //   ),
+                        // ),
                         const SizedBox(width: 12),
                         FloatingActionButton(
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => ArmRecivedviewapproved(
+                                builder: (context) => RmSentviewApprove(
                                   poc: widget.poc,
                                   DateInformed: widget.DateInformed,
                                   LetterNo: widget.LetterNo,
                                   SerialNum: widget.SerialNum,
-                                  OfficerName: widget.OfficerName,
                                   OfficerPositionAndName:
                                       widget.OfficerPositionAndName,
                                   donor_details: widget.donor_details,
@@ -326,19 +327,18 @@ class _ARM_Procumented_viewState extends State<ARM_Procumented_view> {
                                   office_location: widget.office_location,
                                   PlaceOfCoupe_exact_from_arm:
                                       widget.PlaceOfCoupe_exact_from_arm,
-                                  user_name: widget.user_name,
-                                  ARM_Branch_Name: widget.ARM_Branch_Name,
+                                  OfficerName: widget.OfficerName,
+
+                                  user_name: widget.RM_ID,
                                   ARM_Office: widget.ARM_Office,
-                                  Income: widget.Income,
-                                  Outcome: widget.Outcome,
-                                  Profit: widget.Profit,
-                                  Status: widget.Status,
-                                  ADGM_ID: widget.ADGM_ID,
-                                  RM_office: widget.RM_office,
+                                  Income: widget.Income.toString(),
+                                  Outcome: widget.Outcome.toString(),
+                                  Profit: widget.Profit.toString(),
+                                  ARM_Id: widget.ARM_ID,
                                   CO_id: widget.CO_id,
                                   CO_name: widget.CO_name,
-                                  ARM_ID: widget.ARM_ID,
-                                  RM_ID: widget.RM_ID,
+                                  AGM_ID: widget.ADGM_ID,
+                                  Status: widget.Status,
                                 ),
                               ),
                             );

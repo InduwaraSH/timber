@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
+import 'package:timber_app/RM/RM_Proc_view.dart';
 import 'package:timber_app/RM/RM_SentView_Approve.dart';
 import 'package:timber_app/RM/RM_SentView_NotApprove.dart';
 import 'package:timber_app/RM/sent_CardView.dart';
@@ -198,6 +199,36 @@ class _RmSentState extends State<RmSent> {
 
       To = Sent_TO;
       RM_ID = Sent['info']['RM_Id'] ?? "N/A";
+    } else if (K == "PROCUMENTED") {
+      poc = Sent['info']['placeofcoupe'] ?? "N/A";
+      poc_exact = Sent['info']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
+      DateInformed = Sent['info']['dateinformed_from_rm'] ?? "N/A";
+      LetterNo = Sent['info']['LetterNo'] ?? "N/A";
+      SerialNum = Sent['info']['serialnum'] ?? "N/A";
+      OfficerName = Sent['info']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName = Sent['info']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['info']['donor_details'] ?? "N/A";
+      Condition = Sent['info']['Condition'] ?? "N/A";
+      treeCount = Sent['info']['TreeCount'] ?? "N/A";
+      CO_name = Sent['info']['CO_name'] ?? "N/A";
+      CO_id = Sent['info']['CO_id'] ?? "N/A";
+      ARM_Id = Sent['info']['ARM_Id'] ?? "N/A";
+      Income = Sent['info']['income'].toString() ?? "N/A";
+      Outcome = Sent['info']['outcome'].toString() ?? "N/A";
+      Profit =
+          ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
+              .toString();
+      ARM_office = Sent['info']['ARM_location'] ?? "N/A";
+      latestUpdate = Sent['info']['latest_update'] ?? "";
+      statusColour = Color.fromRGBO(52, 199, 89, 1);
+      To = "ARM - $ARM_Id";
+      AGM_ID = Sent['info']['ADGM_ID'] ?? "N/A";
+      if (AGM_ID == "N/A" || AGM_ID == "") {
+        Status = "RM Approved";
+        AGM_ID = "RM Approved";
+      } else {
+        Status = Sent['info']['Status'] ?? "N/A";
+      }
     }
 
     return CupertinoButton(
@@ -272,6 +303,41 @@ class _RmSentState extends State<RmSent> {
                 ARM_Id: ARM_Id,
                 CO_id: CO_id,
                 CO_name: CO_name,
+              ),
+            ),
+          );
+        } else if (K == "PROCUMENTED") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RM_Procumented_view(
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc_exact,
+                OfficerName: OfficerName,
+
+                user_name: widget.username,
+                ARM_Office: ARM_office,
+                Income: Income.toString(),
+                Outcome: Outcome.toString(),
+                Profit: Profit.toString(),
+
+                CO_id: CO_id,
+                CO_name: CO_name,
+
+                Status: Status,
+                ARM_Branch_Name: ARM_office,
+                ADGM_ID: AGM_ID,
+                RM_office: widget.office_location,
+                ARM_ID: ARM_Id,
+                RM_ID: RM_ID,
               ),
             ),
           );
