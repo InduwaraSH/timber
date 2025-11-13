@@ -1,8 +1,11 @@
+import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:ui';
+import 'package:iconsax/iconsax.dart';
 
 class ARM_Pro_call extends StatefulWidget {
   final String poc;
@@ -63,53 +66,133 @@ class ARM_Pro_call extends StatefulWidget {
 }
 
 class _ARM_Pro_callState extends State<ARM_Pro_call> {
+  int currentIndex = 0;
   final TextEditingController _countController = TextEditingController();
-  final List<TextEditingController> _idControllers = [];
-  final List<TextEditingController> _nameControllers = [];
-  final List<TextEditingController> _valueControllers = [];
-  final List<TextEditingController> _mobileControllers = [];
-
-  int holderCount = 0;
-  final PageController _pageController = PageController();
   bool showCards = false;
+  int holderCount = 0;
+  int? selectedOptionIndex;
 
-  final databaseRef = FirebaseDatabase.instance.ref();
+  late PageController _pageController;
+
+  final List<String> fields = ["Procurement ID", "Name", "Mobile", "Value"];
+  late List<Map<String, TextEditingController>> _controllersPerOption;
+  late List<Map<String, FocusNode>> _focusNodesPerOption;
+
+  int? _focusedIndex;
+  String? _focusedField;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
 
   void _generateFields() {
     setState(() {
       holderCount = int.tryParse(_countController.text.trim()) ?? 0;
-      _idControllers.clear();
-      _nameControllers.clear();
-      _valueControllers.clear();
-      _mobileControllers.clear();
 
+      _controllersPerOption = List.generate(holderCount, (index) {
+        return {for (var f in fields) f: TextEditingController()};
+      });
+
+      _focusNodesPerOption = List.generate(holderCount, (index) {
+        return {for (var f in fields) f: FocusNode()};
+      });
+
+      // Focus listeners
       for (int i = 0; i < holderCount; i++) {
-        _idControllers.add(TextEditingController());
-        _nameControllers.add(TextEditingController());
-        _valueControllers.add(TextEditingController());
-        _mobileControllers.add(TextEditingController());
+        for (var f in fields) {
+          _focusNodesPerOption[i][f]!.addListener(() {
+            if (_focusNodesPerOption[i][f]!.hasFocus) {
+              setState(() {
+                _focusedIndex = i;
+                _focusedField = f;
+              });
+            } else if (_focusedIndex == i && _focusedField == f) {
+              setState(() {
+                _focusedIndex = null;
+                _focusedField = null;
+              });
+            }
+          });
+        }
       }
 
       showCards = holderCount > 0;
     });
   }
 
+  void _next() {
+    if (currentIndex < holderCount - 1) {
+      setState(() {
+        currentIndex++;
+      });
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      _saveData();
+    }
+  }
+
+  void _back() {
+    if (currentIndex > 0) {
+      setState(() {
+        currentIndex--;
+      });
+      _pageController.previousPage(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   Future<void> _saveData() async {
+    if (selectedOptionIndex == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Please select a procurement option before saving.",
+            style: TextStyle(fontFamily: "sfproRoundSemiB"),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    final i = selectedOptionIndex!;
+    final controllers = _controllersPerOption[i];
+
+    // Validate fields
+    for (var f in fields) {
+      if (controllers[f]!.text.trim().isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("$f is required!"),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+    }
+
     final branch = widget.ARM_Branch_Name;
     final serial = widget.SerialNum;
     final office = widget.ARM_Branch_Name;
     final RM = widget.RM_office;
-
     final database = FirebaseDatabase.instance.ref();
     DatabaseReference ref = database.child('procurement/$branch/$serial');
 
-    for (int i = 0; i < holderCount; i++) {
-      String optionKey = 'option${i + 1}';
-      await ref.child(optionKey).set({
-        'procurement_id': _idControllers[i].text.trim(),
-        'procurementer_name': _nameControllers[i].text.trim(),
-        'procurement_value': _valueControllers[i].text.trim(),
-        'procurement_mobile': _mobileControllers[i].text.trim(),
+    for (int j = 0; j < holderCount; j++) {
+      await ref.child('option${j + 1}').set({
+        'procurement_id': _controllersPerOption[j]["Procurement ID"]!.text
+            .trim(),
+        'procurementer_name': _controllersPerOption[j]["Name"]!.text.trim(),
+        'procurement_value': _controllersPerOption[j]["Value"]!.text.trim(),
+        'procurement_mobile': _controllersPerOption[j]["Mobile"]!.text.trim(),
+        'selected': j == selectedOptionIndex,
         'saved_at': DateTime.now().toIso8601String(),
       });
     }
@@ -120,27 +203,22 @@ class _ARM_Pro_callState extends State<ARM_Pro_call> {
         .child("Recived")
         .child(serial)
         .update({"from": "Procumented"});
-
     await database
         .child('RM_branch_data_saved')
         .child(RM)
         .child("Sent")
         .child(serial)
         .update({"from": "Procumented"});
-
-    await FirebaseDatabase.instance
-        .ref()
+    await database
         .child("Status_of_job")
         .child(widget.office_location)
-        .child(widget.SerialNum)
+        .child(serial)
         .child("Status")
         .set("procurement");
-
-    await FirebaseDatabase.instance
-        .ref()
+    await database
         .child("Status_of_job")
         .child(widget.office_location)
-        .child(widget.SerialNum)
+        .child(serial)
         .child("procurement")
         .set(DateFormat('yyyy-MM-dd').format(DateTime.now()));
 
@@ -148,7 +226,7 @@ class _ARM_Pro_callState extends State<ARM_Pro_call> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Procurement data saved successfully ✅"),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.black,
         ),
       );
     }
@@ -159,194 +237,326 @@ class _ARM_Pro_callState extends State<ARM_Pro_call> {
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Cannot launch dialer')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Cannot launch dialer')));
     }
   }
 
-  @override
-  void dispose() {
-    _countController.dispose();
-    for (var c in _idControllers) c.dispose();
-    for (var c in _nameControllers) c.dispose();
-    for (var c in _valueControllers) c.dispose();
-    for (var c in _mobileControllers) c.dispose();
-    _pageController.dispose();
-    super.dispose();
-  }
+  Widget _buildOptionPage(int index) {
+    final controllers = _controllersPerOption[index];
+    final focusNodes = _focusNodesPerOption[index];
+    double progress = (index + 1) / holderCount;
 
-  Widget _buildProcurementCard(int index) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-          child: Container(
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      children: [
+        // Dynamic Island–style top card
+        Center(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.white.withOpacity(0.25), Colors.teal.withOpacity(0.15)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(25),
-              border: Border.all(color: Colors.white.withOpacity(0.3), width: 1.5),
+              color: Colors.black87,
+              borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.teal.withOpacity(0.2),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  offset: Offset(0, 4),
                 ),
               ],
             ),
-            padding: const EdgeInsets.all(24),
-            child: SingleChildScrollView(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Option ${index + 1} of $holderCount",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "sfproRoundSemiB",
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "Fill procurement details below",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                        fontFamily: "sfproRoundSemiB",
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 20),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: CircularProgressIndicator(
+                        value: progress,
+                        strokeWidth: 4,
+                        backgroundColor: Colors.white24,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                      ),
+                    ),
+                    Text(
+                      "${(progress * 100).round()}%",
+                      style: const TextStyle(
+                        color: Colors.green,
+                        fontFamily: "sfproRoundSemiB",
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+
+        // Fields
+        ...fields.map((f) {
+          final controller = controllers[f]!;
+          final node = focusNodes[f]!;
+          final isFocused = (_focusedIndex == index && _focusedField == f);
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(22),
+                boxShadow: [
+                  BoxShadow(
+                    color: isFocused
+                        ? Colors.black12
+                        : Colors.grey.withOpacity(0.08),
+                    blurRadius: isFocused ? 18 : 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: Text(
-                      "Procurement Option ${index + 1} / $holderCount",
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.teal,
-                      ),
+                  Text(
+                    f,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: isFocused ? Colors.black : Colors.black87,
+                      fontFamily: "sfproRoundSemiB",
+                      fontSize: 20,
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  TextField(
-                    controller: _idControllers[index],
-                    decoration: _inputStyle("Procurement ID"),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _nameControllers[index],
-                    decoration: _inputStyle("Procurementer Name"),
-                  ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 2),
                   Row(
                     children: [
                       Expanded(
                         child: TextField(
-                          controller: _mobileControllers[index],
-                          keyboardType: TextInputType.phone,
-                          decoration: _inputStyle("Mobile Number"),
+                          controller: controller,
+                          focusNode: node,
+                          keyboardType: f == "Mobile" || f == "Value"
+                              ? TextInputType.number
+                              : TextInputType.text,
+                          decoration: InputDecoration(
+                            hintText: "Enter $f",
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: Colors.grey[400],
+                              fontFamily: "sfproRoundSemiB",
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              _focusedIndex = index;
+                              _focusedField = f;
+                            });
+                          },
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                        onPressed: () =>
-                            _launchDialer(_mobileControllers[index].text.trim()),
-                        icon: const Icon(Icons.phone_rounded, color: Colors.teal, size: 30),
-                      ),
+                      if (f == "Mobile")
+                        IconButton(
+                          onPressed: () =>
+                              _launchDialer(controller.text.trim()),
+                          icon: const Icon(
+                            Iconsax.call5,
+                            color: Colors.black87,
+                          ),
+                        ),
                     ],
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _valueControllers[index],
-                    keyboardType: TextInputType.number,
-                    decoration: _inputStyle("Procurement Value"),
-                  ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: Text(
-                      "Swipe → to next option",
-                      style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-                    ),
                   ),
                 ],
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
+          );
+        }),
+        const SizedBox(height: 16),
 
-  InputDecoration _inputStyle(String label) {
-    return InputDecoration(
-      labelText: label,
-      filled: true,
-      fillColor: Colors.white.withOpacity(0.4),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide.none,
-      ),
+        // Navigation Buttons
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (index > 0)
+              FloatingActionButton(
+                onPressed: _back,
+                mini: true,
+                backgroundColor: Colors.black,
+                child: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ),
+            FloatingActionButton(
+              onPressed: _next,
+              backgroundColor: Colors.black,
+              child: const Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
+                size: 18,
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 12),
+
+        // Checkbox to select option
+        Row(
+          children: [
+            Transform.scale(
+              scale: 1.8,
+              child: CupertinoCheckbox(
+                value: selectedOptionIndex == index,
+                onChanged: (val) {
+                  setState(() {
+                    selectedOptionIndex = val! ? index : null;
+                  });
+                },
+                activeColor: Colors.black87,
+              ),
+            ),
+            const Text(
+              "Select this option as the chosen procurement",
+              style: TextStyle(fontSize: 16, fontFamily: "sfproRoundSemiB"),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE7F5F2),
-      appBar: AppBar(
-        title: const Text("Procurement Details"),
-        backgroundColor: Colors.teal,
-        elevation: 4,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      backgroundColor: const Color(0xFFF5F5F5),
+      body: SafeArea(
         child: showCards
-            ? Column(
-                children: [
-                  Expanded(
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: holderCount,
-                      itemBuilder: (context, index) =>
-                          _buildProcurementCard(index),
-                    ),
-                  ),
-                ],
+            ? PageView.builder(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: holderCount,
+                itemBuilder: (_, index) => _buildOptionPage(index),
               )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Enter Number of Procurement Holders",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.teal),
-                  ),
-                  const SizedBox(height: 15),
-                  TextField(
-                    controller: _countController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: "Number of Options",
-                      border: OutlineInputBorder(),
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton.icon(
-                    onPressed: _generateFields,
-                    icon: const Icon(Icons.play_arrow_rounded),
-                    label: const Text("Start Adding Details"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal,
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                    const SizedBox(height: 20),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Enter Number of\nProcurement Holders",
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontFamily: "sfproRoundSemiB",
+                          height: 1.3,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 40),
+                    TextField(
+                      controller: _countController,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "sfproRoundSemiB",
+                      ),
+                      decoration: InputDecoration(
+                        hintText: "Number of Options",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 18,
+                          fontFamily: "sfproRoundSemiB",
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 20,
+                          horizontal: 16,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: _generateFields,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                        child: const Text(
+                          "Next",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontFamily: "sfproRoundSemiB",
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
       ),
-      floatingActionButton: showCards
-          ? FloatingActionButton.extended(
-              onPressed: _saveData,
-              icon: const Icon(Icons.save_rounded),
-              label: const Text("Save All"),
-              backgroundColor: Colors.teal,
-              elevation: 8,
-            )
-          : null,
     );
   }
 }

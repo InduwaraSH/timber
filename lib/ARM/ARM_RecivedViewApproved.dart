@@ -460,6 +460,7 @@ class _ArmRecivedviewapprovedState extends State<ArmRecivedviewapproved> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
         bottom: false,
+
         child: SingleChildScrollView(
           controller: _scrollController,
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
