@@ -40,12 +40,12 @@ class ArmRecivedviewCo extends StatefulWidget {
     required this.office_location,
     required this.PlaceOfCoupe_exact_from_arm,
     required this.user_name,
-   
 
     required this.ARM_Office,
     required this.RM_office,
-  
-    required this.CO_id, required this.co_name,
+
+    required this.CO_id,
+    required this.co_name,
   });
 
   @override
@@ -291,7 +291,9 @@ class _ArmRecivedviewCoState extends State<ArmRecivedviewCo> {
   @override
   Widget build(BuildContext context) {
     final infoItems = [
-      {"label": "CO", "value": widget.user_name},
+      {"label": "CO id", "value": widget.CO_id},
+      {"label": "CO_Name", "value": widget.co_name},
+      {"label": "RM Office", "value": widget.RM_office},
       {"label": "POC", "value": widget.poc},
       {"label": "Place of Coupe", "value": widget.PlaceOfCoupe_exact_from_arm},
       {"label": "Date Informed", "value": widget.DateInformed},
@@ -422,7 +424,8 @@ class _ArmRecivedviewCoState extends State<ArmRecivedviewCo> {
                     office_location: widget.office_location,
                     PlaceOfCoupe_exact_from_arm:
                         widget.PlaceOfCoupe_exact_from_arm,
-                    RM_office: widget.RM_office, ARM_Branch_Name: '',
+                    RM_office: widget.RM_office,
+                    ARM_Branch_Name: '',
                   ),
                 ),
               );
@@ -435,7 +438,7 @@ class _ArmRecivedviewCoState extends State<ArmRecivedviewCo> {
           label: const Row(
             children: [
               Text(
-                "Confirm & Save",
+                "Confirm & Next",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontFamily: 'sfproRoundSemiB',
@@ -444,7 +447,7 @@ class _ArmRecivedviewCoState extends State<ArmRecivedviewCo> {
                 ),
               ),
               SizedBox(width: 8),
-              Icon(Iconsax.tick_circle, color: Colors.white),
+              Icon(Iconsax.arrow_right, color: Colors.white, size: 25),
             ],
           ),
         ),

@@ -10,7 +10,12 @@ import 'package:timber_app/ARM/ARM_SentView_RM.dart';
 
 class ARM_Sent extends StatefulWidget {
   final String office_location;
-  const ARM_Sent({super.key, required this.office_location});
+  final String username;
+  const ARM_Sent({
+    super.key,
+    required this.office_location,
+    required this.username,
+  });
 
   @override
   State<ARM_Sent> createState() => _ARM_SentState();
@@ -70,6 +75,10 @@ class _ARM_SentState extends State<ARM_Sent> {
     String latestUpdate = "";
     String To_Doc = Sent['To'] ?? "N/A";
     String RM_Id = Sent['From_RM_ID'] ?? "N/A";
+    String Income = "";
+    String Outcome = "";
+    String Ptofit = "";
+
     Color statusColour = Colors.green;
 
     if (Reciver == "RM") {
@@ -83,10 +92,14 @@ class _ARM_SentState extends State<ARM_Sent> {
       donor_details = Sent['info']['donor_details'] ?? "N/A";
       Condition = Sent['info']['Condition'] ?? "N/A";
       treeCount = Sent['info']['treeCount'] ?? "N/A";
-      CO_name = Sent['info']['CO_id'] ?? "N/A";
-      ARM_ID = Sent['info']['arm_id'] ?? "N/A";
-      ARM_office = Sent['info']['ARM_location'] ?? "N/A";
-      latestUpdate = Sent['info']['latest_update'] ?? "";
+      CO_name = Sent['info']['CO_name'] ?? "N/A";
+      //ARM_ID = Sent['info']['arm_id'] ?? "N/A";
+
+      co_id = Sent['info']['CO_id'] ?? "N/A";
+      latestUpdate = Sent['info']['latest_update'] ?? "N/A";
+      Income = Sent['info']['Income'] ?? "N/A";
+      Outcome = Sent['info']['Outcome'] ?? "N/A";
+
       To_Doc = "RM";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
     } else if (Reciver == "CO") {
@@ -136,7 +149,18 @@ class _ARM_SentState extends State<ARM_Sent> {
                 office_location: widget.office_location,
                 PlaceOfCoupe_exact_from_arm: poc,
                 OfficerName: OfficerName,
-                user_name: '',
+                user_name: widget.username,
+                CO_name: CO_name,
+
+                CO_id: co_id,
+
+                Income: Income,
+                Outcome: Outcome,
+                Profit:
+                    ((double.tryParse(Income.toString()) ?? 0) -
+                            (double.tryParse(Outcome.toString()) ?? 0))
+                        .toString(),
+
                 ARM_Office: branchName,
               ),
             ),

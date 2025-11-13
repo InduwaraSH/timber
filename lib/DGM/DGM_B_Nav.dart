@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timber_app/CO/CO_Sent.dart';
 import 'package:timber_app/DGM/DGM_Recived.dart';
-
+import 'package:timber_app/DGM/DGM_Sent.dart';
 
 class dgm_b_navbar extends StatefulWidget {
   final String office_location;
@@ -235,7 +235,7 @@ class DGMNavigControll extends GetxController {
   ];
 
   late final List<Widget> screens = [
-    DGMRecived(office_location: office_location, username: username),
-    CO_Sent(office_location: office_location, username: username),
+    DgmRecived(office_location: office_location, username: username),
+    DgmSent(office_location: office_location, username: username),
   ];
 }

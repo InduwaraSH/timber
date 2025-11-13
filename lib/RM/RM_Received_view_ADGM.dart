@@ -37,6 +37,7 @@ class RmRecivedView_ADGM extends StatefulWidget {
   final String AGM_ID;
   final String Status;
   final String RM_ID;
+  final String ADGM_title;
 
   const RmRecivedView_ADGM({
     super.key,
@@ -62,6 +63,7 @@ class RmRecivedView_ADGM extends StatefulWidget {
     required this.CO_name,
     required this.AGM_ID,
     required this.Status,
+    required this.ADGM_title,
   });
 
   @override
@@ -72,6 +74,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
+  String ADGM_Name = "";
 
   @override
   void initState() {
@@ -271,7 +274,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
       final infoItems = [
         {"label": "Status", "value": widget.Status},
         {"label": "Approved By", "value": widget.AGM_ID},
-        {"label": "AGM ID", "value": widget.AGM_ID},
+        {"label": widget.ADGM_title, "value": widget.AGM_ID},
         {"label": "RM Office", "value": widget.office_location},
         {"label": "RM", "value": widget.RM_ID},
         {"label": "ARM Office", "value": widget.ARM_Office},
@@ -425,7 +428,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
     final infoItems = [
       {"label": "Status", "value": widget.Status},
       {"label": "Approved By", "value": widget.AGM_ID},
-      {"label": "AGM ID", "value": widget.AGM_ID},
+      {"label": widget.ADGM_title, "value": widget.AGM_ID},
       {"label": "RM Office", "value": widget.office_location},
       {"label": "RM", "value": widget.RM_ID},
       {"label": "ARM Office", "value": widget.ARM_Office},
@@ -451,7 +454,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9F8FF),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           int total =
               (int.tryParse(widget.Income) ?? 0) +
@@ -610,27 +613,25 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                               'yyyy-MM-dd HH:mm:ss',
                             ).format(DateTime.now()).toString(),
                           })
-
-                      // Update status_of_job_test
-                      // await FirebaseDatabase.instance
-                      //     .ref()
-                      //     .child("Status_of_job")
-                      //     .child(widget.office_location.toString())
-                      //     .child(widget.SerialNum.toString())
-                      //     .child("Status")
-                      //     .set("approved");
-
-                      // await FirebaseDatabase.instance
-                      //     .ref()
-                      //     .child("Status_of_job")
-                      //     .child(widget.office_location.toString())
-                      //     .child(widget.SerialNum.toString())
-                      //     .child("approved")
-                      //     .set(
-                      //       DateFormat(
-                      //         'yyyy-MM-dd',
-                      //       ).format(DateTime.now()).toString(),
-                      //     )
+                          // Update status_of_job_test
+                          // await FirebaseDatabase.instance
+                          //     .ref()
+                          //     .child("Status_of_job")
+                          //     .child(widget.office_location.toString())
+                          //     .child(widget.SerialNum.toString())
+                          //     .child("Status")
+                          //     .set("approved");
+                          // await FirebaseDatabase.instance
+                          //     .ref()
+                          //     .child("Status_of_job")
+                          //     .child(widget.office_location.toString())
+                          //     .child(widget.SerialNum.toString())
+                          //     .child("approved")
+                          //     .set(
+                          //       DateFormat(
+                          //         'yyyy-MM-dd',
+                          //       ).format(DateTime.now()).toString(),
+                          //     )
                           .then((_) {
                             try {
                               FirebaseDatabase.instance
@@ -669,7 +670,16 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
           );
         },
         backgroundColor: Colors.redAccent,
-        child: const Icon(Iconsax.key1, color: Colors.white, size: 29),
+        label: const Text(
+          "Approve",
+          style: TextStyle(
+            fontFamily: 'sfproRoundSemiB',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+        icon: const Icon(Iconsax.tick_circle, color: Colors.white),
       ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

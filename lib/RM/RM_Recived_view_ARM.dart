@@ -440,7 +440,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9F8FF),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           int total =
               (int.tryParse(widget.Income) ?? 0) +
@@ -1047,7 +1047,16 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
           }
         },
         backgroundColor: Colors.redAccent,
-        child: const Icon(Iconsax.key1, color: Colors.white, size: 29),
+        label: const Text(
+          "Approve",
+          style: TextStyle(
+            fontFamily: 'sfproRoundSemiB',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+        icon: const Icon(Iconsax.tick_circle, color: Colors.white),
       ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

@@ -21,6 +21,12 @@ class ArmSentviewCo extends StatefulWidget {
   final String user_name;
   final String ARM_Branch_Name;
   final String ARM_Office;
+  final String Income;
+  final String Outcome;
+  final String Profit;
+  final String CO_name;
+
+  final String CO_id;
 
   const ArmSentviewCo({
     super.key,
@@ -39,6 +45,12 @@ class ArmSentviewCo extends StatefulWidget {
     required this.ARM_Branch_Name,
 
     required this.ARM_Office,
+    required this.Income,
+    required this.Outcome,
+    required this.Profit,
+    required this.CO_name,
+
+    required this.CO_id,
   });
 
   @override
@@ -259,7 +271,9 @@ class _ArmSentviewCoState extends State<ArmSentviewCo> {
   @override
   Widget build(BuildContext context) {
     final infoItems = [
-      {"label": "CO", "value": widget.user_name},
+      {"label": "ARM_ID", "value": widget.user_name},
+      {"label": "CO", "value": widget.CO_name},
+      {"label": "CO ID", "value": widget.CO_id},
       {"label": "POC", "value": widget.poc},
       {"label": "Place of Coupe", "value": widget.PlaceOfCoupe_exact_from_arm},
       {"label": "Date Informed", "value": widget.DateInformed},
@@ -270,6 +284,9 @@ class _ArmSentviewCoState extends State<ArmSentviewCo> {
       {"label": "Donor Details", "value": widget.donor_details},
       {"label": "Condition", "value": widget.Condition},
       {"label": "Tree Count", "value": widget.treeCount},
+      {"label": "Income", "value": "RS. " + widget.Income},
+      {"label": "Outcome", "value": "RS. " + widget.Outcome},
+      {"label": "Profit", "value": "RS. " + widget.Profit},
     ];
 
     return Scaffold(

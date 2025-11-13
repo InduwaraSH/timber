@@ -92,6 +92,7 @@ class _RMRecivedState extends State<RMRecived> {
     String AGM_ID = "";
     String RM_ID = "";
     String Status = "";
+    String DGM_ID = "";
 
     if (Reciver == "ARM") {
       poc = Sent['info']['poc'] ?? "N/A";
@@ -140,12 +141,43 @@ class _RMRecivedState extends State<RMRecived> {
       ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_Id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
-      RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
       AGM_ID = Sent['timberReportheadlines']['ADGM_id'] ?? "";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
       Status = "AGM Approved";
-      from_doc = "$AGM_ID";
+      from_doc = "$AGM_ID (AGM)";
+    } else if (Reciver == "DGM_Approved") {
+      poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
+      poc_exact =
+          Sent['timberReportheadlines']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
+      DateInformed =
+          Sent['timberReportheadlines']['dateinformed_from_rm'] ?? "N/A";
+      LetterNo = Sent['timberReportheadlines']['LetterNo'] ?? "N/A";
+      SerialNum = Sent['timberReportheadlines']['serialnum'] ?? "N/A";
+      OfficerName = Sent['timberReportheadlines']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName =
+          Sent['timberReportheadlines']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
+      Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
+      treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
+      CO_name = Sent['timberReportheadlines']['CO_name'] ?? "N/A";
+      CO_id = Sent['timberReportheadlines']['CO_id'] ?? "N/A";
+
+      Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
+      Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
+      Profit =
+          ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
+              .toString() ??
+          "N/A";
+      ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
+      RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
+      ARM_Id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
+
+      latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
+      DGM_ID = Sent['timberReportheadlines']['ADGM_id'] ?? "";
+      statusColour = Color.fromRGBO(52, 199, 89, 1);
+      Status = "DGM Approved";
+      from_doc = "$DGM_ID";
     }
 
     return CupertinoButton(
@@ -206,6 +238,38 @@ class _RMRecivedState extends State<RMRecived> {
                 CO_name: CO_name,
                 AGM_ID: AGM_ID,
                 Status: Status,
+                ADGM_title: "AGM",
+              ),
+            ),
+          );
+        } else if (Reciver == "DGM_Approved") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RmRecivedView_ADGM(
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc_exact,
+                OfficerName: OfficerName,
+                RM_ID: RM_ID,
+                user_name: widget.username,
+                ARM_Office: ARM_office,
+                Income: Income.toString(),
+                Outcome: Outcome.toString(),
+                Profit: Profit.toString(),
+                ARM_Id: ARM_Id,
+                CO_id: CO_id,
+                CO_name: CO_name,
+                AGM_ID: DGM_ID,
+                Status: Status,
+                ADGM_title: "DGM",
               ),
             ),
           );

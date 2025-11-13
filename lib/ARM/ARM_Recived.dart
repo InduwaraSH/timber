@@ -119,7 +119,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
       RM_office = Sent['timberReportheadlines']['RM_office'] ?? "N/A";
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
-      from_doc = "CO $CO_name";
+      from_doc = "$CO_name";
       statusColour = Color.fromRGBO(30, 110, 244, 1);
     } else if (from == "RM") {
       branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
