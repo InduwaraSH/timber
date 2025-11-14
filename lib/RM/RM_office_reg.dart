@@ -2,6 +2,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:timber_app/Snack_Message.dart';
+
 class RmOfficeRegister extends StatefulWidget {
   const RmOfficeRegister({super.key});
 
@@ -366,15 +368,10 @@ class _RmOfficeRegisterState extends State<RmOfficeRegister> {
                         onPressed: () async {
                           if (idController.text.isEmpty ||
                               mobileController.text.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Please fill all fields correctly',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                duration: Duration(seconds: 5),
-                                backgroundColor: Colors.red,
-                              ),
+                            showTopSnackBar(
+                              context,
+                              message: "Please fill all fields correctly",
+                              backgroundColor: Colors.red,
                             );
                             return;
                           } else {
@@ -391,27 +388,39 @@ class _RmOfficeRegisterState extends State<RmOfficeRegister> {
                                 .child(idController.text)
                                 .set(branchData)
                                 .then((_) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Registration Successful ${_townName[_selectedTown].toString()}',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      duration: Duration(seconds: 5),
-                                      backgroundColor: Colors.green,
-                                    ),
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //   SnackBar(
+                                  //     content: Text(
+                                  //       'Registration Successful ${_townName[_selectedTown].toString()}',
+                                  //       style: TextStyle(color: Colors.white),
+                                  //     ),
+                                  //     duration: Duration(seconds: 5),
+                                  //     backgroundColor: Colors.green,
+                                  //   ),
+                                  // );
+                                  showTopSnackBar(
+                                    context,
+                                    message:
+                                        "Registration Successful ${_townName[_selectedTown].toString()}",
+                                    backgroundColor: Colors.green,
                                   );
                                 })
                                 .catchError((error) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //   SnackBar(
+                                  //     content: Text(
+                                  //       "Failed to save branch data: $error",
+                                  //       style: TextStyle(color: Colors.white),
+                                  //     ),
+                                  //     duration: Duration(seconds: 5),
+                                  //     backgroundColor: Colors.redAccent,
+                                  //   ),
+                                  // );
+                                  showTopSnackBar(
+                                    context,
+                                    message:
                                         "Failed to save branch data: $error",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      duration: Duration(seconds: 5),
-                                      backgroundColor: Colors.redAccent,
-                                    ),
+                                    backgroundColor: Colors.red,
                                   );
                                 });
                           }

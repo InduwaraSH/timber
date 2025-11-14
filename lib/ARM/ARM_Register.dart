@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:timber_app/Snack_Message.dart';
 
 class ArmRegister extends StatefulWidget {
   const ArmRegister({super.key});
@@ -618,15 +619,20 @@ class _ArmRegisterState extends State<ArmRegister> {
                               await InternetConnection().hasInternetAccess;
 
                           if (result == false) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'No internet connection',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                duration: Duration(seconds: 3),
-                                backgroundColor: Colors.grey,
-                              ),
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //   SnackBar(
+                            //     content: Text(
+                            //       'No internet connection',
+                            //       style: TextStyle(color: Colors.white),
+                            //     ),
+                            //     duration: Duration(seconds: 3),
+                            //     backgroundColor: Colors.grey,
+                            //   ),
+                            // );
+                            showTopSnackBar(
+                              context,
+                              message: 'No internet connection',
+                              backgroundColor: Colors.grey,
                             );
                             return;
                           } else {
@@ -639,15 +645,20 @@ class _ArmRegisterState extends State<ArmRegister> {
                                 passwordReController.text.isEmpty ||
                                 passwordController.text !=
                                     passwordReController.text) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Please fill all fields correctly',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  duration: Duration(seconds: 5),
-                                  backgroundColor: Colors.red,
-                                ),
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(
+                              //     content: Text(
+                              //       'Please fill all fields correctly',
+                              //       style: TextStyle(color: Colors.white),
+                              //     ),
+                              //     duration: Duration(seconds: 5),
+                              //     backgroundColor: Colors.red,
+                              //   ),
+                              // );
+                              showTopSnackBar(
+                                context,
+                                message: 'Please fill all fields correctly',
+                                backgroundColor: Colors.red,
                               );
                               return;
                             } else {
@@ -664,27 +675,39 @@ class _ArmRegisterState extends State<ArmRegister> {
                                   .child(idController.text)
                                   .set(employeeData)
                                   .then((_) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
+                                    // ScaffoldMessenger.of(context).showSnackBar(
+                                    //   SnackBar(
+                                    //     content: Text(
+                                    //       '${usernameController.text} Registration Request Sent Successfully',
+                                    //       style: TextStyle(color: Colors.white),
+                                    //     ),
+                                    //     duration: Duration(seconds: 5),
+                                    //     backgroundColor: Colors.green,
+                                    //   ),
+                                    // );
+                                    showTopSnackBar(
+                                      context,
+                                      message:
                                           '${usernameController.text} Registration Request Sent Successfully',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        duration: Duration(seconds: 5),
-                                        backgroundColor: Colors.green,
-                                      ),
+                                      backgroundColor: Colors.green,
                                     );
                                   })
                                   .catchError((error) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
+                                    // ScaffoldMessenger.of(context).showSnackBar(
+                                    //   SnackBar(
+                                    //     content: Text(
+                                    //       "Failed to save manager data: $error",
+                                    //       style: TextStyle(color: Colors.white),
+                                    //     ),
+                                    //     duration: Duration(seconds: 5),
+                                    //     backgroundColor: Colors.redAccent,
+                                    //   ),
+                                    // );
+                                    showTopSnackBar(
+                                      context,
+                                      message:
                                           "Failed to save manager data: $error",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        duration: Duration(seconds: 5),
-                                        backgroundColor: Colors.redAccent,
-                                      ),
+                                      backgroundColor: Colors.redAccent,
                                     );
                                   });
                             }
