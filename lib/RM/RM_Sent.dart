@@ -139,7 +139,7 @@ class _RmSentState extends State<RmSent> {
       latestUpdate = Sent['latest_update'] ?? "N/A";
 
       To = "ARM $branchName";
-      statusColour = const Color(0xFFFFCB77);
+      statusColour = Color.fromRGBO(255, 204, 0, 1);
     } else if (K == "RM_APPROVED") {
       poc = Sent['info']['placeofcoupe'] ?? "N/A";
       poc_exact = Sent['info']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
@@ -195,7 +195,11 @@ class _RmSentState extends State<RmSent> {
       ARM_Id = Sent['info']['ARM_Id'] ?? "N/A";
 
       latestUpdate = Sent['info']['latest_update'] ?? "N/A";
-      statusColour = Color.fromRGBO(255, 204, 0, 1);
+      if (Sent_TO == "DGM") {
+        statusColour = Color.fromRGBO(30, 110, 244, 1);
+      } else if (Sent_TO == "AGM") {
+        statusColour = Color.fromRGBO(167, 170, 244, 255);
+      }
 
       To = Sent_TO;
       RM_ID = Sent['info']['RM_Id'] ?? "N/A";

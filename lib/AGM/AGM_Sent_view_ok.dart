@@ -1,4 +1,3 @@
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +76,7 @@ class _AGM_Sent_approved_viewState extends State<AGM_Sent_approved_view> {
         .ref()
         .child('Head_office_data_saved')
         .child("AGM")
-        .child("Recived")
+        .child("Send")
         .child(widget.SerialNum)
         .child("allTrees");
 

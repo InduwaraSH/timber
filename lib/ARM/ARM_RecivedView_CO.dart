@@ -295,7 +295,7 @@ class _ArmRecivedviewCoState extends State<ArmRecivedviewCo> {
       {"label": "CO_Name", "value": widget.co_name},
       {"label": "RM Office", "value": widget.RM_office},
       {"label": "POC", "value": widget.poc},
-      {"label": "Place of Coupe", "value": widget.PlaceOfCoupe_exact_from_arm},
+      {"label": "Location", "value": widget.PlaceOfCoupe_exact_from_arm},
       {"label": "Date Informed", "value": widget.DateInformed},
       {"label": "Letter No", "value": widget.LetterNo},
       {"label": "Serial No", "value": widget.SerialNum},

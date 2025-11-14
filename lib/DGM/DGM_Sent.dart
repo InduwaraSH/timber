@@ -27,10 +27,7 @@ class _DgmSentState extends State<DgmSent> {
   bool _showHeader = true;
   String searchQuery = ""; // For search filtering
 
-  Color statusColour = const Color(0xFFEDEBFF);
-  String latestUpdate = "";
-
-  List<Map> _sentList = []; // Added to store and sort items
+  List<Map> _sentList = []; // Store and sort items
 
   @override
   void initState() {
@@ -51,7 +48,7 @@ class _DgmSentState extends State<DgmSent> {
       }
     });
 
-    // Fetch once and listen for changes to apply sorting
+    // Fetch and listen
     dbref.onValue.listen((event) {
       if (event.snapshot.value != null) {
         Map data = event.snapshot.value as Map;
@@ -63,18 +60,19 @@ class _DgmSentState extends State<DgmSent> {
           tempList.add(sent);
         });
 
+        // Sort items by latest_update descending
         tempList.sort((a, b) {
-          final aDateStr = _extractLatestUpdate(a);
-          final bDateStr = _extractLatestUpdate(b);
+          String aDateStr = _extractLatestUpdate(a);
+          String bDateStr = _extractLatestUpdate(b);
 
-          final aDate = aDateStr.isNotEmpty
+          DateTime aDate = aDateStr.isNotEmpty
               ? DateTime.tryParse(aDateStr) ?? DateTime(1900)
               : DateTime(1900);
-          final bDate = bDateStr.isNotEmpty
+          DateTime bDate = bDateStr.isNotEmpty
               ? DateTime.tryParse(bDateStr) ?? DateTime(1900)
               : DateTime(1900);
 
-          return bDate.compareTo(aDate); // latest first
+          return bDate.compareTo(aDate);
         });
 
         setState(() {
@@ -85,11 +83,8 @@ class _DgmSentState extends State<DgmSent> {
   }
 
   String _extractLatestUpdate(Map sent) {
-    if (sent['from'] == 'AGM_Approved') {
-      return sent['latest_update'] ?? '';
-    } else if (sent['from'] == 'AGM_Approved' ||
-        sent['from'] == 'RM_N_Approved') {
-      return sent['info']?['latest_update'] ?? '';
+    if (sent['info'] != null && sent['info']['latest_update'] != null) {
+      return sent['info']['latest_update'];
     }
     return '';
   }
@@ -123,9 +118,7 @@ class _DgmSentState extends State<DgmSent> {
     String latestUpdate = Sent['info']['latest_update'] ?? "N/A";
     String TO_DOC = "RM Office $RM_office";
     String ADGM_Id = Sent['info']['RM_Id'] ?? "N/A";
-    Color statusColour = Color(0xFF5065D8);
-
-    statusColour = Color.fromRGBO(52, 199, 89, 1);
+    Color statusColour = Color.fromRGBO(52, 199, 89, 1);
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
@@ -205,7 +198,7 @@ class _DgmSentState extends State<DgmSent> {
                     maxLines: 1,
                     softWrap: false,
                     style: const TextStyle(
-                      fontSize: 26, // reduce from 33 to fit better
+                      fontSize: 26,
                       fontFamily: "sfproRoundSemiB",
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
@@ -279,19 +272,14 @@ class _DgmSentState extends State<DgmSent> {
             const Divider(thickness: 0.6, color: Colors.black12),
             const SizedBox(height: 10),
 
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Document Sent To :",
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontFamily: "sfproRoundSemiB",
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
+            const Text(
+              "Document Sent To :",
+              style: TextStyle(
+                fontSize: 15,
+                fontFamily: "sfproRoundSemiB",
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
             ),
             const SizedBox(height: 10),
 
@@ -302,7 +290,7 @@ class _DgmSentState extends State<DgmSent> {
                   children: [
                     CircleAvatar(
                       radius: 17,
-                      backgroundColor: const Color.fromARGB(0, 238, 238, 238),
+                      backgroundColor: Colors.transparent,
                       child: ClipOval(
                         child: AvatarPlus(TO_DOC, height: 40, width: 40),
                       ),
@@ -385,8 +373,8 @@ class _DgmSentState extends State<DgmSent> {
                         padding: const EdgeInsets.only(left: 28, right: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
+                          children: const [
+                            Text(
                               "Sent",
                               style: TextStyle(
                                 fontSize: 50,
@@ -401,6 +389,7 @@ class _DgmSentState extends State<DgmSent> {
                     : null,
               ),
 
+              /// Search Bar
               Container(
                 margin: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -435,16 +424,11 @@ class _DgmSentState extends State<DgmSent> {
                   itemCount: _sentList.length,
                   itemBuilder: (context, index) {
                     Map sent = _sentList[index];
-
-                    final String pocVal =
-                        sent['placeOfCoupe'] ??
-                        sent['info']?['placeofcoupe'] ??
-                        "";
+                    final String pocVal = sent['info']?['placeofcoupe'] ?? "";
                     if (searchQuery.isNotEmpty &&
                         !pocVal.toLowerCase().contains(searchQuery)) {
                       return const SizedBox.shrink();
                     }
-
                     return listItem(Sent: sent, index: index);
                   },
                 ),

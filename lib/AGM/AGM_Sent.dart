@@ -26,10 +26,7 @@ class _AgmSentState extends State<AgmSent> {
   bool _showHeader = true;
   String searchQuery = ""; // For search filtering
 
-  Color statusColour = const Color(0xFFEDEBFF);
-  String latestUpdate = "";
-
-  List<Map> _sentList = []; // Added to store and sort items
+  List<Map> _sentList = []; // Store and sort items
 
   @override
   void initState() {
@@ -50,7 +47,6 @@ class _AgmSentState extends State<AgmSent> {
       }
     });
 
-    // Fetch once and listen for changes to apply sorting
     dbref.onValue.listen((event) {
       if (event.snapshot.value != null) {
         Map data = event.snapshot.value as Map;
@@ -62,18 +58,19 @@ class _AgmSentState extends State<AgmSent> {
           tempList.add(sent);
         });
 
+        // ✅ Sort only by latest_update descending
         tempList.sort((a, b) {
-          final aDateStr = _extractLatestUpdate(a);
-          final bDateStr = _extractLatestUpdate(b);
+          String aDateStr = a['info']?['latest_update'] ?? '';
+          String bDateStr = b['info']?['latest_update'] ?? '';
 
-          final aDate = aDateStr.isNotEmpty
+          DateTime aDate = aDateStr.isNotEmpty
               ? DateTime.tryParse(aDateStr) ?? DateTime(1900)
               : DateTime(1900);
-          final bDate = bDateStr.isNotEmpty
+          DateTime bDate = bDateStr.isNotEmpty
               ? DateTime.tryParse(bDateStr) ?? DateTime(1900)
               : DateTime(1900);
 
-          return bDate.compareTo(aDate); // latest first
+          return bDate.compareTo(aDate); // latest on top
         });
 
         setState(() {
@@ -81,16 +78,6 @@ class _AgmSentState extends State<AgmSent> {
         });
       }
     });
-  }
-
-  String _extractLatestUpdate(Map sent) {
-    if (sent['from'] == 'AGM_Approved') {
-      return sent['latest_update'] ?? '';
-    } else if (sent['from'] == 'AGM_Approved' ||
-        sent['from'] == 'RM_N_Approved') {
-      return sent['info']?['latest_update'] ?? '';
-    }
-    return '';
   }
 
   @override
@@ -122,9 +109,7 @@ class _AgmSentState extends State<AgmSent> {
     String latestUpdate = Sent['info']['latest_update'] ?? "N/A";
     String TO_DOC = "RM Office $RM_office";
     String ADGM_Id = Sent['info']['RM_Id'] ?? "N/A";
-    Color statusColour = Color(0xFF5065D8);
-
-    statusColour = Color.fromRGBO(52, 199, 89, 1);
+    Color statusColour = Color.fromRGBO(52, 199, 89, 1);
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
@@ -151,7 +136,7 @@ class _AgmSentState extends State<AgmSent> {
               Outcome: Outcome,
               CO_id: CO_id,
               ARM_id: ARM_id,
-              RM_office: Sent['info']?['RM Office'] ?? "N/A",
+              RM_office: RM_office,
               RM: RM,
               Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
                   ? (((double.tryParse(Income) ?? 0) -
@@ -180,7 +165,7 @@ class _AgmSentState extends State<AgmSent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Row
+            // Same UI as before, unchanged
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -204,7 +189,7 @@ class _AgmSentState extends State<AgmSent> {
                     maxLines: 1,
                     softWrap: false,
                     style: const TextStyle(
-                      fontSize: 26, // reduce from 33 to fit better
+                      fontSize: 26,
                       fontFamily: "sfproRoundSemiB",
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
@@ -278,19 +263,14 @@ class _AgmSentState extends State<AgmSent> {
             const Divider(thickness: 0.6, color: Colors.black12),
             const SizedBox(height: 10),
 
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Document Sent To :",
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontFamily: "sfproRoundSemiB",
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
+            const Text(
+              "Document Sent To :",
+              style: TextStyle(
+                fontSize: 15,
+                fontFamily: "sfproRoundSemiB",
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
             ),
             const SizedBox(height: 10),
 
@@ -301,7 +281,7 @@ class _AgmSentState extends State<AgmSent> {
                   children: [
                     CircleAvatar(
                       radius: 17,
-                      backgroundColor: const Color.fromARGB(0, 238, 238, 238),
+                      backgroundColor: Colors.transparent,
                       child: ClipOval(
                         child: AvatarPlus(TO_DOC, height: 40, width: 40),
                       ),
@@ -384,8 +364,8 @@ class _AgmSentState extends State<AgmSent> {
                         padding: const EdgeInsets.only(left: 28, right: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
+                          children: const [
+                            Text(
                               "Sent",
                               style: TextStyle(
                                 fontSize: 50,
@@ -434,16 +414,11 @@ class _AgmSentState extends State<AgmSent> {
                   itemCount: _sentList.length,
                   itemBuilder: (context, index) {
                     Map sent = _sentList[index];
-
-                    final String pocVal =
-                        sent['placeOfCoupe'] ??
-                        sent['info']?['placeofcoupe'] ??
-                        "";
+                    final String pocVal = sent['info']?['placeofcoupe'] ?? "";
                     if (searchQuery.isNotEmpty &&
                         !pocVal.toLowerCase().contains(searchQuery)) {
                       return const SizedBox.shrink();
                     }
-
                     return listItem(Sent: sent, index: index);
                   },
                 ),

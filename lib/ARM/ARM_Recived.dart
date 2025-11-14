@@ -154,7 +154,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
       RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
-      from_doc = "RM $RM_office";
+      from_doc = "RM $RM_office - Approved";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
@@ -183,7 +183,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       from_doc = "RM $RM_office - Procumented";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
-      statusColour = Color.fromRGBO(52, 199, 89, 1);
+      statusColour = Color.fromRGBO(149, 109, 81, 1);
     } else if (from == "Removing") {
       Status = Sent['timberReportheadlines']['Status'] ?? "N/A";
       ADGM_ID = Sent['timberReportheadlines']['ADGM_ID'] ?? "N/A";
