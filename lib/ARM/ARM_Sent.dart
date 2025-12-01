@@ -490,6 +490,7 @@ class _ARM_SentState extends State<ARM_Sent> {
                   }).toList();
 
                   return ListView.builder(
+                    padding: EdgeInsets.only(bottom: 200),
                     controller: _scrollController,
                     itemCount: filtered.length,
                     itemBuilder: (context, index) {

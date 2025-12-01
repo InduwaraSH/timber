@@ -162,7 +162,7 @@ class _ArmCuttingViewState extends State<ArmCuttingView> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.70,
+              height: MediaQuery.of(context).size.height * 0.75,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.vertical(

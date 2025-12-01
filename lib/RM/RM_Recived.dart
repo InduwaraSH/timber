@@ -572,6 +572,7 @@ class _RMRecivedState extends State<RMRecived> {
                   }).toList();
 
                   return ListView.builder(
+                    padding: EdgeInsets.only(bottom: 200),
                     controller: _scrollController,
                     itemCount: filteredItems.length,
                     itemBuilder: (context, index) {

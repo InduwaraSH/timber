@@ -12,6 +12,7 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:timber_app/ARM/ARMSentImageView.dart';
 import 'package:timber_app/ARM/ARM_Sent_timeline.dart';
+import 'package:timber_app/RM/RM_RecivedTimeline.dart';
 import 'package:timber_app/Snack_Message.dart';
 
 class RmRecivedView_ADGM extends StatefulWidget {
@@ -405,8 +406,8 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ArmSentTimeline_sent(
-                              branchName: widget.office_location,
+                            builder: (_) => RmRecivedtimeline(
+                              branchName: widget.ARM_Office,
                               poc: widget.poc,
                               SerialNum: widget.SerialNum,
                             ),

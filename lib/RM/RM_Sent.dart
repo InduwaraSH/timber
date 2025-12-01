@@ -634,6 +634,7 @@ class _RmSentState extends State<RmSent> {
 
               Expanded(
                 child: ListView.builder(
+                  padding: EdgeInsets.only(bottom: 200),
                   controller: _scrollController,
                   itemCount: _sentList.length,
                   itemBuilder: (context, index) {

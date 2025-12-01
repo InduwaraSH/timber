@@ -411,6 +411,7 @@ class _AGMRecivedState extends State<AGMRecived> {
             // Firebase list
             Expanded(
               child: FirebaseAnimatedList(
+                padding: EdgeInsets.only(bottom: 400),
                 controller: _scrollController,
                 query: dbref,
                 itemBuilder:

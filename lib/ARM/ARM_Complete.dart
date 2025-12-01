@@ -382,7 +382,7 @@ class _ArmCompleteState extends State<ArmComplete> {
       color: Color.fromRGBO(52, 199, 89, 1),
       borderRadius: BorderRadius.circular(16),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      onPressed: _isLoading ? null : _test,
+      onPressed: _isLoading ? null : _updateStatus,
       child: const Text(
         "Confirm",
         style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),

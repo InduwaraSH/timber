@@ -71,7 +71,7 @@ class _dgm_b_navbarState extends State<dgm_b_navbar> {
             Positioned(
               left: 18,
               right: 18,
-              bottom: 20,
+              bottom: 10,
               child: AnimatedSlide(
                 offset: _isNavVisible ? Offset.zero : const Offset(0, 2),
                 duration: const Duration(milliseconds: 300),
@@ -230,7 +230,7 @@ class DGMNavigControll extends GetxController {
   DGMNavigControll(this.office_location, this.username);
 
   late final List<Map<String, dynamic>> items = [
-    {'icon': Iconsax.arrow_down_24, 'label': 'Inbox'},
+    {'icon': Iconsax.message4, 'label': 'Inbox'},
     {'icon': Iconsax.send_24, 'label': 'Sent'},
   ];
 

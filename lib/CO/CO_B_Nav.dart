@@ -71,7 +71,7 @@ class _co_b_navbarState extends State<co_b_navbar> {
             Positioned(
               left: 18,
               right: 18,
-              bottom: 20,
+              bottom: 10,
               child: AnimatedSlide(
                 offset: _isNavVisible ? Offset.zero : const Offset(0, 2),
                 duration: const Duration(milliseconds: 300),

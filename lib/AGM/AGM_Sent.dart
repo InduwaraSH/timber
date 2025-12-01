@@ -410,6 +410,7 @@ class _AgmSentState extends State<AgmSent> {
 
               Expanded(
                 child: ListView.builder(
+                  padding: EdgeInsets.only(bottom: 200),
                   controller: _scrollController,
                   itemCount: _sentList.length,
                   itemBuilder: (context, index) {

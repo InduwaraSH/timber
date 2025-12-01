@@ -412,6 +412,7 @@ class _DgmRecivedState extends State<DgmRecived> {
             // Firebase list
             Expanded(
               child: FirebaseAnimatedList(
+                padding: EdgeInsets.only(bottom: 200),
                 controller: _scrollController,
                 query: dbref,
                 itemBuilder:

@@ -675,6 +675,7 @@ class _ARMReceivedState extends State<ARMReceived> {
                     }).toList();
 
                     return ListView.builder(
+                      padding: EdgeInsets.only(bottom: 200),
                       controller: _scrollController,
                       itemCount: filtered.length,
                       itemBuilder: (context, index) {

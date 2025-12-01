@@ -351,6 +351,7 @@ class _CO_SentState extends State<CO_Sent> {
             /// List
             Expanded(
               child: ListView.builder(
+                padding: EdgeInsets.only(bottom: 200),
                 controller: _scrollController,
                 itemCount: _sentList.length,
                 itemBuilder: (context, index) {

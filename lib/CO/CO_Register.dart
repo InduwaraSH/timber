@@ -38,6 +38,7 @@ class _CoRegisterState extends State<CoRegister> {
     "Akuressa",
     "Deniyaya",
     'Jaffna',
+    'Ratnapura',
   ];
 
   @override

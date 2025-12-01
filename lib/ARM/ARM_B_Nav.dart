@@ -71,7 +71,7 @@ class _arm_b_nav_barState extends State<arm_b_nav_bar> {
             Positioned(
               left: 18,
               right: 18,
-              bottom: 20,
+              bottom: 8,
               child: AnimatedSlide(
                 offset: _isNavVisible ? Offset.zero : const Offset(0, 2),
                 duration: const Duration(milliseconds: 300),

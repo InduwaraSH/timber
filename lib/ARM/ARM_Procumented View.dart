@@ -168,7 +168,7 @@ class _ARM_Procumented_viewState extends State<ARM_Procumented_view> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.40,
+              height: MediaQuery.of(context).size.height * 0.60,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.vertical(
@@ -193,7 +193,7 @@ class _ARM_Procumented_viewState extends State<ARM_Procumented_view> {
                       borderRadius: BorderRadius.circular(3),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 0),
 
                   Expanded(
                     child: CupertinoPageScaffold(

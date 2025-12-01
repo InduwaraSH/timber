@@ -73,7 +73,7 @@ class _RmBNavbarState extends State<RmBNavbar> {
             Positioned(
               left: 18,
               right: 18,
-              bottom: 20,
+              bottom: 10,
               child: AnimatedSlide(
                 offset: _isNavVisible ? Offset.zero : const Offset(0, 2),
                 duration: const Duration(milliseconds: 300),

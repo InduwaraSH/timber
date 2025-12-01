@@ -144,20 +144,10 @@ class _TreeQuesFormState extends State<TreeQuesForm> {
     final currentFields = treeControllers[currentIndex];
     for (var f in fields) {
       if (currentFields[f]!.text.trim().isEmpty) {
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(
-        //     content: Text(
-        //       'Please fill "$f"',
-        //       style: const TextStyle(
-        //         color: Colors.white,
-        //         fontFamily: "sfproRoundRegular",
-        //         fontWeight: FontWeight.bold,
-        //         fontSize: 16,
-        //       ),
-        //     ),
-        //     backgroundColor: Colors.redAccent.shade400,
-        //   ),
-        // );
+        if (f == "Other" && currentFields[f]!.text.trim().isEmpty) {
+          currentFields[f]!.text = "N/A";
+          continue;
+        }
         showTopSnackBar(
           context,
           message: 'Please fill "$f"',

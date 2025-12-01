@@ -405,11 +405,14 @@ class _CORecivedState extends State<CORecived> {
                       : null,
                 ),
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) =>
-                      listItem(Sent: filteredItems[index], index: index),
-                  childCount: filteredItems.length,
+              SliverPadding(
+                padding: EdgeInsets.only(bottom: 200),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) =>
+                        listItem(Sent: filteredItems[index], index: index),
+                    childCount: filteredItems.length,
+                  ),
                 ),
               ),
             ],

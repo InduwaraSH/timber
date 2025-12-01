@@ -93,7 +93,7 @@ class _TreeCutStatusState extends State<TreeCutStatus> {
 
   Widget _buildActionCard(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(24),
+      margin: const EdgeInsets.only(left: 24, right: 24, top: 0, bottom: 24),
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
         color: Colors.white,
