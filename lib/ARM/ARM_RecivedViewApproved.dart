@@ -289,9 +289,9 @@ class _ArmRecivedviewapprovedState extends State<ArmRecivedviewapproved> {
         {"label": "Donor Details", "value": widget.donor_details},
         {"label": "Condition", "value": widget.Condition},
         {"label": "Tree Count", "value": widget.treeCount},
-        {"label": "Income", "value": "Rs. ${widget.Income}"},
-        {"label": "Outcome", "value": "Rs. ${widget.Outcome}"},
-        {"label": "Profit", "value": "Rs. ${widget.Profit}"},
+        {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
+        {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
+        {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
       ];
 
       pdf.addPage(
@@ -429,7 +429,7 @@ class _ArmRecivedviewapprovedState extends State<ArmRecivedviewapproved> {
       {"label": "RM ID", "value": widget.RM_ID},
       {"label": "RM Office", "value": widget.RM_office},
       {"label": "ARM ID", "value": widget.ARM_ID},
-      {"label": "ARM Office", "value": widget.ARM_Office},
+      {"label": "ARM Office", "value": widget.ARM_Branch_Name},
       {"label": "CO ID", "value": widget.CO_id},
       {"label": "CO Name", "value": widget.CO_name},
       {"label": "POC", "value": widget.poc},
@@ -442,22 +442,16 @@ class _ArmRecivedviewapprovedState extends State<ArmRecivedviewapproved> {
       {"label": "Donor Details", "value": widget.donor_details},
       {"label": "Condition", "value": widget.Condition},
       {"label": "Tree Count", "value": widget.treeCount},
-      {"label": "Income", "value": "Rs. ${widget.Income}"},
-      {"label": "Outcome", "value": "Rs. ${widget.Outcome}"},
-      {"label": "Profit", "value": "Rs. ${widget.Profit}"},
+      {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
+      {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
+      {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
     ];
 
     //Money value for RM AGM and DGM
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9F8FF),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Colors.redAccent,
-        child: const Icon(Iconsax.key1, color: Colors.white, size: 29),
-      ),
 
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
         bottom: false,
 

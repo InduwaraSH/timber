@@ -153,17 +153,6 @@ class _ArmProcumentAddState extends State<ArmProcumentAdd>
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  profitPositive
-                      ? "You gained \$${formatted} this week. That's the best result in the last three months."
-                      : "You lost \$${formatted} this week. Review outcome items.",
-                  style: TextStyle(
-                    color: const Color.fromARGB(91, 255, 255, 255),
-                    fontFamily: 'sfproRoundSemiB',
-                    fontSize: 13.5,
-                    height: 1.25,
-                  ),
-                ),
               ],
             ),
           ),

@@ -288,9 +288,9 @@ class _DgmRecivedviewState extends State<DgmRecivedview> {
         {"label": "Donor Details", "value": widget.donor_details},
         {"label": "Condition", "value": widget.Condition},
         {"label": "Tree Count", "value": widget.treeCount},
-        {"label": "Income", "value": "Rs. ${widget.Income}"},
-        {"label": "Outcome", "value": "Rs. ${widget.Outcome}"},
-        {"label": "Profit", "value": "Rs. ${widget.Profit}"},
+        {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
+        {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
+        {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
       ];
 
       pdf.addPage(
@@ -368,11 +368,12 @@ class _DgmRecivedviewState extends State<DgmRecivedview> {
                 Row(
                   children: [
                     FloatingActionButton(
-                      heroTag: "printBtn",
-                      onPressed: _generatePdf,
+                      heroTag: "rejectBtn",
+                      //onPressed: _generatePdf,
+                      onPressed: () {},
                       backgroundColor: Colors.black,
                       child: const Icon(
-                        Iconsax.printer,
+                        Iconsax.close_square,
                         color: Colors.redAccent,
                         size: 29,
                       ),
@@ -427,11 +428,9 @@ class _DgmRecivedviewState extends State<DgmRecivedview> {
       {"label": "RM Office", "value": widget.RM_office},
       {"label": "RM", "value": widget.RM},
       {"label": "ARM Office", "value": widget.ARM_Branch_Name},
-
       {"label": "ARM ID", "value": widget.ARM_id},
       {"label": "CO ID", "value": widget.CO_id},
       {"label": "CO Name", "value": widget.CO_name},
-
       {"label": "POC", "value": widget.poc},
       {"label": "POC Exact", "value": widget.PlaceOfCoupe_exact_from_arm},
       {"label": "Date Informed", "value": widget.DateInformed},
@@ -442,9 +441,9 @@ class _DgmRecivedviewState extends State<DgmRecivedview> {
       {"label": "Donor Details", "value": widget.donor_details},
       {"label": "Condition", "value": widget.Condition},
       {"label": "Tree Count", "value": widget.treeCount},
-      {"label": "Income", "value": "Rs. ${widget.Income}"},
-      {"label": "Outcome", "value": "Rs. ${widget.Outcome}"},
-      {"label": "Profit", "value": "Rs. ${widget.Profit}"},
+      {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
+      {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
+      {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
     ];
 
     //Money value for RM AGM and DGM

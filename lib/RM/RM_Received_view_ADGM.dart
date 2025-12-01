@@ -292,9 +292,9 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
         {"label": "Donor Details", "value": widget.donor_details},
         {"label": "Condition", "value": widget.Condition},
         {"label": "Tree Count", "value": widget.treeCount},
-        {"label": "Income", "value": "Rs. ${widget.Income}"},
-        {"label": "Outcome", "value": "Rs. ${widget.Outcome}"},
-        {"label": "Profit", "value": "Rs. ${widget.Profit}"},
+        {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
+        {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
+        {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
       ];
 
       pdf.addPage(
@@ -446,9 +446,9 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
       {"label": "Donor Details", "value": widget.donor_details},
       {"label": "Condition", "value": widget.Condition},
       {"label": "Tree Count", "value": widget.treeCount},
-      {"label": "Income", "value": "Rs. ${widget.Income}"},
-      {"label": "Outcome", "value": "Rs. ${widget.Outcome}"},
-      {"label": "Profit", "value": "Rs. ${widget.Profit}"},
+      {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
+      {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
+      {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
     ];
 
     //Money value for RM AGM and DGM
@@ -643,7 +643,6 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                                   .child(widget.SerialNum.toString())
                                   .remove();
                               print('Data deleted successfully');
-                              
                             } catch (e) {
                               print('Error deleting data: $e');
                             }

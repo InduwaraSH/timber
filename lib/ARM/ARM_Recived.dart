@@ -79,9 +79,7 @@ class _ARMReceivedState extends State<ARMReceived> {
     String DateInformed = "";
     String LetterNo = "";
     String SerialNum = "";
-
     Color statusColour = Colors.grey;
-
     String OfficerName = "";
     String OfficerPositionAndName = "";
     String donor_details = "";

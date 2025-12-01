@@ -2,17 +2,60 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
+import 'package:timber_app/Snack_Message.dart';
 
 class ArmComplete extends StatefulWidget {
-  final String office;
-  final String rm;
-  final String serial;
+  final String poc;
+  final String DateInformed;
+  final String LetterNo;
+  final String OfficerName;
+  final String SerialNum;
+  final String OfficerPositionAndName;
+  final String donor_details;
+  final String Condition;
+  final String treeCount;
+  final String PlaceOfCoupe_exact_from_arm;
+  final String user_name;
+  final String office_location;
+  final String ARM_Branch_Name;
+  final String ARM_Office;
+  final String Income;
+  final String Outcome;
+  final String Profit;
+  final String ADGM_ID;
+  final String RM_office;
+  final String Status;
+  final String CO_id;
+  final String CO_name;
+  final String ARM_ID;
+  final String RM_ID;
 
   const ArmComplete({
     super.key,
-    required this.office,
-    required this.rm,
-    required this.serial,
+    required this.poc,
+    required this.DateInformed,
+    required this.LetterNo,
+    required this.OfficerName,
+    required this.SerialNum,
+    required this.OfficerPositionAndName,
+    required this.donor_details,
+    required this.Condition,
+    required this.treeCount,
+    required this.PlaceOfCoupe_exact_from_arm,
+    required this.user_name,
+    required this.office_location,
+    required this.ARM_Branch_Name,
+    required this.ARM_Office,
+    required this.Income,
+    required this.Outcome,
+    required this.Profit,
+    required this.ADGM_ID,
+    required this.RM_office,
+    required this.Status,
+    required this.CO_id,
+    required this.CO_name,
+    required this.ARM_ID,
+    required this.RM_ID,
   });
 
   @override
@@ -22,20 +65,59 @@ class ArmComplete extends StatefulWidget {
 class _ArmCompleteState extends State<ArmComplete> {
   final database = FirebaseDatabase.instance.ref();
   bool _isLoading = false;
+  late Query dbref;
+  final ScrollController _scrollController = ScrollController();
+  bool _showHeader = true;
+  String ADGM_Name = "";
+
+  @override
+  void initState() {
+    super.initState();
+    dbref = FirebaseDatabase.instance
+        .ref()
+        .child('ARM_branch_data_saved')
+        .child(widget.office_location)
+        .child("Recived")
+        .child(widget.SerialNum)
+        .child("allTrees");
+    print(" d");
+
+    // _scrollController.addListener(() {
+    //   if (_scrollController.position.userScrollDirection ==
+    //       ScrollDirection.reverse) {
+    //     if (_showHeader) setState(() => _showHeader = false);
+    //   } else if (_scrollController.position.userScrollDirection ==
+    //       ScrollDirection.forward) {
+    //     if (!_showHeader) setState(() => _showHeader = true);
+    //   }
+    // });
+  }
 
   // Local text controllers for Income & Expenditure
   final TextEditingController _incomeController = TextEditingController();
   final TextEditingController _expenditureController = TextEditingController();
+  Future<void> _test() async {
+    DatabaseEvent event = await dbref.once();
+    if (event.snapshot.value != null) {
+      await database
+          .child('test')
+          .child(widget.ARM_Office)
+          .child("Recived")
+          .child(widget.SerialNum)
+          .child("allTrees")
+          .set(event.snapshot.value);
+    }
+  }
 
   Future<void> _updateStatus() async {
     final income = _incomeController.text.trim();
     final expenditure = _expenditureController.text.trim();
 
     if (income.isEmpty || expenditure.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter both income and expenditure"),
-        ),
+      showTopSnackBar(
+        context,
+        message: "Please enter both income and expenditure values.",
+        backgroundColor: Colors.green,
       );
       return;
     }
@@ -44,26 +126,70 @@ class _ArmCompleteState extends State<ArmComplete> {
 
     try {
       // Firebase updates (you’ll handle db linkage later)
-      await database
-          .child('ARM_branch_data_saved')
-          .child(widget.office)
-          .child("Recived")
-          .child(widget.serial)
-          .update({"from": "Removing"});
+      // await database
+      //     .child('ARM_branch_data_saved')
+      //     .child(widget.ARM_Branch_Name)
+      //     .child("Recived")
+      //     .child(widget.SerialNum)
+      //     .update({"from": "Removing"});
 
-      await database
-          .child("Status_of_job")
-          .child(widget.office)
-          .child(widget.serial)
-          .child("Status")
-          .set("tree_removal");
+      // await database
+      //     .child("Status_of_job")
+      //     .child(widget.ARM_Branch_Name)
+      //     .child(widget.SerialNum)
+      //     .child("Status")
+      //     .set("tree_removal");
 
+      // await database
+      //     .child("Status_of_job")
+      //     .child(widget.ARM_Branch_Name)
+      //     .child(widget.SerialNum)
+      //     .child("tree_removal")
+      //     .set(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+      DatabaseEvent event = await dbref.once();
+      if (event.snapshot.value != null) {
+        await database
+            .child('Completed_jobs')
+            .child(widget.ARM_Office)
+            .child(DateTime.now().year.toString())
+            .child(widget.SerialNum)
+            .child("allTrees")
+            .set(event.snapshot.value);
+      }
+
+      // Set info under ARM_branch_data_saved_test
       await database
-          .child("Status_of_job")
-          .child(widget.office)
-          .child(widget.serial)
-          .child("tree_removal")
-          .set(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+          .child('Completed_jobs')
+          .child(widget.ARM_Office)
+          .child(DateTime.now().year.toString())
+          .child(widget.SerialNum)
+          .child("timberReportheadlines")
+          .set({
+            "Status": "ADGM Approved",
+            //"ADGM_ID": widget.AGM_ID,
+            "serialnum": widget.SerialNum,
+            "placeofcoupe": widget.poc,
+            "dateinformed_from_rm": widget.DateInformed,
+            "donor_details": widget.donor_details,
+            "PlaceOfCoupe_exact_from_arm": widget.PlaceOfCoupe_exact_from_arm,
+            "LetterNo": widget.LetterNo,
+            "Condition": widget.Condition,
+            "RM Office": widget.office_location,
+            "OfficerName": widget.OfficerName,
+            "OfficerPosition&name": widget.OfficerPositionAndName,
+            "TreeCount": widget.treeCount.toString(),
+            "Date": widget.DateInformed,
+            "ARM_location": widget.ARM_Office,
+            "CO_name": widget.CO_name,
+            "CO_id": widget.CO_id,
+            //"ARM_Id": widget.ARM_Id,
+            "RM_Id": widget.user_name,
+            "income": widget.Income,
+            "outcome": widget.Outcome,
+            "latest_update": DateFormat(
+              'yyyy-MM-dd HH:mm:ss',
+            ).format(DateTime.now()).toString(),
+          });
 
       // Small delay for smooth UX
       await Future.delayed(const Duration(seconds: 1));
@@ -256,9 +382,9 @@ class _ArmCompleteState extends State<ArmComplete> {
       color: Color.fromRGBO(52, 199, 89, 1),
       borderRadius: BorderRadius.circular(16),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      onPressed: _isLoading ? null : _updateStatus,
+      onPressed: _isLoading ? null : _test,
       child: const Text(
-        "Continue",
+        "Confirm",
         style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
       ),
     );

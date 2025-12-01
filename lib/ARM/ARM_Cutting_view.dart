@@ -194,10 +194,35 @@ class _ArmCuttingViewState extends State<ArmCuttingView> {
                       backgroundColor: Colors.transparent,
 
                       child: ArmComplete(
-                        office: widget.ARM_Branch_Name,
+                        // office: widget.ARM_Branch_Name,
 
-                        rm: widget.RM_office,
-                        serial: widget.SerialNum,
+                        // rm: widget.RM_office,
+                        // serial: widget.SerialNum,
+                        poc: widget.poc,
+                        DateInformed: widget.DateInformed,
+                        LetterNo: widget.LetterNo,
+                        SerialNum: widget.SerialNum,
+                        OfficerName: widget.OfficerName,
+                        OfficerPositionAndName: widget.OfficerPositionAndName,
+                        donor_details: widget.donor_details,
+                        Condition: widget.Condition,
+                        treeCount: widget.treeCount,
+                        office_location: widget.office_location,
+                        PlaceOfCoupe_exact_from_arm:
+                            widget.PlaceOfCoupe_exact_from_arm,
+                        user_name: widget.user_name,
+                        ARM_Branch_Name: widget.ARM_Branch_Name,
+                        ARM_Office: widget.ARM_Office,
+                        Income: widget.Income,
+                        Outcome: widget.Outcome,
+                        Profit: widget.Profit,
+                        Status: widget.Status,
+                        ADGM_ID: widget.ADGM_ID,
+                        RM_office: widget.RM_office,
+                        CO_id: widget.CO_id,
+                        CO_name: widget.CO_name,
+                        ARM_ID: widget.ARM_ID,
+                        RM_ID: widget.RM_ID,
                       ),
                     ),
                   ),
@@ -418,6 +443,15 @@ class _ArmCuttingViewState extends State<ArmCuttingView> {
               ),
               const SizedBox(height: 12),
               Text(
+                "Name",
+                style: const TextStyle(
+                  fontFamily: "sfproRoundSemiB",
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
+              Text(
                 name,
                 style: const TextStyle(
                   fontFamily: "sfproRoundSemiB",
@@ -426,7 +460,7 @@ class _ArmCuttingViewState extends State<ArmCuttingView> {
                   color: Colors.blue,
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 10),
               Text(
                 "NIC: $id",
                 style: const TextStyle(
@@ -446,7 +480,7 @@ class _ArmCuttingViewState extends State<ArmCuttingView> {
                   color: Colors.white70,
                 ),
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   const Icon(Iconsax.call, size: 18, color: Colors.green),
