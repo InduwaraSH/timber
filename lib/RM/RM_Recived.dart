@@ -1,6 +1,5 @@
 import 'package:avatar_plus/avatar_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -8,6 +7,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:timber_app/RM/RM_Received_view_ADGM.dart';
 import 'package:timber_app/RM/RM_Recived_view_ARM.dart';
+import 'package:timber_app/RM/RM_Recived_view_rejected.dart';
 
 class RMRecived extends StatefulWidget {
   final String office_location;
@@ -92,7 +92,9 @@ class _RMRecivedState extends State<RMRecived> {
     String AGM_ID = "";
     String RM_ID = "";
     String Status = "";
+    String Rejected_reason = "";
     String DGM_ID = "";
+    String ADGM_Type = "";
 
     if (Reciver == "ARM") {
       poc = Sent['info']['poc'] ?? "N/A";
@@ -178,6 +180,40 @@ class _RMRecivedState extends State<RMRecived> {
       statusColour = Color.fromRGBO(52, 199, 89, 1);
       Status = "DGM Approved";
       from_doc = "$DGM_ID";
+    } else if (Reciver == "ADGM_Rejected") {
+      poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
+      poc_exact =
+          Sent['timberReportheadlines']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
+      DateInformed =
+          Sent['timberReportheadlines']['dateinformed_from_rm'] ?? "N/A";
+      LetterNo = Sent['timberReportheadlines']['LetterNo'] ?? "N/A";
+      SerialNum = Sent['timberReportheadlines']['serialnum'] ?? "N/A";
+      OfficerName = Sent['timberReportheadlines']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName =
+          Sent['timberReportheadlines']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
+      Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
+      treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
+      CO_name = Sent['timberReportheadlines']['CO_name'] ?? "N/A";
+      CO_id = Sent['timberReportheadlines']['CO_id'] ?? "N/A";
+
+      Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
+      Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
+      Profit =
+          ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
+              .toString() ??
+          "N/A";
+      ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
+      RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
+      ARM_Id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
+
+      latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
+      DGM_ID = Sent['timberReportheadlines']['ADGM_id'] ?? "";
+      ADGM_Type = Sent['timberReportheadlines']['ADGM_type'] ?? "";
+      Rejected_reason = Sent['timberReportheadlines']['Reason'] ?? "";
+      statusColour = Color.fromRGBO(233, 21, 45, 1);
+      Status = "$ADGM_Type Rejected";
+      from_doc = "Rejected from: $ADGM_Type ($DGM_ID)";
     }
 
     return CupertinoButton(
@@ -270,6 +306,39 @@ class _RMRecivedState extends State<RMRecived> {
                 AGM_ID: DGM_ID,
                 Status: Status,
                 ADGM_title: "DGM",
+              ),
+            ),
+          );
+        } else if (Reciver == "ADGM_Rejected") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RmRecivedViewRejected(
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc_exact,
+                OfficerName: OfficerName,
+                RM_ID: RM_ID,
+                user_name: widget.username,
+                ARM_Office: ARM_office,
+                Income: Income.toString(),
+                Outcome: Outcome.toString(),
+                Profit: Profit.toString(),
+                ARM_Id: ARM_Id,
+                CO_id: CO_id,
+                CO_name: CO_name,
+                AGM_ID: DGM_ID,
+                Status: Status,
+                reasonforreject: Rejected_reason,
+                ADGM_title: ADGM_Type,
+                ADGM_Type: ADGM_Type,
               ),
             ),
           );
