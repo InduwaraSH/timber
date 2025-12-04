@@ -94,14 +94,16 @@ class _AGMRecivedState extends State<AGMRecived> {
     String reject_details =
         Sent['timberReportheadlines']['reject_details'] ?? "N/A";
     String Profit;
-    String updated_income;
-    String updated_outcome;
+    String updated_income = "";
+    String updated_outcome = "";
     if (reject_details == "" ||
         reject_details.isEmpty ||
         reject_details == "N/A") {
       Profit =
           ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
               .toString();
+      updated_income = Income;
+      updated_outcome = Outcome;
     } else {
       updated_income = Sent['timberReportheadlines']['updated_income'] ?? "N/A";
       updated_outcome =
@@ -147,6 +149,8 @@ class _AGMRecivedState extends State<AGMRecived> {
               RM: RM,
               Profit: Profit,
               reject_details: reject_details,
+              updated_income: updated_income,
+              updated_outcome: updated_outcome,
             ),
           ),
         );

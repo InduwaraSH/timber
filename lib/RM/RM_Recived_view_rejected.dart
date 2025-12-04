@@ -39,6 +39,8 @@ class RmRecivedViewRejected extends StatefulWidget {
   final String ADGM_title;
   final String reasonforreject;
   final String ADGM_Type;
+  final String updated_income;
+  final String updated_outcome;
 
   const RmRecivedViewRejected({
     super.key,
@@ -67,6 +69,8 @@ class RmRecivedViewRejected extends StatefulWidget {
     required this.ADGM_title,
     required this.reasonforreject,
     required this.ADGM_Type,
+    required this.updated_income,
+    required this.updated_outcome,
   });
 
   @override
@@ -564,7 +568,10 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
                             "ARM_Id": widget.ARM_Id,
                             "RM_Id": widget.user_name,
                             "income": widget.Income,
+                            "profit": widget.Profit,
                             "outcome": widget.Outcome,
+                            "updated_income": widget.updated_income,
+                            "updated_outcome": widget.updated_outcome,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
                             ).format(DateTime.now()).toString(),
@@ -617,8 +624,11 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
                             "CO_id": widget.CO_id,
                             "ARM_Id": widget.ARM_Id,
                             "RM_Id": widget.user_name,
+                            "profit": widget.Profit,
                             "income": widget.Income,
                             "outcome": widget.Outcome,
+                            "updated_income": widget.updated_income,
+                            "updated_outcome": widget.updated_outcome,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
                             ).format(DateTime.now()).toString(),

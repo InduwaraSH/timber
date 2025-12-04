@@ -101,6 +101,9 @@ class _ARMReceivedState extends State<ARMReceived> {
     String ARM_ID = "";
     String reasonforreject = "";
     String ADGM_Type = "";
+    String Profit = "";
+    String updatedIncome = "";
+    String updatedOutcome = "";
 
     if (from == "CO") {
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
@@ -156,6 +159,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
       from_doc = "RM $RM_office - Approved";
+      Profit = Sent['timberReportheadlines']['profit'] ?? "N/A";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
@@ -184,6 +188,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       from_doc = "RM $RM_office - Procumented";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
+      Profit = Sent['timberReportheadlines']['profit'] ?? "N/A";
       statusColour = Color.fromRGBO(149, 109, 81, 1);
     } else if (from == "Removing") {
       Status = Sent['timberReportheadlines']['Status'] ?? "N/A";
@@ -208,6 +213,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
       from_doc = "RM $RM_office - Tree Removing";
+      Profit = Sent['timberReportheadlines']['profit'] ?? "N/A";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
       statusColour = Color.fromRGBO(255, 146, 48, 1);
@@ -236,10 +242,15 @@ class _ARMReceivedState extends State<ARMReceived> {
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
       from_doc = "RM - Rejected";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
+      Profit = Sent['timberReportheadlines']['profit'] ?? "N/A";
       ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
       statusColour = Color.fromRGBO(233, 21, 45, 1);
       ADGM_Type = Sent['timberReportheadlines']['ADGM_Type'] ?? "N/A";
       reasonforreject = Sent['timberReportheadlines']['Reject_reason'] ?? "N/A";
+
+      updatedIncome = Sent['timberReportheadlines']['updated_income'] ?? "N/A";
+      updatedOutcome =
+          Sent['timberReportheadlines']['updated_outcome'] ?? "N/A";
     }
 
     return CupertinoButton(
@@ -313,11 +324,7 @@ class _ARMReceivedState extends State<ARMReceived> {
                 RM_ID: RM_ID,
                 Status: Status,
                 ADGM_ID: ADGM_ID,
-                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
-                    ? (((double.tryParse(Income) ?? 0) -
-                              (double.tryParse(Outcome) ?? 0))
-                          .toString())
-                    : "N/A",
+                Profit: Profit,
               ),
             ),
           );
@@ -349,11 +356,12 @@ class _ARMReceivedState extends State<ARMReceived> {
                 RM_ID: RM_ID,
                 Status: Status,
                 ADGM_ID: ADGM_ID,
-                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
-                    ? (((double.tryParse(Income) ?? 0) -
-                              (double.tryParse(Outcome) ?? 0))
-                          .toString())
-                    : "N/A",
+                Profit: Profit,
+                // (Income.isNotEmpty && Outcome.isNotEmpty)
+                //     ? (((double.tryParse(Income) ?? 0) -
+                //               (double.tryParse(Outcome) ?? 0))
+                //           .toString())
+                //     : "N/A",
               ),
             ),
           );
@@ -385,11 +393,7 @@ class _ARMReceivedState extends State<ARMReceived> {
                 RM_ID: RM_ID,
                 Status: Status,
                 ADGM_ID: ADGM_ID,
-                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
-                    ? (((double.tryParse(Income) ?? 0) -
-                              (double.tryParse(Outcome) ?? 0))
-                          .toString())
-                    : "N/A",
+                Profit: Profit,
               ),
             ),
           );
@@ -420,11 +424,9 @@ class _ARMReceivedState extends State<ARMReceived> {
                 RM_ID: RM_ID,
                 Status: Status,
                 AGM_ID: ADGM_ID + " " + ADGM_Type,
-                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
-                    ? (((double.tryParse(Income) ?? 0) -
-                              (double.tryParse(Outcome) ?? 0))
-                          .toString())
-                    : "N/A",
+                Profit: Profit,
+                updatedIncome: updatedIncome,
+                updatedOutcome: updatedOutcome,
 
                 reasonforreject: reasonforreject,
                 ADGM_Type: ADGM_Type,

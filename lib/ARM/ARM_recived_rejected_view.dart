@@ -40,6 +40,8 @@ class Arm_Recived_RejectedView extends StatefulWidget {
   final String reasonforreject;
   final String ADGM_Type;
   final String RM_office;
+  final String updatedIncome;
+  final String updatedOutcome;
 
   const Arm_Recived_RejectedView({
     super.key,
@@ -68,6 +70,8 @@ class Arm_Recived_RejectedView extends StatefulWidget {
     required this.reasonforreject,
     required this.ADGM_Type,
     required this.RM_office,
+    required this.updatedIncome,
+    required this.updatedOutcome,
   });
 
   @override
@@ -105,8 +109,8 @@ class _aRmRecivedView_ADGMState_Rejected
     _currentProfit = widget.Profit;
 
     // Initialize with existing values so they are not empty if not edited
-    _newRawIncome = widget.Income;
-    _newRawOutcome = widget.Outcome;
+    _newRawIncome = widget.updatedIncome;
+    _newRawOutcome = widget.updatedOutcome;
 
     dbref = FirebaseDatabase.instance
         .ref()

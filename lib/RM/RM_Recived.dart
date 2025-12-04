@@ -153,10 +153,7 @@ class _RMRecivedState extends State<RMRecived> {
 
       Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
       Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
-      Profit =
-          ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
-              .toString() ??
-          "N/A";
+      Profit = Sent['timberReportheadlines']['profit'].toString() ?? "N/A";
       ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_Id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
@@ -184,10 +181,7 @@ class _RMRecivedState extends State<RMRecived> {
 
       Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
       Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
-      Profit =
-          ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
-              .toString() ??
-          "N/A";
+      Profit = Sent['timberReportheadlines']['profit'].toString() ?? "N/A";
       ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_Id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
@@ -216,10 +210,8 @@ class _RMRecivedState extends State<RMRecived> {
 
       Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
       Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
-      Profit =
-          ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
-              .toString() ??
-          "N/A";
+      Profit = Sent['timberReportheadlines']['profit'].toString() ?? "N/A";
+
       ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_Id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
@@ -228,6 +220,8 @@ class _RMRecivedState extends State<RMRecived> {
       DGM_ID = Sent['timberReportheadlines']['ADGM_id'] ?? "";
       ADGM_Type = Sent['timberReportheadlines']['ADGM_type'] ?? "";
       Rejected_reason = Sent['timberReportheadlines']['Reason'] ?? "";
+      updated_Outcome = Sent['timberReportheadlines']['updated_outcome'] ?? "";
+      updated_income = Sent['timberReportheadlines']['updated_income'] ?? "";
       statusColour = Color.fromRGBO(233, 21, 45, 1);
       Status = "$ADGM_Type Rejected";
       from_doc = "Rejected from: $ADGM_Type ($DGM_ID)";
@@ -359,6 +353,8 @@ class _RMRecivedState extends State<RMRecived> {
                 reasonforreject: Rejected_reason,
                 ADGM_title: ADGM_Type,
                 ADGM_Type: ADGM_Type,
+                updated_income: updated_income,
+                updated_outcome: updated_Outcome,
               ),
             ),
           );

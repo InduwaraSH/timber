@@ -556,6 +556,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                             "RM_Id": widget.user_name,
                             "income": widget.Income,
                             "outcome": widget.Outcome,
+                            "profit": widget.Profit,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
                             ).format(DateTime.now()).toString(),
@@ -608,6 +609,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                             "RM_Id": widget.user_name,
                             "income": widget.Income,
                             "outcome": widget.Outcome,
+                            "profit": widget.Profit,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
                             ).format(DateTime.now()).toString(),

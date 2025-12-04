@@ -39,6 +39,8 @@ class AgmRecivedview extends StatefulWidget {
   final String ARM_id;
   final String RM_office;
   final String reject_details;
+  final String updated_income;
+  final String updated_outcome;
   // final String CO_Name;
 
   const AgmRecivedview({
@@ -66,6 +68,8 @@ class AgmRecivedview extends StatefulWidget {
     required this.ARM_id,
     required this.RM_office,
     required this.reject_details,
+    required this.updated_income,
+    required this.updated_outcome,
   });
 
   @override
@@ -153,6 +157,8 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                         RM_ID: widget.RM,
                         tree: treeValue,
                         reject_details: widget.reject_details,
+                        updated_income: widget.updated_income,
+                        updated_outcome: widget.updated_outcome,
                       ),
                     ),
                   ),
@@ -640,6 +646,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                             "RM_Id": widget.RM,
                             "ADGM_id": widget.user_name,
                             "income": widget.Income,
+                            "profit": widget.Profit,
                             "outcome": widget.Outcome,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
@@ -693,6 +700,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                             "RM_Id": widget.RM,
                             "ADGM_id": widget.user_name,
                             "income": widget.Income,
+                            "profit": widget.Profit,
                             "outcome": widget.Outcome,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
