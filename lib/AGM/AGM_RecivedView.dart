@@ -38,6 +38,7 @@ class AgmRecivedview extends StatefulWidget {
   final String RM;
   final String ARM_id;
   final String RM_office;
+  final String reject_details;
   // final String CO_Name;
 
   const AgmRecivedview({
@@ -64,6 +65,7 @@ class AgmRecivedview extends StatefulWidget {
     required this.CO_id,
     required this.ARM_id,
     required this.RM_office,
+    required this.reject_details,
   });
 
   @override
@@ -128,7 +130,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                         poc: widget.poc,
                         DateInformed: widget.DateInformed,
                         LetterNo: widget.LetterNo,
-                       
+
                         OfficerName: widget.OfficerName,
                         OfficerPositionAndName: widget.OfficerPositionAndName,
                         donor_details: widget.donor_details,
@@ -139,17 +141,18 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
                             widget.PlaceOfCoupe_exact_from_arm,
                         user_name: widget.user_name,
                         ARM_Branch_Name: widget.ARM_Branch_Name,
-                        
+
                         Income: widget.Income,
                         Outcome: widget.Outcome,
                         Profit: widget.Profit,
-                        
+
                         RM_office: widget.RM_office,
                         CO_id: widget.CO_id,
                         CO_name: widget.CO_name,
                         ARM_ID: widget.ARM_id,
                         RM_ID: widget.RM,
                         tree: treeValue,
+                        reject_details: widget.reject_details,
                       ),
                     ),
                   ),
@@ -379,6 +382,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
         {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
         {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
         {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+        {"label": "reject_details", "value": "Rs. ${widget.reject_details}"},
       ];
 
       pdf.addPage(
@@ -533,6 +537,7 @@ class _AgmRecivedviewState extends State<AgmRecivedview> {
       {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
       {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
       {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+      {"label": "reject_details", "value": widget.reject_details},
     ];
 
     //Money value for RM AGM and DGM

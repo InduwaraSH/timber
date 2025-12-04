@@ -31,6 +31,7 @@ class AgmDecline extends StatefulWidget {
   final String CO_name;
   final String ARM_ID;
   final String RM_ID;
+  final String reject_details;
   final Object? tree;
   const AgmDecline({
     super.key,
@@ -58,6 +59,7 @@ class AgmDecline extends StatefulWidget {
     required this.ARM_ID,
     required this.RM_ID,
     required this.tree,
+    required this.reject_details,
   });
 
   @override
@@ -175,7 +177,7 @@ class _AgmDeclineState extends State<AgmDecline> {
                               "ADGM_id": widget.user_name,
                               "ADGM_type": "AGM",
                               "Reason":
-                                  "${declineReasonController.text} ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}   ",
+                                  "{${widget.reject_details}}  ${declineReasonController.text} on ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}   ",
                               "income": widget.Income,
                               "outcome": widget.Outcome,
                               "latest_update": DateFormat(
@@ -231,7 +233,7 @@ class _AgmDeclineState extends State<AgmDecline> {
                               "ADGM_id": widget.user_name,
                               "ADGM_type": "AGM",
                               "Reason":
-                                  "${declineReasonController.text} ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()).toString()}",
+                                  "{${widget.reject_details}}  ${declineReasonController.text} on ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}   ",
                               "income": widget.Income,
                               "outcome": widget.Outcome,
                               "latest_update": DateFormat(

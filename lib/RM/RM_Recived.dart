@@ -262,6 +262,8 @@ class _RMRecivedState extends State<RMRecived> {
                 CO_id: CO_id,
                 CO_name: CO_name,
                 Reject_details: Reject_Details,
+                UpdateIncome: updated_income,
+                UpdateOutcome: updated_Outcome,
               ),
             ),
           );

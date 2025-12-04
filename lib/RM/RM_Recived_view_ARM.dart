@@ -34,6 +34,8 @@ class RmRecivedViewArm extends StatefulWidget {
   final String CO_id;
   final String CO_name;
   final String Reject_details;
+  final String UpdateIncome;
+  final String UpdateOutcome;
 
   const RmRecivedViewArm({
     super.key,
@@ -49,7 +51,6 @@ class RmRecivedViewArm extends StatefulWidget {
     required this.office_location,
     required this.PlaceOfCoupe_exact_from_arm,
     required this.user_name,
-
     required this.ARM_Office,
     required this.Income,
     required this.Outcome,
@@ -58,6 +59,8 @@ class RmRecivedViewArm extends StatefulWidget {
     required this.CO_id,
     required this.CO_name,
     required this.Reject_details,
+    required this.UpdateIncome,
+    required this.UpdateOutcome,
   });
 
   @override
@@ -445,9 +448,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
       backgroundColor: const Color(0xFFF9F8FF),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          int total =
-              (int.tryParse(widget.Income) ?? 0) +
-              (int.tryParse(widget.Outcome) ?? 0);
+          double total =
+              (double.tryParse(widget.UpdateIncome) ?? 0) +
+              (double.tryParse(widget.UpdateOutcome) ?? 0);
 
           if (total > 60000) {
             showCupertinoDialog(
@@ -546,6 +549,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "Relevent_RM_Branch": widget.office_location,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
+                              "reject_details": widget.Reject_details,
+                              "updated_income": widget.UpdateIncome,
+                              "updated_outcome": widget.UpdateOutcome,
                               "latest_update": DateFormat(
                                 'yyyy-MM-dd HH:mm:ss',
                               ).format(DateTime.now()).toString(),
@@ -599,6 +605,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "Sent_To": "DGM",
                               "income": widget.Income,
                               "outcome": widget.Outcome,
+                              "reject_details": widget.Reject_details,
+                              "updated_income": widget.UpdateIncome,
+                              "updated_outcome": widget.UpdateOutcome,
                               "latest_update": DateFormat(
                                 'yyyy-MM-dd HH:mm:ss',
                               ).format(DateTime.now()).toString(),
@@ -750,6 +759,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "ARM_Id": widget.ARM_Id,
                               "RM_Id": widget.user_name,
                               "income": widget.Income,
+                              "reject_details": widget.Reject_details,
+                              "updated_income": widget.UpdateIncome,
+                              "updated_outcome": widget.UpdateOutcome,
                               "outcome": widget.Outcome,
                               "latest_update": DateFormat(
                                 'yyyy-MM-dd HH:mm:ss',
@@ -802,6 +814,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "Sent_To": "AGM",
                               "income": widget.Income,
                               "outcome": widget.Outcome,
+                              "reject_details": widget.Reject_details,
+                              "updated_income": widget.UpdateIncome,
+                              "updated_outcome": widget.UpdateOutcome,
                               "latest_update": DateFormat(
                                 'yyyy-MM-dd HH:mm:ss',
                               ).format(DateTime.now()).toString(),
@@ -956,6 +971,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
+                              "reject_details": widget.Reject_details,
+                              "updated_income": widget.UpdateIncome,
+                              "updated_outcome": widget.UpdateOutcome,
                               "latest_update": DateFormat(
                                 'yyyy-MM-dd HH:mm:ss',
                               ).format(DateTime.now()).toString(),
@@ -1008,6 +1026,9 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "RM_Id": widget.user_name,
                               "income": widget.Income,
                               "outcome": widget.Outcome,
+                              "reject_details": widget.Reject_details,
+                              "updated_income": widget.UpdateIncome,
+                              "updated_outcome": widget.UpdateOutcome,
                               "latest_update": DateFormat(
                                 'yyyy-MM-dd HH:mm:ss',
                               ).format(DateTime.now()).toString(),
