@@ -9,6 +9,7 @@ import 'package:timber_app/RM/ARM_OfficeIN_RM.dart';
 import 'package:timber_app/RM/RM_Proc_view.dart';
 import 'package:timber_app/RM/RM_SentView_Approve.dart';
 import 'package:timber_app/RM/RM_SentView_NotApprove.dart';
+import 'package:timber_app/RM/RM_SentView_rejectedbyADGM.dart';
 import 'package:timber_app/RM/sent_CardView.dart';
 
 class RmSent extends StatefulWidget {
@@ -128,6 +129,8 @@ class _RmSentState extends State<RmSent> {
     String RM_ID = "";
     String Sent_TO = "";
     String Status = "";
+    String ADGM_Type = "";
+    String Reject_reason = "";
     String K = (Sent['from'] ?? "").toString().toUpperCase();
     if (K == "RM") {
       branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
@@ -225,7 +228,7 @@ class _RmSentState extends State<RmSent> {
       ARM_office = Sent['info']['ARM_location'] ?? "N/A";
       latestUpdate = Sent['info']['latest_update'] ?? "";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
-      To = "ARM - $ARM_Id";
+      To = "ARM - $ARM_Id Procumented";
       AGM_ID = Sent['info']['ADGM_ID'] ?? "N/A";
       if (AGM_ID == "N/A" || AGM_ID == "") {
         Status = "RM Approved";
@@ -233,6 +236,34 @@ class _RmSentState extends State<RmSent> {
       } else {
         Status = Sent['info']['Status'] ?? "N/A";
       }
+    } else if (K == "ADGM_REJECTED") {
+      poc = Sent['info']['placeofcoupe'] ?? "N/A";
+      poc_exact = Sent['info']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
+      DateInformed = Sent['info']['dateinformed_from_rm'] ?? "N/A";
+      LetterNo = Sent['info']['LetterNo'] ?? "N/A";
+      SerialNum = Sent['info']['serialnum'] ?? "N/A";
+      OfficerName = Sent['info']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName = Sent['info']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['info']['donor_details'] ?? "N/A";
+      Condition = Sent['info']['Condition'] ?? "N/A";
+      treeCount = Sent['info']['TreeCount'] ?? "N/A";
+      CO_name = Sent['info']['CO_name'] ?? "N/A";
+      CO_id = Sent['info']['CO_id'] ?? "N/A";
+      ARM_Id = Sent['info']['ARM_Id'] ?? "N/A";
+      Income = Sent['info']['income'].toString() ?? "N/A";
+      Outcome = Sent['info']['outcome'].toString() ?? "N/A";
+      Profit =
+          ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
+              .toString();
+      ARM_office = Sent['info']['ARM_location'] ?? "N/A";
+      latestUpdate = Sent['info']['latest_update'] ?? "";
+      ADGM_Type = Sent['info']['latest_update'] ?? "";
+      Reject_reason = Sent['info']['Reject_reason'] ?? "";
+      statusColour = Color.fromRGBO(233, 21, 45, 1);
+      Status = Sent['info']['Status'] ?? "N/A";
+      To = "ARM - $ARM_Id Rejected";
+      AGM_ID = Sent['info']['ADGM_ID'] ?? "N/A";
+      RM_ID = Sent['info']['RM_Id'] ?? "N/A";
     }
 
     return CupertinoButton(
@@ -342,6 +373,38 @@ class _RmSentState extends State<RmSent> {
                 RM_office: widget.office_location,
                 ARM_ID: ARM_Id,
                 RM_ID: RM_ID,
+              ),
+            ),
+          );
+        } else if (K == "ADGM_REJECTED") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RmSentviewRejectedbyadgm(
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc_exact,
+                OfficerName: OfficerName,
+
+                user_name: widget.username,
+                ARM_Office: ARM_office,
+                Income: Income.toString(),
+                Outcome: Outcome.toString(),
+                Profit: Profit.toString(),
+                ARM_Id: ARM_Id,
+                CO_id: CO_id,
+                CO_name: CO_name,
+                AGM_ID: AGM_ID,
+                Status: Status,
+                RM_Id: RM_ID,
+                reject_reason: Reject_reason,
               ),
             ),
           );
