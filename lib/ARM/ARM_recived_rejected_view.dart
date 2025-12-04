@@ -77,7 +77,6 @@ class Arm_Recived_RejectedView extends StatefulWidget {
 
 class _aRmRecivedView_ADGMState_Rejected
     extends State<Arm_Recived_RejectedView> {
-  // FIXED: Changed from Query to DatabaseReference to allow .child() usage
   late DatabaseReference dbref;
 
   final ScrollController _scrollController = ScrollController();
@@ -90,6 +89,10 @@ class _aRmRecivedView_ADGMState_Rejected
   late String _currentOutcome;
   late String _currentProfit;
 
+  // NEW VARIABLES FOR RAW VALUES
+  late String _newRawIncome;
+  late String _newRawOutcome;
+
   @override
   void initState() {
     super.initState();
@@ -97,6 +100,10 @@ class _aRmRecivedView_ADGMState_Rejected
     _currentIncome = widget.Income;
     _currentOutcome = widget.Outcome;
     _currentProfit = widget.Profit;
+
+    // Initialize with existing values so they are not empty if not edited
+    _newRawIncome = widget.Income;
+    _newRawOutcome = widget.Outcome;
 
     dbref = FirebaseDatabase.instance
         .ref()
@@ -127,12 +134,12 @@ class _aRmRecivedView_ADGMState_Rejected
   Future<void> _showEditDialog(
     String label,
     String oldValue,
-    Function(String) onSave,
+    Function(String combinedValue, String rawValue) onSave,
   ) async {
     TextEditingController controller = TextEditingController();
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
@@ -172,7 +179,10 @@ class _aRmRecivedView_ADGMState_Rejected
                   // FORMAT: "new- [new value] and old- [old value]"
                   String combinedValue =
                       "new- ${controller.text} and old- $oldValue";
-                  onSave(combinedValue);
+                  String rawValue = controller.text; // The pure new value
+
+                  // Return both values
+                  onSave(combinedValue, rawValue);
                   Navigator.of(context).pop();
                 }
               },
@@ -205,7 +215,6 @@ class _aRmRecivedView_ADGMState_Rejected
     return Iconsax.info_circle;
   }
 
-  // Modified to accept an onEdit callback
   Widget _summaryItem(
     String label,
     String value,
@@ -270,7 +279,6 @@ class _aRmRecivedView_ADGMState_Rejected
                           ),
                         ),
                       ),
-                      // Edit Button Logic
                       if (onEdit != null) ...[
                         const SizedBox(width: 8),
                         GestureDetector(
@@ -301,7 +309,6 @@ class _aRmRecivedView_ADGMState_Rejected
   }
 
   Widget _treeCard(Map data, int index) {
-    // Database Key for this specific tree node
     String treeKey = data['key'];
 
     final fields = {
@@ -315,7 +322,6 @@ class _aRmRecivedView_ADGMState_Rejected
       "Other": data["Other"] ?? "N/A",
     };
 
-    // Mapping display names to actual database keys for updating
     final dbKeyMap = {
       "Tree Type": "Tree Type",
       "Grade": "Grade",
@@ -372,11 +378,9 @@ class _aRmRecivedView_ADGMState_Rejected
               e.value,
               index,
               onEdit: () {
-                _showEditDialog(e.key, e.value, (combinedValue) {
-                  // Update Firebase directly for the tree row
+                _showEditDialog(e.key, e.value, (combinedValue, rawValue) {
                   String dbFieldKey = dbKeyMap[e.key]!;
 
-                  // This line will now work because dbref is a DatabaseReference
                   dbref
                       .child(treeKey)
                       .update({dbFieldKey: combinedValue})
@@ -424,7 +428,6 @@ class _aRmRecivedView_ADGMState_Rejected
 
       final pdf = pw.Document();
 
-      // Updated to use the editable state variables
       final infoItems = [
         {"label": "Status", "value": widget.Status},
         {"label": "Rejected By", "value": widget.AGM_ID},
@@ -446,12 +449,9 @@ class _aRmRecivedView_ADGMState_Rejected
         {"label": "Donor Details", "value": widget.donor_details},
         {"label": "Condition", "value": widget.Condition},
         {"label": "Tree Count", "value": widget.treeCount},
-        {"label": "Expected Income", "value": "Rs. $_currentIncome"}, // Updated
-        {
-          "label": "Expected Expenditure",
-          "value": "Rs. $_currentOutcome",
-        }, // Updated
-        {"label": "Expected Profit", "value": "Rs. $_currentProfit"}, // Updated
+        {"label": "Expected Income", "value": "Rs. $_currentIncome"},
+        {"label": "Expected Expenditure", "value": "Rs. $_currentOutcome"},
+        {"label": "Expected Profit", "value": "Rs. $_currentProfit"},
       ];
 
       pdf.addPage(
@@ -632,7 +632,7 @@ class _aRmRecivedView_ADGMState_Rejected
                     ),
                     onPressed: () async {
                       Reject_story =
-                          "$Reject_story {${widget.reasonforreject} rejected by ${widget.ADGM_Type}(${widget.AGM_ID}) and edited by: ARM (${widget.ARM_Id}) ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}";
+                          "$Reject_story {${widget.reasonforreject} rejected by ${widget.ADGM_Type}(${widget.AGM_ID}) and edited by: ARM (${widget.ARM_Id}) ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()} }";
                       final database = FirebaseDatabase.instance.ref();
 
                       // Write to ARM_branch_data_saved_test
@@ -682,8 +682,10 @@ class _aRmRecivedView_ADGMState_Rejected
                             "CO_id": widget.CO_id,
                             "ARM_ID": widget.ARM_Id,
                             "RM_Id": widget.RM_ID,
-                            "Income": _currentIncome, // EDITED VALUE
-                            "Outcome": _currentOutcome, // EDITED VALUE
+                            "Income": _currentIncome,
+                            "Outcome": _currentOutcome,
+                            "updated_income": _newRawIncome,
+                            "updated_Outcome": _newRawOutcome,
                             "Reject_Details": Reject_story,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
@@ -734,8 +736,10 @@ class _aRmRecivedView_ADGMState_Rejected
                             "CO_id": widget.CO_id,
                             "ARM_ID": widget.ARM_Id,
                             "RM_Id": widget.RM_ID,
-                            "Income": _currentIncome, // EDITED VALUE
-                            "Outcome": _currentOutcome, // EDITED VALUE
+                            "Income": _currentIncome,
+                            "Outcome": _currentOutcome,
+                            "updated_income": _newRawIncome,
+                            "updated_Outcome": _newRawOutcome,
                             "Reject_Details": Reject_story,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
@@ -805,9 +809,13 @@ class _aRmRecivedView_ADGMState_Rejected
                 "Rs. $_currentIncome",
                 20,
                 onEdit: () {
-                  _showEditDialog("Expected Income", _currentIncome, (val) {
+                  _showEditDialog("Expected Income", _currentIncome, (
+                    combinedVal,
+                    rawVal,
+                  ) {
                     setState(() {
-                      _currentIncome = val;
+                      _currentIncome = combinedVal;
+                      _newRawIncome = rawVal; // CAPTURE NEW RAW INCOME HERE
                     });
                   });
                 },
@@ -818,25 +826,22 @@ class _aRmRecivedView_ADGMState_Rejected
                 21,
                 onEdit: () {
                   _showEditDialog("Expected Expenditure", _currentOutcome, (
-                    val,
+                    combinedVal,
+                    rawVal,
                   ) {
                     setState(() {
-                      _currentOutcome = val;
+                      _currentOutcome = combinedVal;
+                      _newRawOutcome =
+                          rawVal; // CAPTURE NEW RAW EXPENDITURE HERE
                     });
                   });
                 },
               ),
               _summaryItem(
                 "Expected Profit",
-                "Rs. $_currentProfit",
+                "Rs. ${((double.tryParse(_newRawIncome) ?? 0) - (double.tryParse(_newRawOutcome) ?? 0)).toStringAsFixed(2)}",
                 22,
-                onEdit: () {
-                  _showEditDialog("Expected Profit", _currentProfit, (val) {
-                    setState(() {
-                      _currentProfit = val;
-                    });
-                  });
-                },
+                // onEdit removed as requested
               ),
 
               const SizedBox(height: 28),

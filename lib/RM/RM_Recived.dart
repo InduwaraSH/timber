@@ -85,6 +85,7 @@ class _RMRecivedState extends State<RMRecived> {
     String ARM_Id = "";
     String CO_id = "";
     String poc_exact = "";
+    String Reject_Details = "";
 
     String from_doc = Reciver == "RM" ? "ARM" : "CO";
     Color statusColour = Colors.black12;
@@ -95,6 +96,8 @@ class _RMRecivedState extends State<RMRecived> {
     String Rejected_reason = "";
     String DGM_ID = "";
     String ADGM_Type = "";
+    String updated_Outcome = "";
+    String updated_income = "";
 
     if (Reciver == "ARM") {
       poc = Sent['info']['poc'] ?? "N/A";
@@ -112,11 +115,25 @@ class _RMRecivedState extends State<RMRecived> {
       ARM_Id = Sent['info']['ARM_ID'] ?? "N/A";
       Income = Sent['info']['Income'].toString() ?? "N/A";
       Outcome = Sent['info']['Outcome'].toString() ?? "N/A";
-      Profit = Sent['info']['profitValue'].toString() ?? "N/A";
+
       ARM_office = Sent['info']['ARM_Office'] ?? "N/A";
       latestUpdate = Sent['info']['latest_update'] ?? "";
-      statusColour = Color.fromRGBO(255, 204, 0, 1);
-      from_doc = "ARM - $ARM_Id";
+      updated_Outcome = Sent['info']['updated_Outcome'] ?? "";
+      updated_income = Sent['info']['updated_income'] ?? "";
+      Reject_Details = Sent['info']['Reject_Details'] ?? "N/A";
+      if (Reject_Details == "N/A" || Reject_Details.isEmpty) {
+        statusColour = Color.fromRGBO(255, 204, 0, 1);
+        from_doc = "ARM - $ARM_Id";
+        updated_income = Income;
+        updated_Outcome = Outcome;
+      } else {
+        statusColour = Color.fromRGBO(204, 19, 139, 1);
+        from_doc = "ARM - $ARM_Id (Resubmitted)";
+      }
+      Profit =
+          ((double.tryParse(updated_income) ?? 0) -
+                  (double.tryParse(updated_Outcome) ?? 0))
+              .toStringAsFixed(2);
     } else if (Reciver == "AGM_Approved") {
       poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
       poc_exact =
@@ -244,6 +261,7 @@ class _RMRecivedState extends State<RMRecived> {
                 ARM_Id: ARM_Id,
                 CO_id: CO_id,
                 CO_name: CO_name,
+                Reject_details: Reject_Details,
               ),
             ),
           );
