@@ -12,7 +12,7 @@ import 'package:timber_app/ARM/ARMSentImageView.dart';
 import 'package:timber_app/RM/RM_RecivedTimeline.dart';
 import 'package:timber_app/Snack_Message.dart';
 
-class RmRecivedViewRejected extends StatefulWidget {
+class Arm_Recived_RejectedView extends StatefulWidget {
   final String poc;
   final String DateInformed;
   final String LetterNo;
@@ -36,11 +36,12 @@ class RmRecivedViewRejected extends StatefulWidget {
   final String AGM_ID;
   final String Status;
   final String RM_ID;
-  final String ADGM_title;
+
   final String reasonforreject;
   final String ADGM_Type;
+  final String RM_office;
 
-  const RmRecivedViewRejected({
+  const Arm_Recived_RejectedView({
     super.key,
     required this.poc,
     required this.DateInformed,
@@ -64,28 +65,42 @@ class RmRecivedViewRejected extends StatefulWidget {
     required this.CO_name,
     required this.AGM_ID,
     required this.Status,
-    required this.ADGM_title,
     required this.reasonforreject,
     required this.ADGM_Type,
+    required this.RM_office,
   });
 
   @override
-  State<RmRecivedViewRejected> createState() =>
-      _RmRecivedView_ADGMState_Rejected();
+  State<Arm_Recived_RejectedView> createState() =>
+      _aRmRecivedView_ADGMState_Rejected();
 }
 
-class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
-  late Query dbref;
+class _aRmRecivedView_ADGMState_Rejected
+    extends State<Arm_Recived_RejectedView> {
+  // FIXED: Changed from Query to DatabaseReference to allow .child() usage
+  late DatabaseReference dbref;
+
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
   String ADGM_Name = "";
+  String Reject_story = "";
+
+  // Mutable variables for editable fields
+  late String _currentIncome;
+  late String _currentOutcome;
+  late String _currentProfit;
 
   @override
   void initState() {
     super.initState();
+    // Initialize mutable variables with widget data
+    _currentIncome = widget.Income;
+    _currentOutcome = widget.Outcome;
+    _currentProfit = widget.Profit;
+
     dbref = FirebaseDatabase.instance
         .ref()
-        .child('RM_branch_data_saved')
+        .child('ARM_branch_data_saved')
         .child(widget.office_location)
         .child("Recived")
         .child(widget.SerialNum)
@@ -106,6 +121,66 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  // ----------------- EDIT DIALOG LOGIC -----------------
+  Future<void> _showEditDialog(
+    String label,
+    String oldValue,
+    Function(String) onSave,
+  ) async {
+    TextEditingController controller = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text('Edit $label'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Current: $oldValue',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    labelText: 'Enter New Value',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              child: const Text('Save', style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                if (controller.text.isNotEmpty) {
+                  // FORMAT: "new- [new value] and old- [old value]"
+                  String combinedValue =
+                      "new- ${controller.text} and old- $oldValue";
+                  onSave(combinedValue);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   IconData _getIconForLabel(String label) {
@@ -130,7 +205,13 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
     return Iconsax.info_circle;
   }
 
-  Widget _summaryItem(String label, String value, int index) {
+  // Modified to accept an onEdit callback
+  Widget _summaryItem(
+    String label,
+    String value,
+    int index, {
+    VoidCallback? onEdit,
+  }) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 250),
       tween: Tween(begin: 1.0, end: 1.0),
@@ -174,15 +255,41 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
                 ),
                 Expanded(
                   flex: 4,
-                  child: Text(
-                    value,
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(
-                      fontFamily: 'sfproRoundSemiB',
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          value,
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                            fontFamily: 'sfproRoundSemiB',
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      // Edit Button Logic
+                      if (onEdit != null) ...[
+                        const SizedBox(width: 8),
+                        GestureDetector(
+                          onTap: onEdit,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Icon(
+                              Iconsax.edit,
+                              size: 16,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ],
@@ -194,6 +301,9 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
   }
 
   Widget _treeCard(Map data, int index) {
+    // Database Key for this specific tree node
+    String treeKey = data['key'];
+
     final fields = {
       "Tree Type": data["Tree Type"] ?? "N/A",
       "Grade": data["Grade"] ?? "N/A",
@@ -203,6 +313,18 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
       "Volume": data["Volume"] ?? "N/A",
       "Value": data["Value"] ?? "N/A",
       "Other": data["Other"] ?? "N/A",
+    };
+
+    // Mapping display names to actual database keys for updating
+    final dbKeyMap = {
+      "Tree Type": "Tree Type",
+      "Grade": "Grade",
+      "Actual Height": "Actual Height",
+      "Com Height": "Commercial Height",
+      "G at B Height": "Girth at Breast Height",
+      "Volume": "Volume",
+      "Value": "Value",
+      "Other": "Other",
     };
 
     return AnimatedContainer(
@@ -244,9 +366,36 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
             ],
           ),
           const SizedBox(height: 12),
-          ...fields.entries
-              .map((e) => _summaryItem(e.key, e.value, index))
-              .toList(),
+          ...fields.entries.map((e) {
+            return _summaryItem(
+              e.key,
+              e.value,
+              index,
+              onEdit: () {
+                _showEditDialog(e.key, e.value, (combinedValue) {
+                  // Update Firebase directly for the tree row
+                  String dbFieldKey = dbKeyMap[e.key]!;
+
+                  // This line will now work because dbref is a DatabaseReference
+                  dbref
+                      .child(treeKey)
+                      .update({dbFieldKey: combinedValue})
+                      .then((_) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("${e.key} updated successfully"),
+                          ),
+                        );
+                      })
+                      .catchError((error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Failed to update: $error")),
+                        );
+                      });
+                });
+              },
+            );
+          }).toList(),
         ],
       ),
     );
@@ -275,11 +424,12 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
 
       final pdf = pw.Document();
 
+      // Updated to use the editable state variables
       final infoItems = [
         {"label": "Status", "value": widget.Status},
         {"label": "Rejected By", "value": widget.AGM_ID},
         {"label": "Rejected Reason", "value": widget.reasonforreject},
-        {"label": widget.ADGM_title, "value": widget.AGM_ID},
+        {"label": widget.ADGM_Type, "value": widget.AGM_ID},
         {"label": "RM Office", "value": widget.office_location},
         {"label": "RM", "value": widget.RM_ID},
         {"label": "ARM Office", "value": widget.ARM_Office},
@@ -296,9 +446,12 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
         {"label": "Donor Details", "value": widget.donor_details},
         {"label": "Condition", "value": widget.Condition},
         {"label": "Tree Count", "value": widget.treeCount},
-        {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
-        {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
-        {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+        {"label": "Expected Income", "value": "Rs. $_currentIncome"}, // Updated
+        {
+          "label": "Expected Expenditure",
+          "value": "Rs. $_currentOutcome",
+        }, // Updated
+        {"label": "Expected Profit", "value": "Rs. $_currentProfit"}, // Updated
       ];
 
       pdf.addPage(
@@ -430,42 +583,10 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
 
   @override
   Widget build(BuildContext context) {
-    final infoItems = [
-      {"label": "Status", "value": widget.Status},
-      {"label": "Rejected By", "value": widget.AGM_ID},
-      {"label": "Rejected Reason", "value": widget.reasonforreject},
-      {"label": widget.ADGM_title, "value": widget.AGM_ID},
-      {"label": "RM Office", "value": widget.office_location},
-      {"label": "RM", "value": widget.RM_ID},
-      {"label": "ARM Office", "value": widget.ARM_Office},
-      {"label": "ARM ID", "value": widget.ARM_Id},
-      {"label": "CO", "value": widget.CO_name},
-      {"label": "CO ID", "value": widget.CO_id},
-      {"label": "POC", "value": widget.poc},
-      {"label": "POC Exact", "value": widget.PlaceOfCoupe_exact_from_arm},
-      {"label": "Date Informed", "value": widget.DateInformed},
-      {"label": "Letter No", "value": widget.LetterNo},
-      {"label": "Serial No", "value": widget.SerialNum},
-      {"label": "Officer Name", "value": widget.OfficerName},
-      {"label": "Officer Position", "value": widget.OfficerPositionAndName},
-      {"label": "Donor Details", "value": widget.donor_details},
-      {"label": "Condition", "value": widget.Condition},
-      {"label": "Tree Count", "value": widget.treeCount},
-      {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
-      {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
-      {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
-    ];
-
-    //Money value for RM AGM and DGM
-
     return Scaffold(
       backgroundColor: const Color(0xFFF9F8FF),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          int total =
-              (int.tryParse(widget.Income) ?? 0) +
-              (int.tryParse(widget.Outcome) ?? 0);
-
           showCupertinoDialog(
             context: context,
             builder: (BuildContext dialogContext) {
@@ -510,22 +631,24 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
                       ),
                     ),
                     onPressed: () async {
+                      Reject_story =
+                          "$Reject_story {${widget.reasonforreject} rejected by ${widget.ADGM_Type}(${widget.AGM_ID}) and edited by: ARM (${widget.ARM_Id}) ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}";
                       final database = FirebaseDatabase.instance.ref();
 
                       // Write to ARM_branch_data_saved_test
                       await database
-                          .child('ARM_branch_data_saved')
-                          .child(widget.ARM_Office)
+                          .child('RM_branch_data_saved')
+                          .child(widget.RM_office)
                           .child("Recived")
                           .child(widget.SerialNum)
-                          .set({"from": "ADGM_Rejected"});
+                          .set({"from": "ARM"});
 
                       // Copy allTrees if present
                       DatabaseEvent event = await dbref.once();
                       if (event.snapshot.value != null) {
                         await database
-                            .child('ARM_branch_data_saved')
-                            .child(widget.ARM_Office)
+                            .child('RM_branch_data_saved')
+                            .child(widget.RM_office)
                             .child("Recived")
                             .child(widget.SerialNum)
                             .child("allTrees")
@@ -534,19 +657,15 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
 
                       // Set info under ARM_branch_data_saved_test
                       await database
-                          .child('ARM_branch_data_saved')
-                          .child(widget.ARM_Office)
+                          .child('RM_branch_data_saved')
+                          .child(widget.RM_office)
                           .child("Recived")
                           .child(widget.SerialNum)
-                          .child("timberReportheadlines")
+                          .child("info")
                           .set({
-                            "Status": "${widget.ADGM_Type} Rejected",
-                            "Reject_reason": widget.reasonforreject,
-                            "ADGM_Type": widget.ADGM_Type,
-                            "ADGM_ID": widget.AGM_ID,
-                            "serialnum": widget.SerialNum,
-                            "placeofcoupe": widget.poc,
-                            "dateinformed_from_rm": widget.DateInformed,
+                            "SerialNum": widget.SerialNum,
+                            "poc": widget.poc,
+                            "DateInformed": widget.DateInformed,
                             "donor_details": widget.donor_details,
                             "PlaceOfCoupe_exact_from_arm":
                                 widget.PlaceOfCoupe_exact_from_arm,
@@ -554,17 +673,18 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
                             "Condition": widget.Condition,
                             "RM Office": widget.office_location,
                             "OfficerName": widget.OfficerName,
-                            "OfficerPosition&name":
+                            "OfficerPositionAndName":
                                 widget.OfficerPositionAndName,
-                            "TreeCount": widget.treeCount.toString(),
+                            "treeCount": widget.treeCount.toString(),
                             "Date": widget.DateInformed,
-                            "ARM_location": widget.ARM_Office,
+                            "ARM_Office": widget.ARM_Office,
                             "CO_name": widget.CO_name,
                             "CO_id": widget.CO_id,
-                            "ARM_Id": widget.ARM_Id,
-                            "RM_Id": widget.user_name,
-                            "income": widget.Income,
-                            "outcome": widget.Outcome,
+                            "ARM_ID": widget.ARM_Id,
+                            "RM_Id": widget.RM_ID,
+                            "Income": _currentIncome, // EDITED VALUE
+                            "Outcome": _currentOutcome, // EDITED VALUE
+                            "Reject_Details": Reject_story,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
                             ).format(DateTime.now()).toString(),
@@ -572,15 +692,15 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
 
                       // Also mirror to RM_branch_data_saved_test
                       await database
-                          .child('RM_branch_data_saved')
+                          .child('ARM_branch_data_saved')
                           .child(widget.office_location)
                           .child("Sent")
                           .child(widget.SerialNum)
-                          .set({"from": "ADGM_Rejected"});
+                          .set({"Reciver": "RM"});
 
                       if (event.snapshot.value != null) {
                         await database
-                            .child('RM_branch_data_saved')
+                            .child('ARM_branch_data_saved')
                             .child(widget.office_location)
                             .child("Sent")
                             .child(widget.SerialNum)
@@ -589,82 +709,40 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
                       }
 
                       await database
-                          .child('RM_branch_data_saved')
+                          .child('ARM_branch_data_saved')
                           .child(widget.office_location)
                           .child("Sent")
                           .child(widget.SerialNum)
                           .child("info")
                           .set({
-                            "Status": "${widget.ADGM_Type} Rejected",
-                            "Reject_reason": widget.reasonforreject,
-                            "ADGM_ID": widget.AGM_ID,
-                            "ADGM_Type": widget.ADGM_Type,
-                            "serialnum": widget.SerialNum,
-                            "placeofcoupe": widget.poc,
-                            "dateinformed_from_rm": widget.DateInformed,
+                            "SerialNum": widget.SerialNum,
+                            "poc": widget.poc,
+                            "DateInformed": widget.DateInformed,
                             "donor_details": widget.donor_details,
                             "PlaceOfCoupe_exact_from_arm":
                                 widget.PlaceOfCoupe_exact_from_arm,
                             "LetterNo": widget.LetterNo,
                             "Condition": widget.Condition,
+                            "RM Office": widget.office_location,
                             "OfficerName": widget.OfficerName,
-                            "OfficerPosition&name":
+                            "OfficerPositionAndName":
                                 widget.OfficerPositionAndName,
-                            "TreeCount": widget.treeCount.toString(),
+                            "treeCount": widget.treeCount.toString(),
                             "Date": widget.DateInformed,
-                            "ARM_location": widget.ARM_Office,
+                            "ARM_Office": widget.ARM_Office,
                             "CO_name": widget.CO_name,
                             "CO_id": widget.CO_id,
-                            "ARM_Id": widget.ARM_Id,
-                            "RM_Id": widget.user_name,
-                            "income": widget.Income,
-                            "outcome": widget.Outcome,
+                            "ARM_ID": widget.ARM_Id,
+                            "RM_Id": widget.RM_ID,
+                            "Income": _currentIncome, // EDITED VALUE
+                            "Outcome": _currentOutcome, // EDITED VALUE
+                            "Reject_Details": Reject_story,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
                             ).format(DateTime.now()).toString(),
-                          })
-                          // Update status_of_job_test
-                          .then((_) {
-                            try {
-                              FirebaseDatabase.instance
-                                  .ref()
-                                  .child("RM_branch_data_saved")
-                                  .child(widget.office_location.toString())
-                                  .child("Recived")
-                                  .child(widget.SerialNum.toString())
-                                  .remove();
-                              print('Data deleted successfully');
-                            } catch (e) {
-                              print('Error deleting data: $e');
-                            }
-                          })
-                          .then((_) {
-                            try {
-                              FirebaseDatabase.instance
-                                  .ref()
-                                  .child("ARM_branch_data_saved")
-                                  .child(widget.ARM_Office.toString())
-                                  .child("Sent")
-                                  .child(widget.SerialNum.toString())
-                                  .remove();
-                              print('Data deleted successfully');
-                              showTopSnackBar(
-                                context,
-                                message: "Data sent to ARM successfully",
-                                backgroundColor: Colors.green,
-                              );
-                            } catch (e) {
-                              print('Error deleting data: $e');
-                              showTopSnackBar(
-                                context,
-                                message: "Error deleting data: $e",
-                                backgroundColor: Colors.red,
-                              );
-                            }
                           });
 
                       Navigator.of(dialogContext).pop();
-                      Navigator.pop(context);
                     },
                   ),
                 ],
@@ -684,7 +762,6 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
           ),
         ),
       ),
-
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
         bottom: false,
@@ -696,17 +773,72 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
             children: [
               _buildHeader(),
               const SizedBox(height: 16),
-              ...infoItems
-                  .asMap()
-                  .entries
-                  .map(
-                    (entry) => _summaryItem(
-                      entry.value["label"]!,
-                      entry.value["value"]!,
-                      entry.key,
-                    ),
-                  )
-                  .toList(),
+              // Build Info Items Manually to inject Edit Functionality
+              _summaryItem("Status", widget.Status, 0),
+              _summaryItem("Rejected By", widget.AGM_ID, 1),
+              _summaryItem("Rejected Reason", widget.reasonforreject, 2),
+              _summaryItem(widget.ADGM_Type, widget.AGM_ID, 3),
+              _summaryItem("RM Office", widget.office_location, 4),
+              _summaryItem("RM", widget.RM_ID, 5),
+              _summaryItem("ARM Office", widget.ARM_Office, 6),
+              _summaryItem("ARM ID", widget.ARM_Id, 7),
+              _summaryItem("CO", widget.CO_name, 8),
+              _summaryItem("CO ID", widget.CO_id, 9),
+              _summaryItem("POC", widget.poc, 10),
+              _summaryItem("POC Exact", widget.PlaceOfCoupe_exact_from_arm, 11),
+              _summaryItem("Date Informed", widget.DateInformed, 12),
+              _summaryItem("Letter No", widget.LetterNo, 13),
+              _summaryItem("Serial No", widget.SerialNum, 14),
+              _summaryItem("Officer Name", widget.OfficerName, 15),
+              _summaryItem(
+                "Officer Position",
+                widget.OfficerPositionAndName,
+                16,
+              ),
+              _summaryItem("Donor Details", widget.donor_details, 17),
+              _summaryItem("Condition", widget.Condition, 18),
+              _summaryItem("Tree Count", widget.treeCount, 19),
+
+              // Editable Fields
+              _summaryItem(
+                "Expected Income",
+                "Rs. $_currentIncome",
+                20,
+                onEdit: () {
+                  _showEditDialog("Expected Income", _currentIncome, (val) {
+                    setState(() {
+                      _currentIncome = val;
+                    });
+                  });
+                },
+              ),
+              _summaryItem(
+                "Expected Expenditure",
+                "Rs. $_currentOutcome",
+                21,
+                onEdit: () {
+                  _showEditDialog("Expected Expenditure", _currentOutcome, (
+                    val,
+                  ) {
+                    setState(() {
+                      _currentOutcome = val;
+                    });
+                  });
+                },
+              ),
+              _summaryItem(
+                "Expected Profit",
+                "Rs. $_currentProfit",
+                22,
+                onEdit: () {
+                  _showEditDialog("Expected Profit", _currentProfit, (val) {
+                    setState(() {
+                      _currentProfit = val;
+                    });
+                  });
+                },
+              ),
+
               const SizedBox(height: 28),
               const Padding(
                 padding: EdgeInsets.only(left: 10.0, top: 8.0),

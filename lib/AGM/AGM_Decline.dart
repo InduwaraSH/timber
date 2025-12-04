@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:timber_app/Snack_Message.dart';
 
 class AgmDecline extends StatefulWidget {
   final String office;
@@ -236,68 +237,49 @@ class _AgmDeclineState extends State<AgmDecline> {
                               "latest_update": DateFormat(
                                 'yyyy-MM-dd HH:mm:ss',
                               ).format(DateTime.now()).toString(),
+                            })
+                            //Update status_of_job_test
+                            .then((_) {
+                              try {
+                                FirebaseDatabase.instance
+                                    .ref()
+                                    .child('Head_office_data_saved')
+                                    .child("AGM")
+                                    .child("Recived")
+                                    .child(widget.serial.toString())
+                                    .remove();
+                                print('Data deleted successfully');
+                                showTopSnackBar(
+                                  context,
+                                  message: "Data sent to RM successfully",
+                                  backgroundColor: Colors.green,
+                                );
+                              } catch (e) {
+                                showTopSnackBar(
+                                  context,
+                                  message: "Error deleting data: $e",
+                                  backgroundColor: Colors.red,
+                                );
+                              }
+                            })
+                            .then((_) {
+                              try {
+                                FirebaseDatabase.instance
+                                    .ref()
+                                    .child("RM_branch_data_saved")
+                                    .child(widget.RM_office.toString())
+                                    .child("Sent")
+                                    .child(widget.serial.toString())
+                                    .remove();
+                                print('Data deleted successfully');
+                              } catch (e) {
+                                print('Error deleting data: $e');
+                              }
                             });
 
-                        // Update status_of_job_test
-                        // await FirebaseDatabase.instance
-                        //     .ref()
-                        //     .child("Status_of_job")
-                        //     .child(widget.ARM_Branch_Name.toString())
-                        //     .child(widget.SerialNum.toString())
-                        //     .child("Status")
-                        //     .set("approved");
-
-                        // await FirebaseDatabase.instance
-                        //     .ref()
-                        //     .child("Status_of_job")
-                        //     .child(widget.ARM_Branch_Name.toString())
-                        //     .child(widget.SerialNum.toString())
-                        //     .child("approved")
-                        //     .set(
-                        //       DateFormat(
-                        //         'yyyy-MM-dd',
-                        //       ).format(DateTime.now()).toString(),
-                        //     )
-                        //     .then((_) {
-                        //       try {
-                        //         FirebaseDatabase.instance
-                        //             .ref()
-                        //             .child('Head_office_data_saved')
-                        //             .child("AGM")
-                        //             .child("Recived")
-                        //             .child(widget.SerialNum.toString())
-                        //             .remove();
-                        //         print('Data deleted successfully');
-                        //         showTopSnackBar(
-                        //           context,
-                        //           message: "Data sent to RM successfully",
-                        //           backgroundColor: Colors.green,
-                        //         );
-                        //       } catch (e) {
-                        //         showTopSnackBar(
-                        //           context,
-                        //           message: "Error deleting data: $e",
-                        //           backgroundColor: Colors.red,
-                        //         );
-                        //       }
-                        //     })
-                        //     .then((_) {
-                        //       try {
-                        //         FirebaseDatabase.instance
-                        //             .ref()
-                        //             .child("RM_branch_data_saved")
-                        //             .child(widget.RM_office.toString())
-                        //             .child("Sent")
-                        //             .child(widget.SerialNum.toString())
-                        //             .remove();
-                        //         print('Data deleted successfully');
-                        //       } catch (e) {
-                        //         print('Error deleting data: $e');
-                        //       }
-                        //     });
-
-                        // Navigator.of(dialogContext).pop();
-                        // Navigator.pop(context);
+                        Navigator.of(dialogContext).pop();
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                       }
                     },
                   ),
