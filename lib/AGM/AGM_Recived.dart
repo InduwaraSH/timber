@@ -92,7 +92,7 @@ class _AGMRecivedState extends State<AGMRecived> {
     String RM = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
     String RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
     String reject_details =
-        Sent['timberReportheadlines']['reject_details'] ?? "N/A";
+        Sent['timberReportheadlines']['reject_details'] ?? "";
     String Profit;
     String updated_income = "";
     String updated_outcome = "";

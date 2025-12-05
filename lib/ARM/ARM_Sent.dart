@@ -78,6 +78,7 @@ class _ARM_SentState extends State<ARM_Sent> {
     String Income = "";
     String Outcome = "";
     String Ptofit = "";
+    String Reject_reason = "";
 
     Color statusColour = Colors.green;
 
@@ -93,6 +94,7 @@ class _ARM_SentState extends State<ARM_Sent> {
       Condition = Sent['info']['Condition'] ?? "N/A";
       treeCount = Sent['info']['treeCount'] ?? "N/A";
       CO_name = Sent['info']['CO_name'] ?? "N/A";
+      Reject_reason = Sent['info']['Reject_Details'] ?? "N/A";
       //ARM_ID = Sent['info']['arm_id'] ?? "N/A";
 
       co_id = Sent['info']['CO_id'] ?? "N/A";
@@ -101,7 +103,14 @@ class _ARM_SentState extends State<ARM_Sent> {
       Outcome = Sent['info']['Outcome'] ?? "N/A";
 
       To_Doc = "RM";
-      statusColour = Color.fromRGBO(52, 199, 89, 1);
+      if (Reject_reason == "" ||
+          Reject_reason.isEmpty ||
+          Reject_reason == "N/A") {
+        statusColour = Color.fromRGBO(52, 199, 89, 1);
+      } else {
+        statusColour = Color.fromRGBO(204, 19, 139, 1);
+        To_Doc = "RM - Re submitted";
+      }
     } else if (Reciver == "CO") {
       branchName = Sent['arm_office_location'] ?? "Not Available";
       poc = Sent['placeOfCoupe'] ?? "N/A";
@@ -155,6 +164,7 @@ class _ARM_SentState extends State<ARM_Sent> {
                 CO_id: co_id,
 
                 Income: Income,
+                Reject_Details: Reject_reason,
                 Outcome: Outcome,
                 Profit:
                     ((double.tryParse(Income.toString()) ?? 0) -

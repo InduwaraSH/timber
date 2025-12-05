@@ -32,6 +32,7 @@ class RmSentviewApprove extends StatefulWidget {
   final String CO_name;
   final String AGM_ID;
   final String Status;
+  final String reject_details;
 
   const RmSentviewApprove({
     super.key,
@@ -57,6 +58,7 @@ class RmSentviewApprove extends StatefulWidget {
     required this.CO_name,
     required this.AGM_ID,
     required this.Status,
+    required this.reject_details,
   });
 
   @override
@@ -284,6 +286,7 @@ class _RmSentviewApproveState extends State<RmSentviewApprove> {
         {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
         {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
         {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+        {"label": "Reject_details", "value": "Rs. ${widget.reject_details}"},
       ];
 
       pdf.addPage(
@@ -437,6 +440,7 @@ class _RmSentviewApproveState extends State<RmSentviewApprove> {
       {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
       {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
       {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+      {"label": "Reject_details", "value": "Rs. ${widget.reject_details}"},
     ];
 
     //Money value for RM AGM and DGM

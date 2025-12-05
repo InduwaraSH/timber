@@ -131,6 +131,10 @@ class _RmSentState extends State<RmSent> {
     String Status = "";
     String ADGM_Type = "";
     String Reject_reason = "";
+    String Reject_Details = "";
+    String Updated_income = "";
+    String Updated_Outcome = "";
+    String prefix = "";
     String K = (Sent['from'] ?? "").toString().toUpperCase();
     if (K == "RM") {
       branchName = Sent['ARM_Branch_Name'] ?? "Not Available";
@@ -157,6 +161,7 @@ class _RmSentState extends State<RmSent> {
       CO_name = Sent['info']['CO_name'] ?? "N/A";
       CO_id = Sent['info']['CO_id'] ?? "N/A";
       ARM_Id = Sent['info']['ARM_Id'] ?? "N/A";
+      Reject_Details = Sent['info']['reject_details'] ?? "N/A";
       Income = Sent['info']['income'].toString() ?? "N/A";
       Outcome = Sent['info']['outcome'].toString() ?? "N/A";
       Profit =
@@ -189,13 +194,26 @@ class _RmSentState extends State<RmSent> {
       CO_id = Sent['info']['CO_id'] ?? "N/A";
       Income = Sent['info']['income'].toString() ?? "N/A";
       Outcome = Sent['info']['outcome'].toString() ?? "N/A";
+
+      Updated_income = Sent['info']['updated_income'].toString() ?? "N/A";
+      Updated_Outcome = Sent['info']['updated_outcome'].toString() ?? "N/A";
+
       Profit =
-          ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
+          ((double.tryParse(Updated_income) ?? 0) -
+                  (double.tryParse(Updated_Outcome) ?? 0))
               .toString() ??
           "N/A";
       ARM_office = Sent['info']['ARM_location'] ?? "N/A";
       RM_ID = Sent['info']['RM_Id'] ?? "N/A";
       ARM_Id = Sent['info']['ARM_Id'] ?? "N/A";
+      Reject_Details = Sent['info']['reject_details'] ?? "N/A";
+      if (Reject_Details == "" ||
+          Reject_Details.isEmpty ||
+          Reject_Details == "N/A") {
+        prefix = "";
+      } else {
+        prefix = " - Re submitted";
+      }
 
       latestUpdate = Sent['info']['latest_update'] ?? "N/A";
       if (Sent_TO == "DGM") {
@@ -204,7 +222,7 @@ class _RmSentState extends State<RmSent> {
         statusColour = Color.fromRGBO(167, 170, 244, 255);
       }
 
-      To = Sent_TO;
+      To = Sent_TO + prefix;
       RM_ID = Sent['info']['RM_Id'] ?? "N/A";
     } else if (K == "PROCUMENTED") {
       poc = Sent['info']['placeofcoupe'] ?? "N/A";
@@ -310,6 +328,7 @@ class _RmSentState extends State<RmSent> {
                 CO_name: CO_name,
                 AGM_ID: AGM_ID,
                 Status: Status,
+                reject_details: Reject_Details,
               ),
             ),
           );
@@ -338,6 +357,7 @@ class _RmSentState extends State<RmSent> {
                 ARM_Id: ARM_Id,
                 CO_id: CO_id,
                 CO_name: CO_name,
+                Reject_Details: Reject_Details,
               ),
             ),
           );
@@ -373,6 +393,7 @@ class _RmSentState extends State<RmSent> {
                 RM_office: widget.office_location,
                 ARM_ID: ARM_Id,
                 RM_ID: RM_ID,
+                reject_details: Reject_Details,
               ),
             ),
           );

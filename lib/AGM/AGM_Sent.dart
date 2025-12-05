@@ -110,6 +110,7 @@ class _AgmSentState extends State<AgmSent> {
     String TO_DOC = "";
     String ADGM_Id = "";
     String Reason = "";
+    String Reject_details = "";
     Color statusColour = Color.fromRGBO(52, 199, 89, 1);
     String check = (Sent['from'] ?? "").toString().toUpperCase();
 
@@ -135,6 +136,7 @@ class _AgmSentState extends State<AgmSent> {
       latestUpdate = Sent['info']['latest_update'] ?? "N/A";
       TO_DOC = "RM Office $RM_office";
       ADGM_Id = Sent['info']['RM_Id'] ?? "N/A";
+      Reject_details = Sent['info']['reject_details'] ?? "N/A";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
     } else {
       branchName = Sent['info']['ARM_location'] ?? "Not Available";
@@ -189,6 +191,7 @@ class _AgmSentState extends State<AgmSent> {
                 CO_id: CO_id,
                 ARM_id: ARM_id,
                 RM_office: RM_office,
+                reject_details: Reject_details,
                 RM: RM,
                 Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
                     ? (((double.tryParse(Income) ?? 0) -

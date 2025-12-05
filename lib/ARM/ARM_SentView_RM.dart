@@ -25,6 +25,7 @@ class ArmSentviewCo extends StatefulWidget {
   final String Outcome;
   final String Profit;
   final String CO_name;
+  final String Reject_Details;
 
   final String CO_id;
 
@@ -51,6 +52,7 @@ class ArmSentviewCo extends StatefulWidget {
     required this.CO_name,
 
     required this.CO_id,
+    required this.Reject_Details,
   });
 
   @override
@@ -287,6 +289,7 @@ class _ArmSentviewCoState extends State<ArmSentviewCo> {
       {"label": "Income", "value": "RS. " + widget.Income},
       {"label": "Outcome", "value": "RS. " + widget.Outcome},
       {"label": "Profit", "value": "RS. " + widget.Profit},
+      {"label": "Reject_Details", "value": widget.Reject_Details},
     ];
 
     return Scaffold(

@@ -545,6 +545,7 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
                               "CO_name": widget.CO_name,
                               "CO_id": widget.CO_id,
                               "ARM_Id": widget.ARM_Id,
+
                               "RM_Id": widget.user_name,
                               "Relevent_RM_Branch": widget.office_location,
                               "income": widget.Income,

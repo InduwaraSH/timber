@@ -138,63 +138,216 @@ class _aRmRecivedView_ADGMState_Rejected
   }
 
   // ----------------- EDIT DIALOG LOGIC -----------------
+  // ----------------- UPDATED MODERN EDIT DIALOG -----------------
   Future<void> _showEditDialog(
     String label,
     String oldValue,
     Function(String combinedValue, String rawValue) onSave,
   ) async {
     TextEditingController controller = TextEditingController();
+
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: Text('Edit $label'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Current: $oldValue',
-                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: controller,
-                  decoration: const InputDecoration(
-                    labelText: 'Enter New Value',
-                    border: OutlineInputBorder(),
-                  ),
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
                 ),
               ],
             ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-              child: const Text('Save', style: TextStyle(color: Colors.white)),
-              onPressed: () {
-                if (controller.text.isNotEmpty) {
-                  // FORMAT: "new- [new value] and old- [old value]"
-                  String combinedValue =
-                      "new- ${controller.text} and old- $oldValue";
-                  String rawValue = controller.text; // The pure new value
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // --- Header ---
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Iconsax.edit,
+                          color: Colors.blue,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      Expanded(
+                        child: Text(
+                          "Update $label",
+                          style: const TextStyle(
+                            fontFamily: 'sfproRoundSemiB',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
 
-                  // Return both values
-                  onSave(combinedValue, rawValue);
-                  Navigator.of(context).pop();
-                }
-              },
+                  // --- Current Value Display ---
+                  Text(
+                    "CURRENT VALUE",
+                    style: TextStyle(
+                      fontFamily: 'sfproRoundSemiB',
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[600],
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF5F7FA),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: Text(
+                      oldValue,
+                      style: const TextStyle(
+                        fontFamily: 'sfproRoundRegular',
+                        fontSize: 15,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // --- New Value Input ---
+                  Text(
+                    "NEW VALUE",
+                    style: TextStyle(
+                      fontFamily: 'sfproRoundSemiB',
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[600],
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      controller: controller,
+                      style: const TextStyle(
+                        fontFamily: 'sfproRoundSemiB',
+                        fontSize: 16,
+                        color: Colors.black87,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: "Enter new value...",
+                        hintStyle: TextStyle(
+                          fontFamily: 'sfproRoundRegular',
+                          fontSize: 15,
+                          color: Colors.grey[400],
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 18,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+
+                  // --- Buttons ---
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: const Text(
+                            "Cancel",
+                            style: TextStyle(
+                              fontFamily: 'sfproRoundSemiB',
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (controller.text.isNotEmpty) {
+                              String combinedValue =
+                                  "${controller.text} \n${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString()} \n \n $oldValue  \n  ";
+                              String rawValue = controller.text;
+                              onSave(combinedValue, rawValue);
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            shadowColor: Colors.black.withOpacity(0.3),
+                          ),
+                          child: const Text(
+                            "Save Changes",
+                            style: TextStyle(
+                              fontFamily: 'sfproRoundSemiB',
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
+          ),
         );
       },
     );
@@ -297,9 +450,9 @@ class _aRmRecivedView_ADGMState_Rejected
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Icon(
-                              Iconsax.edit,
+                              Iconsax.edit_24,
                               size: 16,
-                              color: Colors.blue,
+                              color: Color.fromRGBO(0, 145, 255, 1),
                             ),
                           ),
                         ),
@@ -405,14 +558,6 @@ class _aRmRecivedView_ADGMState_Rejected
                   });
 
                   // Show feedback
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        "${e.key} updated locally. Press Send to save.",
-                      ),
-                      duration: const Duration(seconds: 1),
-                    ),
-                  );
                 });
               },
             );
@@ -623,20 +768,20 @@ class _aRmRecivedView_ADGMState_Rejected
             builder: (BuildContext dialogContext) {
               return CupertinoAlertDialog(
                 title: const Text(
-                  'Permission Alert',
+                  'Re Submittion Alert',
                   style: TextStyle(
                     fontFamily: 'sfproRoundSemiB',
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue,
+                    color: Color.fromRGBO(30, 110, 244, 1),
                     fontSize: 20,
                   ),
                 ),
                 content: const Text(
-                  'This sent job will be approved and recorded under ARM Received.',
+                  'Once you press Confirm, your edited document will be sent to the RM.',
                   style: TextStyle(
                     fontFamily: 'sfproRoundRegular',
                     fontWeight: FontWeight.w600,
-                    color: Colors.black54,
+                    color: Colors.black45,
                     fontSize: 15,
                   ),
                 ),
@@ -658,7 +803,7 @@ class _aRmRecivedView_ADGMState_Rejected
                       style: TextStyle(
                         fontFamily: 'sfpro',
                         fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                        color: Color.fromRGBO(52, 199, 89, 1),
                       ),
                     ),
                     onPressed: () async {
@@ -669,7 +814,7 @@ class _aRmRecivedView_ADGMState_Rejected
                               .toStringAsFixed(2);
 
                       Reject_story =
-                          "$Reject_story {${widget.reasonforreject} rejected by ${widget.ADGM_Type}(${widget.AGM_ID}) and edited by: ARM (${widget.ARM_Id}) ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()} }";
+                          "$Reject_story \n [${widget.reasonforreject} rejected by ${widget.ADGM_Type}(${widget.AGM_ID}) and resubmitted by: ARM (${widget.ARM_Id}) on ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()} ]";
                       final database = FirebaseDatabase.instance.ref();
 
                       // 2. PREPARE MODIFIED TREES
@@ -819,16 +964,55 @@ class _aRmRecivedView_ADGMState_Rejected
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
                             ).format(DateTime.now()).toString(),
+                          })
+                          .then((_) {
+                            try {
+                              FirebaseDatabase.instance
+                                  .ref()
+                                  .child("RM_branch_data_saved")
+                                  .child(widget.RM_office.toString())
+                                  .child("Sent")
+                                  .child(widget.SerialNum.toString())
+                                  .remove();
+                              print('Data deleted successfully');
+                            } catch (e) {
+                              print('Error deleting data: $e');
+                            }
+                          })
+                          .then((_) {
+                            try {
+                              FirebaseDatabase.instance
+                                  .ref()
+                                  .child("ARM_branch_data_saved")
+                                  .child(widget.ARM_Office.toString())
+                                  .child("Recived")
+                                  .child(widget.SerialNum.toString())
+                                  .remove();
+                              print('Data deleted successfully');
+                              showTopSnackBar(
+                                context,
+                                message: "Data sent to ARM successfully",
+                                backgroundColor: Colors.green,
+                              );
+                            } catch (e) {
+                              print('Error deleting data: $e');
+                              showTopSnackBar(
+                                context,
+                                message: "Error deleting data: $e",
+                                backgroundColor: Colors.red,
+                              );
+                            }
                           });
 
                       // 5. UPDATE SOURCE (Original location: ARM Received)
                       // You requested to update the trees sent to RM,
                       // which implies the source record should also reflect these edits.
-                      if (finalTreesData.isNotEmpty) {
-                        await dbref.set(finalTreesData);
-                      }
+                      // if (finalTreesData.isNotEmpty) {
+                      //   await dbref.set(finalTreesData);
+                      // }
 
                       Navigator.of(dialogContext).pop();
+                      Navigator.pop(context);
                     },
                   ),
                 ],

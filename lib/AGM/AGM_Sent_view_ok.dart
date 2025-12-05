@@ -32,6 +32,7 @@ class AGM_Sent_approved_view extends StatefulWidget {
   final String RM;
   final String ARM_id;
   final String RM_office;
+  final String reject_details;
   // final String CO_Name;
 
   const AGM_Sent_approved_view({
@@ -58,6 +59,7 @@ class AGM_Sent_approved_view extends StatefulWidget {
     required this.CO_id,
     required this.ARM_id,
     required this.RM_office,
+    required this.reject_details,
   });
 
   @override
@@ -286,6 +288,7 @@ class _AGM_Sent_approved_viewState extends State<AGM_Sent_approved_view> {
         {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
         {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
         {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+        {"label": "Reject_details", "value": "Rs. ${widget.reject_details}"},
       ];
 
       pdf.addPage(
@@ -440,6 +443,7 @@ class _AGM_Sent_approved_viewState extends State<AGM_Sent_approved_view> {
       {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
       {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
       {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+      {"label": "Reject_details", "value": "Rs. ${widget.reject_details}"},
     ];
 
     //Money value for RM AGM and DGM

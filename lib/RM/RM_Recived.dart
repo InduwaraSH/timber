@@ -159,6 +159,7 @@ class _RMRecivedState extends State<RMRecived> {
       ARM_Id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
       AGM_ID = Sent['timberReportheadlines']['ADGM_id'] ?? "";
+      Reject_Details = Sent['timberReportheadlines']['reject_details'] ?? "N/A";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
       Status = "AGM Approved";
       from_doc = "$AGM_ID (AGM)";
@@ -189,6 +190,7 @@ class _RMRecivedState extends State<RMRecived> {
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
       DGM_ID = Sent['timberReportheadlines']['ADGM_id'] ?? "";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
+      Reject_Details = Sent['timberReportheadlines']['reject_details'] ?? "N/A";
       Status = "DGM Approved";
       from_doc = "$DGM_ID";
     } else if (Reciver == "ADGM_Rejected") {
@@ -289,6 +291,7 @@ class _RMRecivedState extends State<RMRecived> {
                 AGM_ID: AGM_ID,
                 Status: Status,
                 ADGM_title: "AGM",
+                Reject_Details: Reject_Details,
               ),
             ),
           );
@@ -320,6 +323,7 @@ class _RMRecivedState extends State<RMRecived> {
                 AGM_ID: DGM_ID,
                 Status: Status,
                 ADGM_title: "DGM",
+                Reject_Details: Reject_Details,
               ),
             ),
           );

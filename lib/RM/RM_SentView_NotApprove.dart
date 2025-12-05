@@ -32,6 +32,7 @@ class RmSentviewNotapprove extends StatefulWidget {
   final String CO_name;
 
   final String RM_ID;
+  final String Reject_Details;
 
   const RmSentviewNotapprove({
     super.key,
@@ -55,6 +56,7 @@ class RmSentviewNotapprove extends StatefulWidget {
     required this.ARM_Id,
     required this.CO_id,
     required this.CO_name,
+    required this.Reject_Details,
   });
 
   @override
@@ -281,6 +283,7 @@ class _RmSentviewNotapproveState extends State<RmSentviewNotapprove> {
         {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
         {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
         {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+        {"label": "Reject_Details", "value": "Rs. ${widget.Reject_Details}"},
       ];
 
       pdf.addPage(
@@ -432,6 +435,7 @@ class _RmSentviewNotapproveState extends State<RmSentviewNotapprove> {
       {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
       {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
       {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+      {"label": "Reject_Details", "value": widget.Reject_Details},
     ];
 
     //Money value for RM AGM and DGM

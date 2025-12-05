@@ -34,6 +34,7 @@ class RM_Procumented_view extends StatefulWidget {
   final String CO_name;
   final String ARM_ID;
   final String RM_ID;
+  final String reject_details;
 
   const RM_Procumented_view({
     super.key,
@@ -61,6 +62,7 @@ class RM_Procumented_view extends StatefulWidget {
     required this.CO_name,
     required this.ARM_ID,
     required this.RM_ID,
+    required this.reject_details,
   });
 
   @override
@@ -337,6 +339,7 @@ class _RM_Procumented_viewState extends State<RM_Procumented_view> {
                                   CO_name: widget.CO_name,
                                   AGM_ID: widget.ADGM_ID,
                                   Status: widget.Status,
+                                  reject_details: widget.reject_details,
                                 ),
                               ),
                             );

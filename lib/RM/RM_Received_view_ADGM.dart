@@ -37,6 +37,7 @@ class RmRecivedView_ADGM extends StatefulWidget {
   final String Status;
   final String RM_ID;
   final String ADGM_title;
+  final String Reject_Details;
 
   const RmRecivedView_ADGM({
     super.key,
@@ -63,6 +64,7 @@ class RmRecivedView_ADGM extends StatefulWidget {
     required this.AGM_ID,
     required this.Status,
     required this.ADGM_title,
+    required this.Reject_Details,
   });
 
   @override
@@ -293,6 +295,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
         {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
         {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
         {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+        {"label": "Reject_Details", "value": widget.Reject_Details},
       ];
 
       pdf.addPage(
@@ -447,6 +450,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
       {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
       {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
       {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+      {"label": "Reject_Details", "value": widget.Reject_Details},
     ];
 
     //Money value for RM AGM and DGM
@@ -557,6 +561,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                             "income": widget.Income,
                             "outcome": widget.Outcome,
                             "profit": widget.Profit,
+                            "reject_details": widget.Reject_Details,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',
                             ).format(DateTime.now()).toString(),
@@ -609,6 +614,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                             "RM_Id": widget.user_name,
                             "income": widget.Income,
                             "outcome": widget.Outcome,
+                            "reject_details": widget.Reject_Details,
                             "profit": widget.Profit,
                             "latest_update": DateFormat(
                               'yyyy-MM-dd HH:mm:ss',

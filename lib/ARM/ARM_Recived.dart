@@ -102,6 +102,7 @@ class _ARMReceivedState extends State<ARMReceived> {
     String reasonforreject = "";
     String ADGM_Type = "";
     String Profit = "";
+    String Reject_details = "";
     String updatedIncome = "";
     String updatedOutcome = "";
 
@@ -189,6 +190,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
       Profit = Sent['timberReportheadlines']['profit'] ?? "N/A";
+      Reject_details = Sent['timberReportheadlines']['reject_details'] ?? "N/A";
       statusColour = Color.fromRGBO(149, 109, 81, 1);
     } else if (from == "Removing") {
       Status = Sent['timberReportheadlines']['Status'] ?? "N/A";
@@ -216,6 +218,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       Profit = Sent['timberReportheadlines']['profit'] ?? "N/A";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
+      Reject_details = Sent['timberReportheadlines']['reject_details'] ?? "N/A";
       statusColour = Color.fromRGBO(255, 146, 48, 1);
     } else if (from == "ADGM_Rejected") {
       Status = Sent['timberReportheadlines']['Status'] ?? "N/A";
@@ -234,7 +237,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
       Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
       treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
-      CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
+      CO_name = Sent['timberReportheadlines']['CO_name'] ?? "N/A";
       Income = Sent['timberReportheadlines']['income'].toString();
       Outcome = Sent['timberReportheadlines']['outcome'].toString();
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
@@ -357,6 +360,7 @@ class _ARMReceivedState extends State<ARMReceived> {
                 Status: Status,
                 ADGM_ID: ADGM_ID,
                 Profit: Profit,
+                reject_details: Reject_details,
                 // (Income.isNotEmpty && Outcome.isNotEmpty)
                 //     ? (((double.tryParse(Income) ?? 0) -
                 //               (double.tryParse(Outcome) ?? 0))
@@ -394,6 +398,7 @@ class _ARMReceivedState extends State<ARMReceived> {
                 Status: Status,
                 ADGM_ID: ADGM_ID,
                 Profit: Profit,
+                reject_details: Reject_details,
               ),
             ),
           );

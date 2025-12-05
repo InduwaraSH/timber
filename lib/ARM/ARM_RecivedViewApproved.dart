@@ -34,6 +34,7 @@ class ArmRecivedviewapproved extends StatefulWidget {
   final String CO_name;
   final String ARM_ID;
   final String RM_ID;
+  final String reject_details;
 
   const ArmRecivedviewapproved({
     super.key,
@@ -61,6 +62,7 @@ class ArmRecivedviewapproved extends StatefulWidget {
     required this.CO_name,
     required this.ARM_ID,
     required this.RM_ID,
+    required this.reject_details,
   });
 
   @override
@@ -292,6 +294,7 @@ class _ArmRecivedviewapprovedState extends State<ArmRecivedviewapproved> {
         {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
         {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
         {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+        {"label": "Reject_details", "value": widget.reject_details},
       ];
 
       pdf.addPage(
@@ -445,6 +448,7 @@ class _ArmRecivedviewapprovedState extends State<ArmRecivedviewapproved> {
       {"label": "Expected Income", "value": "Rs. ${widget.Income}"},
       {"label": "Expected Expenditure", "value": "Rs. ${widget.Outcome}"},
       {"label": "Expected Profit", "value": "Rs. ${widget.Profit}"},
+      {"label": "Reject_details", "value": widget.reject_details},
     ];
 
     //Money value for RM AGM and DGM

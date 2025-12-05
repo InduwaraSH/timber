@@ -35,6 +35,7 @@ class ArmCuttingView extends StatefulWidget {
   final String CO_name;
   final String ARM_ID;
   final String RM_ID;
+  final String reject_details;
 
   const ArmCuttingView({
     super.key,
@@ -62,6 +63,7 @@ class ArmCuttingView extends StatefulWidget {
     required this.CO_name,
     required this.ARM_ID,
     required this.RM_ID,
+    required this.reject_details,
   });
 
   @override
@@ -370,6 +372,7 @@ class _ArmCuttingViewState extends State<ArmCuttingView> {
                                   CO_name: widget.CO_name,
                                   ARM_ID: widget.ARM_ID,
                                   RM_ID: widget.RM_ID,
+                                  reject_details: widget.reject_details,
                                 ),
                               ),
                             );

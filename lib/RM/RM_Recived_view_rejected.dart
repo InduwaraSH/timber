@@ -475,16 +475,16 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
             builder: (BuildContext dialogContext) {
               return CupertinoAlertDialog(
                 title: const Text(
-                  'Permission Alert',
+                  'Rejection Alert',
                   style: TextStyle(
                     fontFamily: 'sfproRoundSemiB',
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue,
+                    color: Colors.red,
                     fontSize: 20,
                   ),
                 ),
                 content: const Text(
-                  'This sent job will be approved and recorded under ARM Received.',
+                  'Once you press Send, this rejected document will be sent to the relevant ARM.',
                   style: TextStyle(
                     fontFamily: 'sfproRoundRegular',
                     fontWeight: FontWeight.w600,
@@ -506,11 +506,11 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
                   ),
                   CupertinoDialogAction(
                     child: const Text(
-                      'Confirm',
+                      'Sent To ARM',
                       style: TextStyle(
                         fontFamily: 'sfpro',
                         fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                        color: Colors.red,
                       ),
                     ),
                     onPressed: () async {
@@ -624,6 +624,7 @@ class _RmRecivedView_ADGMState_Rejected extends State<RmRecivedViewRejected> {
                             "CO_id": widget.CO_id,
                             "ARM_Id": widget.ARM_Id,
                             "RM_Id": widget.user_name,
+
                             "profit": widget.Profit,
                             "income": widget.Income,
                             "outcome": widget.Outcome,
