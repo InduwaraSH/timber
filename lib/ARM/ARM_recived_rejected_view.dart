@@ -814,7 +814,7 @@ class _aRmRecivedView_ADGMState_Rejected
                               .toStringAsFixed(2);
 
                       Reject_story =
-                          "$Reject_story \n [${widget.reasonforreject} rejected by ${widget.ADGM_Type}(${widget.AGM_ID}) and resubmitted by: ARM (${widget.ARM_Id}) on ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()} ]";
+                          "$Reject_story \n \n ${widget.reasonforreject} \n rejected by (${widget.AGM_ID}) \n and resubmitted by: \n ARM (${widget.ARM_Id}) \n on ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()} ";
                       final database = FirebaseDatabase.instance.ref();
 
                       // 2. PREPARE MODIFIED TREES

@@ -104,6 +104,7 @@ class _AGMRecivedState extends State<AGMRecived> {
               .toString();
       updated_income = Income;
       updated_outcome = Outcome;
+      reject_details = "";
     } else {
       updated_income = Sent['timberReportheadlines']['updated_income'] ?? "N/A";
       updated_outcome =

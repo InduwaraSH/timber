@@ -110,6 +110,7 @@ class _DgmSentState extends State<DgmSent> {
     String RM_office = "";
     String latestUpdate = "";
     String TO_DOC = "";
+    String profit = "";
     String ADGM_Id = "";
     String Reason = "";
     String Reject_details = "";
@@ -130,6 +131,7 @@ class _DgmSentState extends State<DgmSent> {
       treeCount = Sent['info']['TreeCount'] ?? "N/A";
       CO_name = Sent['info']['CO_name'] ?? "N/A";
       CO_id = Sent['info']['CO_id'] ?? "N/A";
+      profit = Sent['info']['profit'].toString();
       ARM_id = Sent['info']['ARM_Id'] ?? "N/A";
       Income = Sent['info']['income'].toString();
       Outcome = Sent['info']['outcome'].toString();
@@ -155,6 +157,7 @@ class _DgmSentState extends State<DgmSent> {
       CO_name = Sent['info']['CO_name'] ?? "N/A";
       CO_id = Sent['info']['CO_id'] ?? "N/A";
       ARM_id = Sent['info']['ARM_Id'] ?? "N/A";
+      profit = Sent['info']['profit'].toString();
       Reason = Sent['info']['Reason'] ?? "N/A";
       Income = Sent['info']['income'].toString();
       Outcome = Sent['info']['outcome'].toString();
@@ -197,11 +200,7 @@ class _DgmSentState extends State<DgmSent> {
                 RM_office: RM_office,
                 reject_details: Reject_details,
                 RM: RM,
-                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
-                    ? (((double.tryParse(Income) ?? 0) -
-                              (double.tryParse(Outcome) ?? 0))
-                          .toString())
-                    : "N/A",
+                Profit: profit,
               ),
             ),
           );
@@ -232,11 +231,7 @@ class _DgmSentState extends State<DgmSent> {
                 ARM_id: ARM_id,
                 RM_office: RM_office,
                 RM: RM,
-                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
-                    ? (((double.tryParse(Income) ?? 0) -
-                              (double.tryParse(Outcome) ?? 0))
-                          .toString())
-                    : "N/A",
+                Profit: profit,
               ),
             ),
           );

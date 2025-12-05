@@ -185,7 +185,7 @@ class _AgmDeclineState extends State<AgmDecline> {
                                 "ADGM_id": widget.user_name,
                                 "ADGM_type": "AGM",
                                 "Reason":
-                                    "{${widget.reject_details}}  ${declineReasonController.text} on ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}   ",
+                                    "${widget.reject_details} \n \n  ${declineReasonController.text} \n on ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}   ",
                                 "income": widget.Income,
                                 "outcome": widget.Outcome,
                                 "updated_income": widget.updated_income,
@@ -243,7 +243,7 @@ class _AgmDeclineState extends State<AgmDecline> {
                                 "ADGM_id": widget.user_name,
                                 "ADGM_type": "AGM",
                                 "Reason":
-                                    "{${widget.reject_details}}  ${declineReasonController.text} on ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}   ",
+                                    "${widget.reject_details} \n \n  ${declineReasonController.text} \n on ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}   ",
                                 "income": widget.Income,
                                 "outcome": widget.Outcome,
                                 "profit": widget.Profit,

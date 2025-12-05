@@ -102,6 +102,7 @@ class _AgmSentState extends State<AgmSent> {
     String CO_name = "";
     String CO_id = "";
     String ARM_id = "";
+    String profit = "";
     String Income = "";
     String Outcome = "";
     String RM = "";
@@ -132,6 +133,7 @@ class _AgmSentState extends State<AgmSent> {
       Income = Sent['info']['income'].toString();
       Outcome = Sent['info']['outcome'].toString();
       RM = Sent['info']['RM_Id'] ?? "N/A";
+      profit = Sent['info']['profit'].toString();
       RM_office = Sent['info']['RM_office'] ?? "N/A";
       latestUpdate = Sent['info']['latest_update'] ?? "N/A";
       TO_DOC = "RM Office $RM_office";
@@ -151,6 +153,7 @@ class _AgmSentState extends State<AgmSent> {
       Condition = Sent['info']['Condition'] ?? "N/A";
       treeCount = Sent['info']['TreeCount'] ?? "N/A";
       CO_name = Sent['info']['CO_name'] ?? "N/A";
+      profit = Sent['info']['profit'].toString();
       CO_id = Sent['info']['CO_id'] ?? "N/A";
       ARM_id = Sent['info']['ARM_Id'] ?? "N/A";
       Reason = Sent['info']['Reason'] ?? "N/A";
@@ -194,11 +197,7 @@ class _AgmSentState extends State<AgmSent> {
                 RM_office: RM_office,
                 reject_details: Reject_details,
                 RM: RM,
-                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
-                    ? (((double.tryParse(Income) ?? 0) -
-                              (double.tryParse(Outcome) ?? 0))
-                          .toString())
-                    : "N/A",
+                Profit: profit,
               ),
             ),
           );
@@ -229,11 +228,7 @@ class _AgmSentState extends State<AgmSent> {
                 ARM_id: ARM_id,
                 RM_office: RM_office,
                 RM: RM,
-                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
-                    ? (((double.tryParse(Income) ?? 0) -
-                              (double.tryParse(Outcome) ?? 0))
-                          .toString())
-                    : "N/A",
+                Profit: profit,
               ),
             ),
           );

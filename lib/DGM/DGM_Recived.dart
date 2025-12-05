@@ -93,7 +93,7 @@ class _DgmRecivedState extends State<DgmRecived> {
     String RM = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
     String RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
     String reject_details =
-        Sent['timberReportheadlines']['reject_details'] ?? "";
+        Sent['timberReportheadlines']['reject_details'] ?? " ";
     String Profit;
     String updated_income = "";
     String updated_outcome = "";
@@ -105,6 +105,7 @@ class _DgmRecivedState extends State<DgmRecived> {
               .toString();
       updated_income = Income;
       updated_outcome = Outcome;
+      reject_details = "";
     } else {
       updated_income = Sent['timberReportheadlines']['updated_income'] ?? "N/A";
       updated_outcome =
