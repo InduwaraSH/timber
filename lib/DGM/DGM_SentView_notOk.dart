@@ -9,7 +9,7 @@ import 'package:printing/printing.dart';
 import 'package:timber_app/ARM/ARMSentImageView.dart';
 import 'package:timber_app/ARM/ARM_Sent_timeline.dart';
 
-class AGM_Sent_rejected_view extends StatefulWidget {
+class DGM_Sent_rejected_view extends StatefulWidget {
   final String poc;
   final String DateInformed;
   final String LetterNo;
@@ -36,7 +36,7 @@ class AGM_Sent_rejected_view extends StatefulWidget {
   final String ADGM_Id;
   // final String CO_Name;
 
-  const AGM_Sent_rejected_view({
+  const DGM_Sent_rejected_view({
     super.key,
     required this.poc,
     required this.DateInformed,
@@ -65,10 +65,10 @@ class AGM_Sent_rejected_view extends StatefulWidget {
   });
 
   @override
-  State<AGM_Sent_rejected_view> createState() => _AGM_Sent_rejected_viewState();
+  State<DGM_Sent_rejected_view> createState() => _DGM_Sent_rejected_viewState();
 }
 
-class _AGM_Sent_rejected_viewState extends State<AGM_Sent_rejected_view> {
+class _DGM_Sent_rejected_viewState extends State<DGM_Sent_rejected_view> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
@@ -79,7 +79,7 @@ class _AGM_Sent_rejected_viewState extends State<AGM_Sent_rejected_view> {
     dbref = FirebaseDatabase.instance
         .ref()
         .child('Head_office_data_saved')
-        .child("AGM")
+        .child("DGM")
         .child("Send")
         .child(widget.SerialNum)
         .child("allTrees");
@@ -269,7 +269,7 @@ class _AGM_Sent_rejected_viewState extends State<AGM_Sent_rejected_view> {
       final pdf = pw.Document();
 
       final infoItems = [
-        {"label": "AGM ID", "value": widget.ADGM_Id},
+        {"label": "DGM ID", "value": widget.ADGM_Id},
         {"label": "RM Office", "value": widget.RM_office},
         {"label": "RM", "value": widget.RM},
         {"label": "ARM Office", "value": widget.ARM_Branch_Name},
@@ -424,7 +424,8 @@ class _AGM_Sent_rejected_viewState extends State<AGM_Sent_rejected_view> {
     final infoItems = [
       {"label": "Status", "value": "Rejected"},
       {"label": "Reason", "value": widget.reason},
-      {"label": "AGM ID", "value": widget.ADGM_Id},
+      {"label": "DGM ID", "value": widget.ADGM_Id},
+
       {"label": "RM Office", "value": widget.RM_office},
       {"label": "RM", "value": widget.RM},
       {"label": "ARM Office", "value": widget.ARM_Branch_Name},

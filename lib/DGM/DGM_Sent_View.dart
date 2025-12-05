@@ -32,6 +32,8 @@ class DGM_Sent_approved_view extends StatefulWidget {
   final String RM;
   final String ARM_id;
   final String RM_office;
+  final String reject_details;
+  final String ADGM_Id;
   // final String CO_Name;
 
   const DGM_Sent_approved_view({
@@ -58,6 +60,8 @@ class DGM_Sent_approved_view extends StatefulWidget {
     required this.CO_id,
     required this.ARM_id,
     required this.RM_office,
+    required this.reject_details,
+    required this.ADGM_Id,
   });
 
   @override
@@ -265,7 +269,7 @@ class _DGM_Sent_approved_viewState extends State<DGM_Sent_approved_view> {
       final pdf = pw.Document();
 
       final infoItems = [
-        {"label": "AGM ID", "value": widget.user_name},
+        {"label": "DGM ID", "value": widget.ADGM_Id},
         {"label": "RM Office", "value": widget.RM_office},
         {"label": "RM", "value": widget.RM},
         {"label": "ARM Office", "value": widget.ARM_Branch_Name},
@@ -286,6 +290,7 @@ class _DGM_Sent_approved_viewState extends State<DGM_Sent_approved_view> {
         {"label": "Income", "value": "Rs. ${widget.Income}"},
         {"label": "Outcome", "value": "Rs. ${widget.Outcome}"},
         {"label": "Profit", "value": "Rs. ${widget.Profit}"},
+        {"label": "Reject Details", "value": widget.reject_details},
       ];
 
       pdf.addPage(
@@ -418,7 +423,7 @@ class _DGM_Sent_approved_viewState extends State<DGM_Sent_approved_view> {
   @override
   Widget build(BuildContext context) {
     final infoItems = [
-      {"label": "AGM ID", "value": widget.user_name},
+      {"label": "DGM ID", "value": widget.ADGM_Id},
       {"label": "RM Office", "value": widget.RM_office},
       {"label": "RM", "value": widget.RM},
       {"label": "ARM Office", "value": widget.ARM_Branch_Name},
@@ -440,6 +445,7 @@ class _DGM_Sent_approved_viewState extends State<DGM_Sent_approved_view> {
       {"label": "Income", "value": "Rs. ${widget.Income}"},
       {"label": "Outcome", "value": "Rs. ${widget.Outcome}"},
       {"label": "Profit", "value": "Rs. ${widget.Profit}"},
+      {"label": "Reject Details", "value": widget.reject_details},
     ];
 
     //Money value for RM AGM and DGM

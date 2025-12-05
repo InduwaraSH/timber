@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:timber_app/AGM/AGM_Sent_view_notOK.dart';
 import 'package:timber_app/AGM/AGM_Sent_view_ok.dart';
+import 'package:timber_app/DGM/DGM_SentView_notOk.dart';
 import 'package:timber_app/DGM/DGM_Sent_View.dart';
 
 class DgmSent extends StatefulWidget {
@@ -48,7 +50,6 @@ class _DgmSentState extends State<DgmSent> {
       }
     });
 
-    // Fetch and listen
     dbref.onValue.listen((event) {
       if (event.snapshot.value != null) {
         Map data = event.snapshot.value as Map;
@@ -60,10 +61,10 @@ class _DgmSentState extends State<DgmSent> {
           tempList.add(sent);
         });
 
-        // Sort items by latest_update descending
+        // ✅ Sort only by latest_update descending
         tempList.sort((a, b) {
-          String aDateStr = _extractLatestUpdate(a);
-          String bDateStr = _extractLatestUpdate(b);
+          String aDateStr = a['info']?['latest_update'] ?? '';
+          String bDateStr = b['info']?['latest_update'] ?? '';
 
           DateTime aDate = aDateStr.isNotEmpty
               ? DateTime.tryParse(aDateStr) ?? DateTime(1900)
@@ -72,7 +73,7 @@ class _DgmSentState extends State<DgmSent> {
               ? DateTime.tryParse(bDateStr) ?? DateTime(1900)
               : DateTime(1900);
 
-          return bDate.compareTo(aDate);
+          return bDate.compareTo(aDate); // latest on top
         });
 
         setState(() {
@@ -82,13 +83,6 @@ class _DgmSentState extends State<DgmSent> {
     });
   }
 
-  String _extractLatestUpdate(Map sent) {
-    if (sent['info'] != null && sent['info']['latest_update'] != null) {
-      return sent['info']['latest_update'];
-    }
-    return '';
-  }
-
   @override
   void dispose() {
     _scrollController.dispose();
@@ -96,65 +90,157 @@ class _DgmSentState extends State<DgmSent> {
   }
 
   Widget listItem({required Map Sent, required int index}) {
-    String branchName = Sent['info']['ARM_location'] ?? "Not Available";
-    String poc = Sent['info']['placeofcoupe'] ?? "N/A";
-    String poc_exact = Sent['info']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
-    String DateInformed = Sent['info']['dateinformed_from_rm'] ?? "N/A";
-    String LetterNo = Sent['info']['LetterNo'] ?? "N/A";
-    String SerialNum = Sent['info']['serialnum'] ?? "N/A";
-    String OfficerName = Sent['info']['OfficerName'] ?? "N/A";
-    String OfficerPositionAndName =
-        Sent['info']['OfficerPosition&name'] ?? "N/A";
-    String donor_details = Sent['info']['donor_details'] ?? "N/A";
-    String Condition = Sent['info']['Condition'] ?? "N/A";
-    String treeCount = Sent['info']['TreeCount'] ?? "N/A";
-    String CO_name = Sent['info']['CO_name'] ?? "N/A";
-    String CO_id = Sent['info']['CO_id'] ?? "N/A";
-    String ARM_id = Sent['info']['ARM_Id'] ?? "N/A";
-    String Income = Sent['info']['income'].toString();
-    String Outcome = Sent['info']['outcome'].toString();
-    String RM = Sent['info']['RM_Id'] ?? "N/A";
-    String RM_office = Sent['info']['RM_office'] ?? "N/A";
-    String latestUpdate = Sent['info']['latest_update'] ?? "N/A";
-    String TO_DOC = "RM Office $RM_office";
-    String ADGM_Id = Sent['info']['RM_Id'] ?? "N/A";
+    String branchName = "";
+    String poc = "";
+    String poc_exact = "";
+    String DateInformed = "";
+    String LetterNo = "";
+    String SerialNum = "";
+    String OfficerName = "";
+    String OfficerPositionAndName = "";
+    String donor_details = "";
+    String Condition = "";
+    String treeCount = "";
+    String CO_name = "";
+    String CO_id = "";
+    String ARM_id = "";
+    String Income = "";
+    String Outcome = "";
+    String RM = "";
+    String RM_office = "";
+    String latestUpdate = "";
+    String TO_DOC = "";
+    String ADGM_Id = "";
+    String Reason = "";
+    String Reject_details = "";
     Color statusColour = Color.fromRGBO(52, 199, 89, 1);
+    String check = (Sent['from'] ?? "").toString().toUpperCase();
+
+    if (check == "DGM_APPROVED") {
+      branchName = Sent['info']['ARM_location'] ?? "Not Available";
+      poc = Sent['info']['placeofcoupe'] ?? "N/A";
+      poc_exact = Sent['info']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
+      DateInformed = Sent['info']['dateinformed_from_rm'] ?? "N/A";
+      LetterNo = Sent['info']['LetterNo'] ?? "N/A";
+      SerialNum = Sent['info']['serialnum'] ?? "N/A";
+      OfficerName = Sent['info']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName = Sent['info']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['info']['donor_details'] ?? "N/A";
+      Condition = Sent['info']['Condition'] ?? "N/A";
+      treeCount = Sent['info']['TreeCount'] ?? "N/A";
+      CO_name = Sent['info']['CO_name'] ?? "N/A";
+      CO_id = Sent['info']['CO_id'] ?? "N/A";
+      ARM_id = Sent['info']['ARM_Id'] ?? "N/A";
+      Income = Sent['info']['income'].toString();
+      Outcome = Sent['info']['outcome'].toString();
+      RM = Sent['info']['RM_Id'] ?? "N/A";
+      RM_office = Sent['info']['RM_office'] ?? "N/A";
+      latestUpdate = Sent['info']['latest_update'] ?? "N/A";
+      TO_DOC = "RM Office $RM_office";
+      ADGM_Id = Sent['info']['ADGM_id'] ?? "N/A";
+      Reject_details = Sent['info']['reject_details'] ?? "N/A";
+      statusColour = Color.fromRGBO(52, 199, 89, 1);
+    } else {
+      branchName = Sent['info']['ARM_location'] ?? "Not Available";
+      poc = Sent['info']['placeofcoupe'] ?? "N/A";
+      poc_exact = Sent['info']['PlaceOfCoupe_exact_from_arm'] ?? "N/A";
+      DateInformed = Sent['info']['dateinformed_from_rm'] ?? "N/A";
+      LetterNo = Sent['info']['LetterNo'] ?? "N/A";
+      SerialNum = Sent['info']['serialnum'] ?? "N/A";
+      OfficerName = Sent['info']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName = Sent['info']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['info']['donor_details'] ?? "N/A";
+      Condition = Sent['info']['Condition'] ?? "N/A";
+      treeCount = Sent['info']['TreeCount'] ?? "N/A";
+      CO_name = Sent['info']['CO_name'] ?? "N/A";
+      CO_id = Sent['info']['CO_id'] ?? "N/A";
+      ARM_id = Sent['info']['ARM_Id'] ?? "N/A";
+      Reason = Sent['info']['Reason'] ?? "N/A";
+      Income = Sent['info']['income'].toString();
+      Outcome = Sent['info']['outcome'].toString();
+      RM = Sent['info']['RM_Id'] ?? "N/A";
+      RM_office = Sent['info']['RM_office'] ?? "N/A";
+      latestUpdate = Sent['info']['latest_update'] ?? "N/A";
+      TO_DOC = "RM Office $RM_office (Rejected)";
+      ADGM_Id = Sent['info']['ADGM_id'] ?? "N/A";
+
+      statusColour = Color.fromRGBO(233, 21, 45, 1);
+    }
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => DGM_Sent_approved_view(
-              ARM_Branch_Name: branchName,
-              poc: poc,
-              DateInformed: DateInformed,
-              LetterNo: LetterNo,
-              SerialNum: SerialNum,
-              OfficerPositionAndName: OfficerPositionAndName,
-              donor_details: donor_details,
-              Condition: Condition,
-              treeCount: treeCount,
-              office_location: widget.office_location,
-              PlaceOfCoupe_exact_from_arm: poc_exact,
-              OfficerName: OfficerName,
-              user_name: widget.username,
-              CO_name: CO_name,
-              Income: Income,
-              Outcome: Outcome,
-              CO_id: CO_id,
-              ARM_id: ARM_id,
-              RM_office: RM_office,
-              RM: RM,
-              Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
-                  ? (((double.tryParse(Income) ?? 0) -
-                            (double.tryParse(Outcome) ?? 0))
-                        .toString())
-                  : "N/A",
+        if (check == "DGM_APPROVED") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => DGM_Sent_approved_view(
+                ARM_Branch_Name: branchName,
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc_exact,
+                OfficerName: OfficerName,
+                user_name: widget.username,
+                CO_name: CO_name,
+                Income: Income,
+                Outcome: Outcome,
+                CO_id: CO_id,
+                ADGM_Id: ADGM_Id,
+                ARM_id: ARM_id,
+                RM_office: RM_office,
+                reject_details: Reject_details,
+                RM: RM,
+                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
+                    ? (((double.tryParse(Income) ?? 0) -
+                              (double.tryParse(Outcome) ?? 0))
+                          .toString())
+                    : "N/A",
+              ),
             ),
-          ),
-        );
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => DGM_Sent_rejected_view(
+                ARM_Branch_Name: branchName,
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc_exact,
+                OfficerName: OfficerName,
+                user_name: widget.username,
+                CO_name: CO_name,
+                Income: Income,
+                Outcome: Outcome,
+                CO_id: CO_id,
+                reason: Reason,
+                ADGM_Id: ADGM_Id,
+                ARM_id: ARM_id,
+                RM_office: RM_office,
+                RM: RM,
+                Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
+                    ? (((double.tryParse(Income) ?? 0) -
+                              (double.tryParse(Outcome) ?? 0))
+                          .toString())
+                    : "N/A",
+              ),
+            ),
+          );
+        }
       },
       child: Container(
         width: double.infinity,
@@ -174,7 +260,7 @@ class _DgmSentState extends State<DgmSent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Row
+            // Same UI as before, unchanged
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -389,7 +475,6 @@ class _DgmSentState extends State<DgmSent> {
                     : null,
               ),
 
-              /// Search Bar
               Container(
                 margin: const EdgeInsets.symmetric(
                   horizontal: 16,

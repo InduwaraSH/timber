@@ -33,6 +33,7 @@ class AGM_Sent_approved_view extends StatefulWidget {
   final String ARM_id;
   final String RM_office;
   final String reject_details;
+  final String ADGM_Id;
   // final String CO_Name;
 
   const AGM_Sent_approved_view({
@@ -60,6 +61,7 @@ class AGM_Sent_approved_view extends StatefulWidget {
     required this.ARM_id,
     required this.RM_office,
     required this.reject_details,
+    required this.ADGM_Id,
   });
 
   @override
@@ -267,7 +269,7 @@ class _AGM_Sent_approved_viewState extends State<AGM_Sent_approved_view> {
       final pdf = pw.Document();
 
       final infoItems = [
-        {"label": "AGM ID", "value": widget.user_name},
+        {"label": "AGM ID", "value": widget.ADGM_Id},
         {"label": "RM Office", "value": widget.RM_office},
         {"label": "RM", "value": widget.RM},
         {"label": "ARM Office", "value": widget.ARM_Branch_Name},
@@ -421,7 +423,7 @@ class _AGM_Sent_approved_viewState extends State<AGM_Sent_approved_view> {
   @override
   Widget build(BuildContext context) {
     final infoItems = [
-      {"label": "AGM ID", "value": widget.user_name},
+      {"label": "AGM ID", "value": widget.ADGM_Id},
       {"label": "RM Office", "value": widget.RM_office},
       {"label": "RM", "value": widget.RM},
       {"label": "ARM Office", "value": widget.ARM_Branch_Name},

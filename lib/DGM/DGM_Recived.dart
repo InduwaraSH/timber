@@ -92,7 +92,29 @@ class _DgmRecivedState extends State<DgmRecived> {
     String Outcome = Sent['timberReportheadlines']['outcome'].toString();
     String RM = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
     String RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
+    String reject_details =
+        Sent['timberReportheadlines']['reject_details'] ?? "";
+    String Profit;
+    String updated_income = "";
+    String updated_outcome = "";
+    if (reject_details == "" ||
+        reject_details.isEmpty ||
+        reject_details == "N/A") {
+      Profit =
+          ((double.tryParse(Income) ?? 0) - (double.tryParse(Outcome) ?? 0))
+              .toString();
+      updated_income = Income;
+      updated_outcome = Outcome;
+    } else {
+      updated_income = Sent['timberReportheadlines']['updated_income'] ?? "N/A";
+      updated_outcome =
+          Sent['timberReportheadlines']['updated_outcome'] ?? "N/A";
 
+      Profit =
+          ((double.tryParse(updated_income) ?? 0) -
+                  (double.tryParse(updated_outcome) ?? 0))
+              .toString();
+    }
     String latestUpdate =
         Sent['timberReportheadlines']['latest_update'] ?? "N/A";
     String from_doc = "RM Office $RM_office";
@@ -125,11 +147,10 @@ class _DgmRecivedState extends State<DgmRecived> {
               ARM_id: ARM_id,
               RM_office: RM_office,
               RM: RM,
-              Profit: (Income.isNotEmpty && Outcome.isNotEmpty)
-                  ? (((double.tryParse(Income) ?? 0) -
-                            (double.tryParse(Outcome) ?? 0))
-                        .toString())
-                  : "N/A",
+              Profit: Profit,
+              reject_details: reject_details,
+              updated_income: updated_income,
+              updated_outcome: updated_outcome,
             ),
           ),
         );

@@ -135,7 +135,7 @@ class _AgmSentState extends State<AgmSent> {
       RM_office = Sent['info']['RM_office'] ?? "N/A";
       latestUpdate = Sent['info']['latest_update'] ?? "N/A";
       TO_DOC = "RM Office $RM_office";
-      ADGM_Id = Sent['info']['RM_Id'] ?? "N/A";
+      ADGM_Id = Sent['info']['ADGM_id'] ?? "N/A";
       Reject_details = Sent['info']['reject_details'] ?? "N/A";
       statusColour = Color.fromRGBO(52, 199, 89, 1);
     } else {
@@ -160,7 +160,7 @@ class _AgmSentState extends State<AgmSent> {
       RM_office = Sent['info']['RM_office'] ?? "N/A";
       latestUpdate = Sent['info']['latest_update'] ?? "N/A";
       TO_DOC = "RM Office $RM_office (Rejected)";
-      ADGM_Id = Sent['info']['RM_Id'] ?? "N/A";
+      ADGM_Id = Sent['info']['ADGM_id'] ?? "N/A";
       statusColour = Color.fromRGBO(233, 21, 45, 1);
     }
 
@@ -190,6 +190,7 @@ class _AgmSentState extends State<AgmSent> {
                 Outcome: Outcome,
                 CO_id: CO_id,
                 ARM_id: ARM_id,
+                ADGM_Id: ADGM_Id,
                 RM_office: RM_office,
                 reject_details: Reject_details,
                 RM: RM,
@@ -224,6 +225,7 @@ class _AgmSentState extends State<AgmSent> {
                 Outcome: Outcome,
                 CO_id: CO_id,
                 reason: Reason,
+                ADGM_Id: ADGM_Id,
                 ARM_id: ARM_id,
                 RM_office: RM_office,
                 RM: RM,
