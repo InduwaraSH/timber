@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +12,7 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:timber_app/ARM/ARMSentImageView.dart';
 import 'package:timber_app/RM/RM_RecivedTimeline.dart';
+import 'package:timber_app/RM/RM_decline_ARM.dart';
 import 'package:timber_app/Snack_Message.dart';
 
 class RmRecivedViewArm extends StatefulWidget {
@@ -71,6 +74,96 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
+
+  Future<void> _declineSheet(BuildContext context) async {
+    // fetch current trees data before opening the sheet
+    DatabaseEvent event = await dbref.once();
+    final treeValue = event.snapshot.value;
+
+    showCupertinoModalPopup(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.3),
+      builder: (context) {
+        return ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.75,
+              decoration: BoxDecoration(
+                color: Color(0xFFF5F5F7),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(28),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.15),
+                    blurRadius: 20,
+                    offset: const Offset(0, -8),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 8),
+                  Container(
+                    width: 40,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[400],
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  Expanded(
+                    child: CupertinoPageScaffold(
+                      backgroundColor: Colors.transparent,
+
+                      child: RM_Decline(
+                        office: widget.ARM_Office,
+
+                        rm_office: widget.office_location,
+                        serial: widget.SerialNum,
+                        poc: widget.poc,
+                        DateInformed: widget.DateInformed,
+                        LetterNo: widget.LetterNo,
+
+                        OfficerName: widget.OfficerName,
+                        OfficerPositionAndName: widget.OfficerPositionAndName,
+                        donor_details: widget.donor_details,
+                        Condition: widget.Condition,
+                        treeCount: widget.treeCount,
+                        office_location: widget.office_location,
+                        PlaceOfCoupe_exact_from_arm:
+                            widget.PlaceOfCoupe_exact_from_arm,
+                        user_name: widget.user_name,
+                        ARM_Branch_Name: widget.ARM_Office,
+
+                        Income: widget.Income,
+                        Outcome: widget.Outcome,
+                        Profit: widget.Profit,
+
+                        RM_office: widget.office_location,
+                        CO_id: widget.CO_id,
+                        CO_name: widget.CO_name,
+                        ARM_ID: widget.ARM_Id,
+                        RM_ID: widget.user_name,
+                        tree: treeValue,
+                        reject_details: widget.Reject_details,
+                        updated_income: widget.UpdateIncome,
+                        updated_outcome: widget.UpdateOutcome,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -446,674 +539,708 @@ class _RmRecivedViewArmState extends State<RmRecivedViewArm> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9F8FF),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          double total =
-              (double.tryParse(widget.UpdateIncome) ?? 0) +
-              (double.tryParse(widget.UpdateOutcome) ?? 0);
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left: 40, right: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FloatingActionButton.extended(
+              onPressed: () {
+                double total =
+                    (double.tryParse(widget.UpdateIncome) ?? 0) +
+                    (double.tryParse(widget.UpdateOutcome) ?? 0);
 
-          if (total > 60000) {
-            showCupertinoDialog(
-              context: context,
-              builder: (BuildContext dialogContext) {
-                return CupertinoAlertDialog(
-                  title: const Text(
-                    'Permission Alert',
-                    style: TextStyle(
-                      fontFamily: 'sfproRoundSemiB',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                      fontSize: 20,
-                    ),
-                  ),
-                  content: const Text(
-                    'This action requires higher permissions. So it will be sent to the DGM.',
-                    style: TextStyle(
-                      fontFamily: 'sfproRoundRegular',
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54,
-                      fontSize: 15,
-                    ),
-                  ),
-                  actions: [
-                    CupertinoDialogAction(
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(
-                          fontFamily: 'sfpro',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                if (total > 60000) {
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (BuildContext dialogContext) {
+                      return CupertinoAlertDialog(
+                        title: const Text(
+                          'Permission Alert',
+                          style: TextStyle(
+                            fontFamily: 'sfproRoundSemiB',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                            fontSize: 20,
+                          ),
                         ),
-                      ),
-                      onPressed: () => Navigator.of(dialogContext).pop(),
-                    ),
-                    CupertinoDialogAction(
-                      child: const Text(
-                        'Confirm',
-                        style: TextStyle(
-                          fontFamily: 'sfpro',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
+                        content: const Text(
+                          'This action requires higher permissions. So it will be sent to the DGM.',
+                          style: TextStyle(
+                            fontFamily: 'sfproRoundRegular',
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 15,
+                          ),
                         ),
-                      ),
-                      onPressed: () async {
-                        final database = FirebaseDatabase.instance.ref();
+                        actions: [
+                          CupertinoDialogAction(
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                fontFamily: 'sfpro',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            onPressed: () => Navigator.of(dialogContext).pop(),
+                          ),
+                          CupertinoDialogAction(
+                            child: const Text(
+                              'Confirm',
+                              style: TextStyle(
+                                fontFamily: 'sfpro',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
+                            onPressed: () async {
+                              final database = FirebaseDatabase.instance.ref();
 
-                        // Write to ARM_branch_data_saved_test
-                        await database
-                            .child('Head_office_data_saved')
-                            .child("DGM")
-                            .child("Recived")
-                            .child(widget.SerialNum)
-                            .set({"from": "RM_N_Approved"});
+                              // Write to ARM_branch_data_saved_test
+                              await database
+                                  .child('Head_office_data_saved')
+                                  .child("DGM")
+                                  .child("Recived")
+                                  .child(widget.SerialNum)
+                                  .set({"from": "RM_N_Approved"});
 
-                        // Copy allTrees if present
-                        DatabaseEvent event = await dbref.once();
-                        if (event.snapshot.value != null) {
-                          await database
-                              .child('Head_office_data_saved')
-                              .child("DGM")
-                              .child("Recived")
-                              .child(widget.SerialNum)
-                              .child("allTrees")
-                              .set(event.snapshot.value);
-                        }
-
-                        // Set info under Head_office_data_saved
-                        await database
-                            .child('Head_office_data_saved')
-                            .child("DGM")
-                            .child("Recived")
-                            .child(widget.SerialNum)
-                            .child("timberReportheadlines")
-                            .set({
-                              "serialnum": widget.SerialNum,
-                              "placeofcoupe": widget.poc,
-                              "dateinformed_from_rm": widget.DateInformed,
-                              "donor_details": widget.donor_details,
-                              "PlaceOfCoupe_exact_from_arm":
-                                  widget.PlaceOfCoupe_exact_from_arm,
-                              "LetterNo": widget.LetterNo,
-                              "Condition": widget.Condition,
-                              "RM Office": widget.office_location,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPosition&name":
-                                  widget.OfficerPositionAndName,
-                              "TreeCount": widget.treeCount.toString(),
-                              "Date": widget.DateInformed,
-                              "ARM_location": widget.ARM_Office,
-                              "CO_name": widget.CO_name,
-                              "CO_id": widget.CO_id,
-                              "ARM_Id": widget.ARM_Id,
-
-                              "RM_Id": widget.user_name,
-                              "Relevent_RM_Branch": widget.office_location,
-                              "income": widget.Income,
-                              "outcome": widget.Outcome,
-                              "reject_details": widget.Reject_details,
-                              "updated_income": widget.UpdateIncome,
-                              "updated_outcome": widget.UpdateOutcome,
-                              "latest_update": DateFormat(
-                                'yyyy-MM-dd HH:mm:ss',
-                              ).format(DateTime.now()).toString(),
-
-                              // "CO_id": widget.user_name,
-                            });
-
-                        // Also mirror to RM_branch_data_saved_test
-                        await database
-                            .child('RM_branch_data_saved')
-                            .child(widget.office_location)
-                            .child("Sent")
-                            .child(widget.SerialNum)
-                            .set({"from": "RM_N_Approved"});
-
-                        if (event.snapshot.value != null) {
-                          await database
-                              .child('RM_branch_data_saved')
-                              .child(widget.office_location)
-                              .child("Sent")
-                              .child(widget.SerialNum)
-                              .child("allTrees")
-                              .set(event.snapshot.value);
-                        }
-
-                        await database
-                            .child('RM_branch_data_saved')
-                            .child(widget.office_location)
-                            .child("Sent")
-                            .child(widget.SerialNum)
-                            .child("info")
-                            .set({
-                              "serialnum": widget.SerialNum,
-                              "placeofcoupe": widget.poc,
-                              "dateinformed_from_rm": widget.DateInformed,
-                              "donor_details": widget.donor_details,
-                              "PlaceOfCoupe_exact_from_arm":
-                                  widget.PlaceOfCoupe_exact_from_arm,
-                              "LetterNo": widget.LetterNo,
-                              "Condition": widget.Condition,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPosition&name":
-                                  widget.OfficerPositionAndName,
-                              "TreeCount": widget.treeCount.toString(),
-                              "Date": widget.DateInformed,
-                              "ARM_location": widget.ARM_Office,
-                              "CO_name": widget.CO_name,
-                              "CO_id": widget.CO_id,
-                              "ARM_Id": widget.ARM_Id,
-                              "RM_Id": widget.user_name,
-                              "Sent_To": "DGM",
-                              "income": widget.Income,
-                              "outcome": widget.Outcome,
-                              "reject_details": widget.Reject_details,
-                              "updated_income": widget.UpdateIncome,
-                              "updated_outcome": widget.UpdateOutcome,
-                              "latest_update": DateFormat(
-                                'yyyy-MM-dd HH:mm:ss',
-                              ).format(DateTime.now()).toString(),
-                            })
-                            // Update status_of_job_test
-                            // await FirebaseDatabase.instance
-                            //     .ref()
-                            //     .child("Status_of_job")
-                            //     .child(widget.office_location.toString())
-                            //     .child(widget.SerialNum.toString())
-                            //     .child("Status")
-                            //     .set("approved");
-                            // await FirebaseDatabase.instance
-                            //     .ref()
-                            //     .child("Status_of_job")
-                            //     .child(widget.office_location.toString())
-                            //     .child(widget.SerialNum.toString())
-                            //     .child("approved")
-                            //     .set(
-                            //       DateFormat(
-                            //         'yyyy-MM-dd',
-                            //       ).format(DateTime.now()).toString(),
-                            //     )
-                            .then((_) {
-                              try {
-                                FirebaseDatabase.instance
-                                    .ref()
-                                    .child("RM_branch_data_saved")
-                                    .child(widget.office_location.toString())
+                              // Copy allTrees if present
+                              DatabaseEvent event = await dbref.once();
+                              if (event.snapshot.value != null) {
+                                await database
+                                    .child('Head_office_data_saved')
+                                    .child("DGM")
                                     .child("Recived")
-                                    .child(widget.SerialNum.toString())
-                                    .remove();
-                                print('Data deleted successfully');
-                                showTopSnackBar(
-                                  context,
-                                  message: "Data sent to DGM successfully",
-                                  backgroundColor: Colors.green,
-                                );
-                              } catch (e) {
-                                print('Error deleting data: $e');
-                                showTopSnackBar(
-                                  context,
-                                  message: "Error deleting data: $e",
-                                  backgroundColor: Colors.red,
-                                );
+                                    .child(widget.SerialNum)
+                                    .child("allTrees")
+                                    .set(event.snapshot.value);
                               }
-                            });
 
-                        Navigator.of(dialogContext).pop();
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          } else if (total > 30000) {
-            showCupertinoDialog(
-              context: context,
-              builder: (BuildContext dialogContext) {
-                return CupertinoAlertDialog(
-                  title: const Text(
-                    'Permission Alert',
-                    style: TextStyle(
-                      fontFamily: 'sfproRoundSemiB',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                      fontSize: 20,
-                    ),
-                  ),
-                  content: const Text(
-                    'This action requires higher permissions. So it will be sent to the AGM.',
-                    style: TextStyle(
-                      fontFamily: 'sfproRoundRegular',
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54,
-                      fontSize: 15,
-                    ),
-                  ),
-                  actions: [
-                    CupertinoDialogAction(
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(
-                          fontFamily: 'sfpro',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      onPressed: () => Navigator.of(dialogContext).pop(),
-                    ),
-                    CupertinoDialogAction(
-                      child: const Text(
-                        'Confirm',
-                        style: TextStyle(
-                          fontFamily: 'sfpro',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                        ),
-                      ),
-                      onPressed: () async {
-                        final database = FirebaseDatabase.instance.ref();
+                              // Set info under Head_office_data_saved
+                              await database
+                                  .child('Head_office_data_saved')
+                                  .child("DGM")
+                                  .child("Recived")
+                                  .child(widget.SerialNum)
+                                  .child("timberReportheadlines")
+                                  .set({
+                                    "serialnum": widget.SerialNum,
+                                    "placeofcoupe": widget.poc,
+                                    "dateinformed_from_rm": widget.DateInformed,
+                                    "donor_details": widget.donor_details,
+                                    "PlaceOfCoupe_exact_from_arm":
+                                        widget.PlaceOfCoupe_exact_from_arm,
+                                    "LetterNo": widget.LetterNo,
+                                    "Condition": widget.Condition,
+                                    "RM Office": widget.office_location,
+                                    "OfficerName": widget.OfficerName,
+                                    "OfficerPosition&name":
+                                        widget.OfficerPositionAndName,
+                                    "TreeCount": widget.treeCount.toString(),
+                                    "Date": widget.DateInformed,
+                                    "ARM_location": widget.ARM_Office,
+                                    "CO_name": widget.CO_name,
+                                    "CO_id": widget.CO_id,
+                                    "ARM_Id": widget.ARM_Id,
 
-                        // Write to ARM_branch_data_saved_test
-                        await database
-                            .child('Head_office_data_saved')
-                            .child("AGM")
-                            .child("Recived")
-                            .child(widget.SerialNum)
-                            .set({"from": "RM_N_Approved"});
+                                    "RM_Id": widget.user_name,
+                                    "Relevent_RM_Branch":
+                                        widget.office_location,
+                                    "income": widget.Income,
+                                    "outcome": widget.Outcome,
+                                    "reject_details": widget.Reject_details,
+                                    "updated_income": widget.UpdateIncome,
+                                    "updated_outcome": widget.UpdateOutcome,
+                                    "latest_update": DateFormat(
+                                      'yyyy-MM-dd HH:mm:ss',
+                                    ).format(DateTime.now()).toString(),
 
-                        // Copy allTrees if present
-                        DatabaseEvent event = await dbref.once();
-                        if (event.snapshot.value != null) {
-                          await database
-                              .child('Head_office_data_saved')
-                              .child("AGM")
-                              .child("Recived")
-                              .child(widget.SerialNum)
-                              .child("allTrees")
-                              .set(event.snapshot.value);
-                        }
+                                    // "CO_id": widget.user_name,
+                                  });
 
-                        // Set info under ARM_branch_data_saved_test
-                        await database
-                            .child('Head_office_data_saved')
-                            .child("AGM")
-                            .child("Recived")
-                            .child(widget.SerialNum)
-                            .child("timberReportheadlines")
-                            .set({
-                              "serialnum": widget.SerialNum,
-                              "placeofcoupe": widget.poc,
-                              "dateinformed_from_rm": widget.DateInformed,
-                              "donor_details": widget.donor_details,
-                              "PlaceOfCoupe_exact_from_arm":
-                                  widget.PlaceOfCoupe_exact_from_arm,
-                              "LetterNo": widget.LetterNo,
-                              "Condition": widget.Condition,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPosition&name":
-                                  widget.OfficerPositionAndName,
-                              "RM Office": widget.office_location,
-                              "TreeCount": widget.treeCount.toString(),
-                              "Date": widget.DateInformed,
-                              "ARM_location": widget.ARM_Office,
-                              "CO_name": widget.CO_name,
-                              "CO_id": widget.CO_id,
-                              "ARM_Id": widget.ARM_Id,
-                              "RM_Id": widget.user_name,
-                              "income": widget.Income,
-                              "reject_details": widget.Reject_details,
-                              "updated_income": widget.UpdateIncome,
-                              "updated_outcome": widget.UpdateOutcome,
-                              "outcome": widget.Outcome,
-                              "latest_update": DateFormat(
-                                'yyyy-MM-dd HH:mm:ss',
-                              ).format(DateTime.now()).toString(),
-                            });
+                              // Also mirror to RM_branch_data_saved_test
+                              await database
+                                  .child('RM_branch_data_saved')
+                                  .child(widget.office_location)
+                                  .child("Sent")
+                                  .child(widget.SerialNum)
+                                  .set({"from": "RM_N_Approved"});
 
-                        // Also mirror to RM_branch_data_saved_test
-                        await database
-                            .child('RM_branch_data_saved')
-                            .child(widget.office_location)
-                            .child("Sent")
-                            .child(widget.SerialNum)
-                            .set({"from": "RM_N_Approved"});
-
-                        if (event.snapshot.value != null) {
-                          await database
-                              .child('RM_branch_data_saved')
-                              .child(widget.office_location)
-                              .child("Sent")
-                              .child(widget.SerialNum)
-                              .child("allTrees")
-                              .set(event.snapshot.value);
-                        }
-
-                        await database
-                            .child('RM_branch_data_saved')
-                            .child(widget.office_location)
-                            .child("Sent")
-                            .child(widget.SerialNum)
-                            .child("info")
-                            .set({
-                              "serialnum": widget.SerialNum,
-                              "placeofcoupe": widget.poc,
-                              "dateinformed_from_rm": widget.DateInformed,
-                              "donor_details": widget.donor_details,
-                              "PlaceOfCoupe_exact_from_arm":
-                                  widget.PlaceOfCoupe_exact_from_arm,
-                              "LetterNo": widget.LetterNo,
-                              "Condition": widget.Condition,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPosition&name":
-                                  widget.OfficerPositionAndName,
-                              "TreeCount": widget.treeCount.toString(),
-                              "Date": widget.DateInformed,
-                              "ARM_location": widget.ARM_Office,
-                              "CO_name": widget.CO_name,
-                              "CO_id": widget.CO_id,
-                              "ARM_Id": widget.ARM_Id,
-                              "RM_Id": widget.user_name,
-                              "Sent_To": "AGM",
-                              "income": widget.Income,
-                              "outcome": widget.Outcome,
-                              "reject_details": widget.Reject_details,
-                              "updated_income": widget.UpdateIncome,
-                              "updated_outcome": widget.UpdateOutcome,
-                              "latest_update": DateFormat(
-                                'yyyy-MM-dd HH:mm:ss',
-                              ).format(DateTime.now()).toString(),
-                            })
-                            // Update status_of_job_test
-                            // await FirebaseDatabase.instance
-                            //     .ref()
-                            //     .child("Status_of_job")
-                            //     .child(widget.office_location.toString())
-                            //     .child(widget.SerialNum.toString())
-                            //     .child("Status")
-                            //     .set("approved");
-                            // await FirebaseDatabase.instance
-                            //     .ref()
-                            //     .child("Status_of_job")
-                            //     .child(widget.office_location.toString())
-                            //     .child(widget.SerialNum.toString())
-                            //     .child("approved")
-                            //     .set(
-                            //       DateFormat(
-                            //         'yyyy-MM-dd',
-                            //       ).format(DateTime.now()).toString(),
-                            //     )
-                            .then((_) {
-                              try {
-                                FirebaseDatabase.instance
-                                    .ref()
-                                    .child("RM_branch_data_saved")
-                                    .child(widget.office_location.toString())
-                                    .child("Recived")
-                                    .child(widget.SerialNum.toString())
-                                    .remove();
-                                print('Data deleted successfully');
-                                showTopSnackBar(
-                                  context,
-                                  message: "Data sent to AGM successfully",
-                                  backgroundColor: Colors.green,
-                                );
-                              } catch (e) {
-                                print('Error deleting data: $e');
-                                showTopSnackBar(
-                                  context,
-                                  message: "Error deleting data: $e",
-                                  backgroundColor: Colors.red,
-                                );
-                              }
-                            });
-
-                        Navigator.of(dialogContext).pop();
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          } else {
-            showCupertinoDialog(
-              context: context,
-              builder: (BuildContext dialogContext) {
-                return CupertinoAlertDialog(
-                  title: const Text(
-                    'Permission Alert',
-                    style: TextStyle(
-                      fontFamily: 'sfproRoundSemiB',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                      fontSize: 20,
-                    ),
-                  ),
-                  content: const Text(
-                    'This sent job will be approved and recorded under ARM Received.',
-                    style: TextStyle(
-                      fontFamily: 'sfproRoundRegular',
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54,
-                      fontSize: 15,
-                    ),
-                  ),
-                  actions: [
-                    CupertinoDialogAction(
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(
-                          fontFamily: 'sfpro',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      onPressed: () => Navigator.of(dialogContext).pop(),
-                    ),
-                    CupertinoDialogAction(
-                      child: const Text(
-                        'Confirm',
-                        style: TextStyle(
-                          fontFamily: 'sfpro',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                        ),
-                      ),
-                      onPressed: () async {
-                        final database = FirebaseDatabase.instance.ref();
-
-                        // Write to ARM_branch_data_saved_test
-                        await database
-                            .child('ARM_branch_data_saved')
-                            .child(widget.ARM_Office)
-                            .child("Recived")
-                            .child(widget.SerialNum)
-                            .set({"from": "RM_Approved"});
-
-                        // Copy allTrees if present
-                        DatabaseEvent event = await dbref.once();
-                        if (event.snapshot.value != null) {
-                          await database
-                              .child('ARM_branch_data_saved')
-                              .child(widget.ARM_Office)
-                              .child("Recived")
-                              .child(widget.SerialNum)
-                              .child("allTrees")
-                              .set(event.snapshot.value);
-                        }
-
-                        // Set info under ARM_branch_data_saved_test
-                        await database
-                            .child('ARM_branch_data_saved')
-                            .child(widget.ARM_Office)
-                            .child("Recived")
-                            .child(widget.SerialNum)
-                            .child("timberReportheadlines")
-                            .set({
-                              "Status": "RM Approved",
-                              "ADGM_ID": "",
-                              "serialnum": widget.SerialNum,
-                              "placeofcoupe": widget.poc,
-                              "dateinformed_from_rm": widget.DateInformed,
-                              "donor_details": widget.donor_details,
-                              "PlaceOfCoupe_exact_from_arm":
-                                  widget.PlaceOfCoupe_exact_from_arm,
-                              "LetterNo": widget.LetterNo,
-                              "Condition": widget.Condition,
-                              "RM Office": widget.office_location,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPosition&name":
-                                  widget.OfficerPositionAndName,
-                              "TreeCount": widget.treeCount.toString(),
-                              "Date": widget.DateInformed,
-                              "ARM_location": widget.ARM_Office,
-                              "CO_name": widget.CO_name,
-                              "CO_id": widget.CO_id,
-                              "ARM_Id": widget.ARM_Id,
-                              "RM_Id": widget.user_name,
-                              "income": widget.Income,
-                              "outcome": widget.Outcome,
-                              "reject_details": widget.Reject_details,
-                              "updated_income": widget.UpdateIncome,
-                              "updated_outcome": widget.UpdateOutcome,
-                              "latest_update": DateFormat(
-                                'yyyy-MM-dd HH:mm:ss',
-                              ).format(DateTime.now()).toString(),
-                            });
-
-                        // Also mirror to RM_branch_data_saved_test
-                        await database
-                            .child('RM_branch_data_saved')
-                            .child(widget.office_location)
-                            .child("Sent")
-                            .child(widget.SerialNum)
-                            .set({"from": "RM_Approved"});
-
-                        if (event.snapshot.value != null) {
-                          await database
-                              .child('RM_branch_data_saved')
-                              .child(widget.office_location)
-                              .child("Sent")
-                              .child(widget.SerialNum)
-                              .child("allTrees")
-                              .set(event.snapshot.value);
-                        }
-
-                        await database
-                            .child('RM_branch_data_saved')
-                            .child(widget.office_location)
-                            .child("Sent")
-                            .child(widget.SerialNum)
-                            .child("info")
-                            .set({
-                              "Status": "RM Approved",
-                              "ADGM_ID": "",
-                              "serialnum": widget.SerialNum,
-                              "placeofcoupe": widget.poc,
-                              "dateinformed_from_rm": widget.DateInformed,
-                              "donor_details": widget.donor_details,
-                              "PlaceOfCoupe_exact_from_arm":
-                                  widget.PlaceOfCoupe_exact_from_arm,
-                              "LetterNo": widget.LetterNo,
-                              "Condition": widget.Condition,
-                              "OfficerName": widget.OfficerName,
-                              "OfficerPosition&name":
-                                  widget.OfficerPositionAndName,
-                              "TreeCount": widget.treeCount.toString(),
-                              "Date": widget.DateInformed,
-                              "ARM_location": widget.ARM_Office,
-                              "CO_name": widget.CO_name,
-                              "CO_id": widget.CO_id,
-                              "ARM_Id": widget.ARM_Id,
-                              "RM_Id": widget.user_name,
-                              "income": widget.Income,
-                              "outcome": widget.Outcome,
-                              "reject_details": widget.Reject_details,
-                              "updated_income": widget.UpdateIncome,
-                              "updated_outcome": widget.UpdateOutcome,
-                              "latest_update": DateFormat(
-                                'yyyy-MM-dd HH:mm:ss',
-                              ).format(DateTime.now()).toString(),
-                            });
-
-                        // Update status_of_job_test
-                        await FirebaseDatabase.instance
-                            .ref()
-                            .child("Status_of_job")
-                            .child(widget.ARM_Office.toString())
-                            .child(widget.SerialNum.toString())
-                            .child("Status")
-                            .set("approved");
-
-                        await FirebaseDatabase.instance
-                            .ref()
-                            .child("Status_of_job")
-                            .child(widget.ARM_Office.toString())
-                            .child(widget.SerialNum.toString())
-                            .child("approved")
-                            .set(
-                              DateFormat(
-                                'yyyy-MM-dd',
-                              ).format(DateTime.now()).toString(),
-                            )
-                            .then((_) {
-                              try {
-                                FirebaseDatabase.instance
-                                    .ref()
-                                    .child("RM_branch_data_saved")
-                                    .child(widget.office_location.toString())
-                                    .child("Recived")
-                                    .child(widget.SerialNum.toString())
-                                    .remove();
-                                print('Data deleted successfully');
-                              } catch (e) {
-                                print('Error deleting data: $e');
-                              }
-                            })
-                            .then((_) {
-                              try {
-                                FirebaseDatabase.instance
-                                    .ref()
-                                    .child("ARM_branch_data_saved")
-                                    .child(widget.office_location.toString())
+                              if (event.snapshot.value != null) {
+                                await database
+                                    .child('RM_branch_data_saved')
+                                    .child(widget.office_location)
                                     .child("Sent")
-                                    .child(widget.SerialNum.toString())
-                                    .remove();
-                                print('Data deleted successfully');
-                                showTopSnackBar(
-                                  context,
-                                  message: "Approved!",
-                                  backgroundColor: Colors.green,
-                                );
-                              } catch (e) {
-                                showTopSnackBar(
-                                  context,
-                                  message: "Error deleting data: $e",
-                                  backgroundColor: Colors.red,
-                                );
+                                    .child(widget.SerialNum)
+                                    .child("allTrees")
+                                    .set(event.snapshot.value);
                               }
-                            });
 
-                        Navigator.of(dialogContext).pop();
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                );
+                              await database
+                                  .child('RM_branch_data_saved')
+                                  .child(widget.office_location)
+                                  .child("Sent")
+                                  .child(widget.SerialNum)
+                                  .child("info")
+                                  .set({
+                                    "serialnum": widget.SerialNum,
+                                    "placeofcoupe": widget.poc,
+                                    "dateinformed_from_rm": widget.DateInformed,
+                                    "donor_details": widget.donor_details,
+                                    "PlaceOfCoupe_exact_from_arm":
+                                        widget.PlaceOfCoupe_exact_from_arm,
+                                    "LetterNo": widget.LetterNo,
+                                    "Condition": widget.Condition,
+                                    "OfficerName": widget.OfficerName,
+                                    "OfficerPosition&name":
+                                        widget.OfficerPositionAndName,
+                                    "TreeCount": widget.treeCount.toString(),
+                                    "Date": widget.DateInformed,
+                                    "ARM_location": widget.ARM_Office,
+                                    "CO_name": widget.CO_name,
+                                    "CO_id": widget.CO_id,
+                                    "ARM_Id": widget.ARM_Id,
+                                    "RM_Id": widget.user_name,
+                                    "Sent_To": "DGM",
+                                    "income": widget.Income,
+                                    "outcome": widget.Outcome,
+                                    "reject_details": widget.Reject_details,
+                                    "updated_income": widget.UpdateIncome,
+                                    "updated_outcome": widget.UpdateOutcome,
+                                    "latest_update": DateFormat(
+                                      'yyyy-MM-dd HH:mm:ss',
+                                    ).format(DateTime.now()).toString(),
+                                  })
+                                  // Update status_of_job_test
+                                  // await FirebaseDatabase.instance
+                                  //     .ref()
+                                  //     .child("Status_of_job")
+                                  //     .child(widget.office_location.toString())
+                                  //     .child(widget.SerialNum.toString())
+                                  //     .child("Status")
+                                  //     .set("approved");
+                                  // await FirebaseDatabase.instance
+                                  //     .ref()
+                                  //     .child("Status_of_job")
+                                  //     .child(widget.office_location.toString())
+                                  //     .child(widget.SerialNum.toString())
+                                  //     .child("approved")
+                                  //     .set(
+                                  //       DateFormat(
+                                  //         'yyyy-MM-dd',
+                                  //       ).format(DateTime.now()).toString(),
+                                  //     )
+                                  .then((_) {
+                                    try {
+                                      FirebaseDatabase.instance
+                                          .ref()
+                                          .child("RM_branch_data_saved")
+                                          .child(
+                                            widget.office_location.toString(),
+                                          )
+                                          .child("Recived")
+                                          .child(widget.SerialNum.toString())
+                                          .remove();
+                                      print('Data deleted successfully');
+                                      showTopSnackBar(
+                                        context,
+                                        message:
+                                            "Data sent to DGM successfully",
+                                        backgroundColor: Colors.green,
+                                      );
+                                    } catch (e) {
+                                      print('Error deleting data: $e');
+                                      showTopSnackBar(
+                                        context,
+                                        message: "Error deleting data: $e",
+                                        backgroundColor: Colors.red,
+                                      );
+                                    }
+                                  });
+
+                              Navigator.of(dialogContext).pop();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else if (total > 30000) {
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (BuildContext dialogContext) {
+                      return CupertinoAlertDialog(
+                        title: const Text(
+                          'Permission Alert',
+                          style: TextStyle(
+                            fontFamily: 'sfproRoundSemiB',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                            fontSize: 20,
+                          ),
+                        ),
+                        content: const Text(
+                          'This action requires higher permissions. So it will be sent to the AGM.',
+                          style: TextStyle(
+                            fontFamily: 'sfproRoundRegular',
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 15,
+                          ),
+                        ),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                fontFamily: 'sfpro',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            onPressed: () => Navigator.of(dialogContext).pop(),
+                          ),
+                          CupertinoDialogAction(
+                            child: const Text(
+                              'Confirm',
+                              style: TextStyle(
+                                fontFamily: 'sfpro',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
+                            onPressed: () async {
+                              final database = FirebaseDatabase.instance.ref();
+
+                              // Write to ARM_branch_data_saved_test
+                              await database
+                                  .child('Head_office_data_saved')
+                                  .child("AGM")
+                                  .child("Recived")
+                                  .child(widget.SerialNum)
+                                  .set({"from": "RM_N_Approved"});
+
+                              // Copy allTrees if present
+                              DatabaseEvent event = await dbref.once();
+                              if (event.snapshot.value != null) {
+                                await database
+                                    .child('Head_office_data_saved')
+                                    .child("AGM")
+                                    .child("Recived")
+                                    .child(widget.SerialNum)
+                                    .child("allTrees")
+                                    .set(event.snapshot.value);
+                              }
+
+                              // Set info under ARM_branch_data_saved_test
+                              await database
+                                  .child('Head_office_data_saved')
+                                  .child("AGM")
+                                  .child("Recived")
+                                  .child(widget.SerialNum)
+                                  .child("timberReportheadlines")
+                                  .set({
+                                    "serialnum": widget.SerialNum,
+                                    "placeofcoupe": widget.poc,
+                                    "dateinformed_from_rm": widget.DateInformed,
+                                    "donor_details": widget.donor_details,
+                                    "PlaceOfCoupe_exact_from_arm":
+                                        widget.PlaceOfCoupe_exact_from_arm,
+                                    "LetterNo": widget.LetterNo,
+                                    "Condition": widget.Condition,
+                                    "OfficerName": widget.OfficerName,
+                                    "OfficerPosition&name":
+                                        widget.OfficerPositionAndName,
+                                    "RM Office": widget.office_location,
+                                    "TreeCount": widget.treeCount.toString(),
+                                    "Date": widget.DateInformed,
+                                    "ARM_location": widget.ARM_Office,
+                                    "CO_name": widget.CO_name,
+                                    "CO_id": widget.CO_id,
+                                    "ARM_Id": widget.ARM_Id,
+                                    "RM_Id": widget.user_name,
+                                    "income": widget.Income,
+                                    "reject_details": widget.Reject_details,
+                                    "updated_income": widget.UpdateIncome,
+                                    "updated_outcome": widget.UpdateOutcome,
+                                    "outcome": widget.Outcome,
+                                    "latest_update": DateFormat(
+                                      'yyyy-MM-dd HH:mm:ss',
+                                    ).format(DateTime.now()).toString(),
+                                  });
+
+                              // Also mirror to RM_branch_data_saved_test
+                              await database
+                                  .child('RM_branch_data_saved')
+                                  .child(widget.office_location)
+                                  .child("Sent")
+                                  .child(widget.SerialNum)
+                                  .set({"from": "RM_N_Approved"});
+
+                              if (event.snapshot.value != null) {
+                                await database
+                                    .child('RM_branch_data_saved')
+                                    .child(widget.office_location)
+                                    .child("Sent")
+                                    .child(widget.SerialNum)
+                                    .child("allTrees")
+                                    .set(event.snapshot.value);
+                              }
+
+                              await database
+                                  .child('RM_branch_data_saved')
+                                  .child(widget.office_location)
+                                  .child("Sent")
+                                  .child(widget.SerialNum)
+                                  .child("info")
+                                  .set({
+                                    "serialnum": widget.SerialNum,
+                                    "placeofcoupe": widget.poc,
+                                    "dateinformed_from_rm": widget.DateInformed,
+                                    "donor_details": widget.donor_details,
+                                    "PlaceOfCoupe_exact_from_arm":
+                                        widget.PlaceOfCoupe_exact_from_arm,
+                                    "LetterNo": widget.LetterNo,
+                                    "Condition": widget.Condition,
+                                    "OfficerName": widget.OfficerName,
+                                    "OfficerPosition&name":
+                                        widget.OfficerPositionAndName,
+                                    "TreeCount": widget.treeCount.toString(),
+                                    "Date": widget.DateInformed,
+                                    "ARM_location": widget.ARM_Office,
+                                    "CO_name": widget.CO_name,
+                                    "CO_id": widget.CO_id,
+                                    "ARM_Id": widget.ARM_Id,
+                                    "RM_Id": widget.user_name,
+                                    "Sent_To": "AGM",
+                                    "income": widget.Income,
+                                    "outcome": widget.Outcome,
+                                    "reject_details": widget.Reject_details,
+                                    "updated_income": widget.UpdateIncome,
+                                    "updated_outcome": widget.UpdateOutcome,
+                                    "latest_update": DateFormat(
+                                      'yyyy-MM-dd HH:mm:ss',
+                                    ).format(DateTime.now()).toString(),
+                                  })
+                                  // Update status_of_job_test
+                                  // await FirebaseDatabase.instance
+                                  //     .ref()
+                                  //     .child("Status_of_job")
+                                  //     .child(widget.office_location.toString())
+                                  //     .child(widget.SerialNum.toString())
+                                  //     .child("Status")
+                                  //     .set("approved");
+                                  // await FirebaseDatabase.instance
+                                  //     .ref()
+                                  //     .child("Status_of_job")
+                                  //     .child(widget.office_location.toString())
+                                  //     .child(widget.SerialNum.toString())
+                                  //     .child("approved")
+                                  //     .set(
+                                  //       DateFormat(
+                                  //         'yyyy-MM-dd',
+                                  //       ).format(DateTime.now()).toString(),
+                                  //     )
+                                  .then((_) {
+                                    try {
+                                      FirebaseDatabase.instance
+                                          .ref()
+                                          .child("RM_branch_data_saved")
+                                          .child(
+                                            widget.office_location.toString(),
+                                          )
+                                          .child("Recived")
+                                          .child(widget.SerialNum.toString())
+                                          .remove();
+                                      print('Data deleted successfully');
+                                      showTopSnackBar(
+                                        context,
+                                        message:
+                                            "Data sent to AGM successfully",
+                                        backgroundColor: Colors.green,
+                                      );
+                                    } catch (e) {
+                                      print('Error deleting data: $e');
+                                      showTopSnackBar(
+                                        context,
+                                        message: "Error deleting data: $e",
+                                        backgroundColor: Colors.red,
+                                      );
+                                    }
+                                  });
+
+                              Navigator.of(dialogContext).pop();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (BuildContext dialogContext) {
+                      return CupertinoAlertDialog(
+                        title: const Text(
+                          'Permission Alert',
+                          style: TextStyle(
+                            fontFamily: 'sfproRoundSemiB',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                            fontSize: 20,
+                          ),
+                        ),
+                        content: const Text(
+                          'This sent job will be approved and recorded under ARM Received.',
+                          style: TextStyle(
+                            fontFamily: 'sfproRoundRegular',
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 15,
+                          ),
+                        ),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                fontFamily: 'sfpro',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            onPressed: () => Navigator.of(dialogContext).pop(),
+                          ),
+                          CupertinoDialogAction(
+                            child: const Text(
+                              'Confirm',
+                              style: TextStyle(
+                                fontFamily: 'sfpro',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
+                            onPressed: () async {
+                              final database = FirebaseDatabase.instance.ref();
+
+                              // Write to ARM_branch_data_saved_test
+                              await database
+                                  .child('ARM_branch_data_saved')
+                                  .child(widget.ARM_Office)
+                                  .child("Recived")
+                                  .child(widget.SerialNum)
+                                  .set({"from": "RM_Approved"});
+
+                              // Copy allTrees if present
+                              DatabaseEvent event = await dbref.once();
+                              if (event.snapshot.value != null) {
+                                await database
+                                    .child('ARM_branch_data_saved')
+                                    .child(widget.ARM_Office)
+                                    .child("Recived")
+                                    .child(widget.SerialNum)
+                                    .child("allTrees")
+                                    .set(event.snapshot.value);
+                              }
+
+                              // Set info under ARM_branch_data_saved_test
+                              await database
+                                  .child('ARM_branch_data_saved')
+                                  .child(widget.ARM_Office)
+                                  .child("Recived")
+                                  .child(widget.SerialNum)
+                                  .child("timberReportheadlines")
+                                  .set({
+                                    "Status": "RM Approved",
+                                    "ADGM_ID": "",
+                                    "serialnum": widget.SerialNum,
+                                    "placeofcoupe": widget.poc,
+                                    "dateinformed_from_rm": widget.DateInformed,
+                                    "donor_details": widget.donor_details,
+                                    "PlaceOfCoupe_exact_from_arm":
+                                        widget.PlaceOfCoupe_exact_from_arm,
+                                    "LetterNo": widget.LetterNo,
+                                    "Condition": widget.Condition,
+                                    "RM Office": widget.office_location,
+                                    "OfficerName": widget.OfficerName,
+                                    "OfficerPosition&name":
+                                        widget.OfficerPositionAndName,
+                                    "TreeCount": widget.treeCount.toString(),
+                                    "Date": widget.DateInformed,
+                                    "ARM_location": widget.ARM_Office,
+                                    "CO_name": widget.CO_name,
+                                    "CO_id": widget.CO_id,
+                                    "ARM_Id": widget.ARM_Id,
+                                    "RM_Id": widget.user_name,
+                                    "income": widget.Income,
+                                    "outcome": widget.Outcome,
+                                    "reject_details": widget.Reject_details,
+                                    "updated_income": widget.UpdateIncome,
+                                    "updated_outcome": widget.UpdateOutcome,
+                                    "latest_update": DateFormat(
+                                      'yyyy-MM-dd HH:mm:ss',
+                                    ).format(DateTime.now()).toString(),
+                                  });
+
+                              // Also mirror to RM_branch_data_saved_test
+                              await database
+                                  .child('RM_branch_data_saved')
+                                  .child(widget.office_location)
+                                  .child("Sent")
+                                  .child(widget.SerialNum)
+                                  .set({"from": "RM_Approved"});
+
+                              if (event.snapshot.value != null) {
+                                await database
+                                    .child('RM_branch_data_saved')
+                                    .child(widget.office_location)
+                                    .child("Sent")
+                                    .child(widget.SerialNum)
+                                    .child("allTrees")
+                                    .set(event.snapshot.value);
+                              }
+
+                              await database
+                                  .child('RM_branch_data_saved')
+                                  .child(widget.office_location)
+                                  .child("Sent")
+                                  .child(widget.SerialNum)
+                                  .child("info")
+                                  .set({
+                                    "Status": "RM Approved",
+                                    "ADGM_ID": "",
+                                    "serialnum": widget.SerialNum,
+                                    "placeofcoupe": widget.poc,
+                                    "dateinformed_from_rm": widget.DateInformed,
+                                    "donor_details": widget.donor_details,
+                                    "PlaceOfCoupe_exact_from_arm":
+                                        widget.PlaceOfCoupe_exact_from_arm,
+                                    "LetterNo": widget.LetterNo,
+                                    "Condition": widget.Condition,
+                                    "OfficerName": widget.OfficerName,
+                                    "OfficerPosition&name":
+                                        widget.OfficerPositionAndName,
+                                    "TreeCount": widget.treeCount.toString(),
+                                    "Date": widget.DateInformed,
+                                    "ARM_location": widget.ARM_Office,
+                                    "CO_name": widget.CO_name,
+                                    "CO_id": widget.CO_id,
+                                    "ARM_Id": widget.ARM_Id,
+                                    "RM_Id": widget.user_name,
+                                    "income": widget.Income,
+                                    "outcome": widget.Outcome,
+                                    "reject_details": widget.Reject_details,
+                                    "updated_income": widget.UpdateIncome,
+                                    "updated_outcome": widget.UpdateOutcome,
+                                    "latest_update": DateFormat(
+                                      'yyyy-MM-dd HH:mm:ss',
+                                    ).format(DateTime.now()).toString(),
+                                  });
+
+                              // Update status_of_job_test
+                              await FirebaseDatabase.instance
+                                  .ref()
+                                  .child("Status_of_job")
+                                  .child(widget.ARM_Office.toString())
+                                  .child(widget.SerialNum.toString())
+                                  .child("Status")
+                                  .set("approved");
+
+                              await FirebaseDatabase.instance
+                                  .ref()
+                                  .child("Status_of_job")
+                                  .child(widget.ARM_Office.toString())
+                                  .child(widget.SerialNum.toString())
+                                  .child("approved")
+                                  .set(
+                                    DateFormat(
+                                      'yyyy-MM-dd',
+                                    ).format(DateTime.now()).toString(),
+                                  )
+                                  .then((_) {
+                                    try {
+                                      FirebaseDatabase.instance
+                                          .ref()
+                                          .child("RM_branch_data_saved")
+                                          .child(
+                                            widget.office_location.toString(),
+                                          )
+                                          .child("Recived")
+                                          .child(widget.SerialNum.toString())
+                                          .remove();
+                                      print('Data deleted successfully');
+                                    } catch (e) {
+                                      print('Error deleting data: $e');
+                                    }
+                                  })
+                                  .then((_) {
+                                    try {
+                                      FirebaseDatabase.instance
+                                          .ref()
+                                          .child("ARM_branch_data_saved")
+                                          .child(
+                                            widget.office_location.toString(),
+                                          )
+                                          .child("Sent")
+                                          .child(widget.SerialNum.toString())
+                                          .remove();
+                                      print('Data deleted successfully');
+                                      showTopSnackBar(
+                                        context,
+                                        message: "Approved!",
+                                        backgroundColor: Colors.green,
+                                      );
+                                    } catch (e) {
+                                      showTopSnackBar(
+                                        context,
+                                        message: "Error deleting data: $e",
+                                        backgroundColor: Colors.red,
+                                      );
+                                    }
+                                  });
+
+                              Navigator.of(dialogContext).pop();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
               },
-            );
-          }
-        },
-        backgroundColor: Colors.redAccent,
-        label: const Text(
-          "Approve",
-          style: TextStyle(
-            fontFamily: 'sfproRoundSemiB',
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            fontSize: 16,
-          ),
+              backgroundColor: Colors.redAccent,
+              label: const Text(
+                "Approve",
+                style: TextStyle(
+                  fontFamily: 'sfproRoundSemiB',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+              icon: const Icon(Iconsax.tick_circle, color: Colors.white),
+            ),
+
+            FloatingActionButton.extended(
+              onPressed: () => _declineSheet(context),
+              backgroundColor: Colors.grey,
+              label: const Text(
+                "Reject",
+                style: TextStyle(
+                  fontFamily: 'sfproRoundSemiB',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+              icon: const Icon(Iconsax.close_circle, color: Colors.white),
+            ),
+          ],
         ),
-        icon: const Icon(Iconsax.tick_circle, color: Colors.white),
       ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

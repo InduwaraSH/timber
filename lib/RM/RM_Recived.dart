@@ -120,12 +120,13 @@ class _RMRecivedState extends State<RMRecived> {
       latestUpdate = Sent['info']['latest_update'] ?? "";
       updated_Outcome = Sent['info']['updated_Outcome'] ?? "";
       updated_income = Sent['info']['updated_income'] ?? "";
-      Reject_Details = Sent['info']['Reject_Details'] ?? "N/A";
+      Reject_Details = Sent['info']['Reject_Details'] ?? "";
       if (Reject_Details == "N/A" || Reject_Details.isEmpty) {
         statusColour = Color.fromRGBO(255, 204, 0, 1);
         from_doc = "ARM - $ARM_Id";
         updated_income = Income;
         updated_Outcome = Outcome;
+        Reject_Details = "";
       } else {
         statusColour = Color.fromRGBO(204, 19, 139, 1);
         from_doc = "ARM - $ARM_Id (Resubmitted)";

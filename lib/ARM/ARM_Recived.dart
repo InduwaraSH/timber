@@ -10,6 +10,7 @@ import 'package:timber_app/ARM/ARM_Procumented%20View.dart';
 import 'package:timber_app/ARM/ARM_RecivedViewApproved.dart';
 import 'package:timber_app/ARM/ARM_RecivedView_CO.dart';
 import 'package:timber_app/ARM/ARM_Recived_view.dart';
+import 'package:timber_app/ARM/ARM_Recived_view_rej_by_rm.dart';
 import 'package:timber_app/ARM/ARM_Remove_view.dart';
 import 'package:timber_app/ARM/ARM_recived_rejected_view.dart';
 import 'package:timber_app/ARM/Procument_call.dart';
@@ -254,6 +255,44 @@ class _ARMReceivedState extends State<ARMReceived> {
       updatedIncome = Sent['timberReportheadlines']['updated_income'] ?? "N/A";
       updatedOutcome =
           Sent['timberReportheadlines']['updated_outcome'] ?? "N/A";
+    } else if (from == "RM_Rejected") {
+      Status = Sent['timberReportheadlines']['Status'] ?? "N/A";
+
+      ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
+      branchName =
+          Sent['timberReportheadlines']['ARM_location'] ?? "Not Available";
+      poc = Sent['timberReportheadlines']['placeofcoupe'] ?? "N/A";
+      DateInformed =
+          Sent['timberReportheadlines']['dateinformed_from_rm'] ?? "N/A";
+      LetterNo = Sent['timberReportheadlines']['LetterNo'] ?? "N/A";
+      SerialNum = Sent['timberReportheadlines']['serialnum'] ?? "N/A";
+      OfficerName = Sent['timberReportheadlines']['OfficerName'] ?? "N/A";
+      OfficerPositionAndName =
+          Sent['timberReportheadlines']['OfficerPosition&name'] ?? "N/A";
+      donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
+      Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
+      treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
+      CO_name = Sent['timberReportheadlines']['CO_name'] ?? "N/A";
+      Income = Sent['timberReportheadlines']['income'].toString();
+      Outcome = Sent['timberReportheadlines']['outcome'].toString();
+      latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
+      RM_office = Sent['timberReportheadlines']['RM Office'] ?? "N/A";
+      CO_id = Sent['timberReportheadlines']['CO_id'] ?? "Not Available";
+      from_doc = "RM - Rejected";
+      RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
+      Profit = Sent['timberReportheadlines']['profit'] ?? "N/A";
+      ARM_ID = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
+      statusColour = Color.fromRGBO(233, 21, 45, 1);
+      ADGM_Type = Sent['timberReportheadlines']['ADGM_Type'] ?? "N/A";
+      reasonforreject = Sent['timberReportheadlines']['Reject_reason'] ?? "";
+
+      updatedIncome = Sent['timberReportheadlines']['updated_income'] ?? "N/A";
+      updatedOutcome =
+          Sent['timberReportheadlines']['updated_outcome'] ?? "N/A";
+
+      if (reasonforreject == "N/A") {
+        reasonforreject = "";
+      }
     }
 
     return CupertinoButton(
@@ -429,6 +468,42 @@ class _ARMReceivedState extends State<ARMReceived> {
                 RM_ID: RM_ID,
                 Status: Status,
                 AGM_ID: ADGM_ID + " " + ADGM_Type,
+                Profit: Profit,
+                updatedIncome: updatedIncome,
+                updatedOutcome: updatedOutcome,
+
+                reasonforreject: reasonforreject,
+                ADGM_Type: ADGM_Type,
+              ),
+            ),
+          );
+        } else if (from == "RM_Rejected") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ARmRecivedViewRejByRm(
+                poc: poc,
+                DateInformed: DateInformed,
+                LetterNo: LetterNo,
+                SerialNum: SerialNum,
+                OfficerPositionAndName: OfficerPositionAndName,
+                donor_details: donor_details,
+                Condition: Condition,
+                treeCount: treeCount,
+                office_location: widget.office_location,
+                PlaceOfCoupe_exact_from_arm: poc,
+                OfficerName: OfficerName,
+                user_name: CO_name,
+                ARM_Office: ARM_office,
+                Income: Income,
+                Outcome: Outcome,
+                RM_office: RM_office,
+                CO_id: CO_id,
+                CO_name: CO_name,
+                ARM_Id: ARM_ID,
+                RM_ID: RM_ID,
+                Status: Status,
+
                 Profit: Profit,
                 updatedIncome: updatedIncome,
                 updatedOutcome: updatedOutcome,
