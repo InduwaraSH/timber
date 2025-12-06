@@ -342,7 +342,7 @@ class _ARM_Procumented_viewState extends State<ARM_Procumented_view> {
                                       widget.PlaceOfCoupe_exact_from_arm,
                                   user_name: widget.user_name,
                                   ARM_Branch_Name: widget.ARM_Branch_Name,
-                                  ARM_Office: widget.ARM_Office,
+                                  //ARM_Office: widget.ARM_Office,
                                   Income: widget.Income,
                                   Outcome: widget.Outcome,
                                   Profit: widget.Profit,

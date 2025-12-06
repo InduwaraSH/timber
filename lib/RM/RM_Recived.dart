@@ -113,8 +113,8 @@ class _RMRecivedState extends State<RMRecived> {
       CO_name = Sent['info']['CO_name'] ?? "N/A";
       CO_id = Sent['info']['CO_id'] ?? "N/A";
       ARM_Id = Sent['info']['ARM_ID'] ?? "N/A";
-      Income = Sent['info']['Income'].toString() ?? "N/A";
-      Outcome = Sent['info']['Outcome'].toString() ?? "N/A";
+      Income = Sent['info']['Income'].toString();
+      Outcome = Sent['info']['Outcome'].toString();
 
       ARM_office = Sent['info']['ARM_Office'] ?? "N/A";
       latestUpdate = Sent['info']['latest_update'] ?? "";
@@ -152,9 +152,9 @@ class _RMRecivedState extends State<RMRecived> {
       CO_name = Sent['timberReportheadlines']['CO_name'] ?? "N/A";
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "N/A";
 
-      Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
-      Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
-      Profit = Sent['timberReportheadlines']['profit'].toString() ?? "N/A";
+      Income = Sent['timberReportheadlines']['income'].toString();
+      Outcome = Sent['timberReportheadlines']['outcome'].toString();
+      Profit = Sent['timberReportheadlines']['profit'].toString();
       ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_Id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
@@ -181,9 +181,9 @@ class _RMRecivedState extends State<RMRecived> {
       CO_name = Sent['timberReportheadlines']['CO_name'] ?? "N/A";
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "N/A";
 
-      Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
-      Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
-      Profit = Sent['timberReportheadlines']['profit'].toString() ?? "N/A";
+      Income = Sent['timberReportheadlines']['income'].toString();
+      Outcome = Sent['timberReportheadlines']['outcome'].toString();
+      Profit = Sent['timberReportheadlines']['profit'].toString();
       ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
       ARM_Id = Sent['timberReportheadlines']['ARM_Id'] ?? "N/A";
@@ -211,9 +211,9 @@ class _RMRecivedState extends State<RMRecived> {
       CO_name = Sent['timberReportheadlines']['CO_name'] ?? "N/A";
       CO_id = Sent['timberReportheadlines']['CO_id'] ?? "N/A";
 
-      Income = Sent['timberReportheadlines']['income'].toString() ?? "N/A";
-      Outcome = Sent['timberReportheadlines']['outcome'].toString() ?? "N/A";
-      Profit = Sent['timberReportheadlines']['profit'].toString() ?? "N/A";
+      Income = Sent['timberReportheadlines']['income'].toString();
+      Outcome = Sent['timberReportheadlines']['outcome'].toString();
+      Profit = Sent['timberReportheadlines']['profit'].toString();
 
       ARM_office = Sent['timberReportheadlines']['ARM_location'] ?? "N/A";
       RM_ID = Sent['timberReportheadlines']['RM_Id'] ?? "N/A";
@@ -617,8 +617,8 @@ class _RMRecivedState extends State<RMRecived> {
             // Firebase list
             // Firebase list
             Expanded(
-              child: FutureBuilder<DatabaseEvent>(
-                future: dbref.once(),
+              child: StreamBuilder<DatabaseEvent>(
+                stream: dbref.onValue,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(child: CupertinoActivityIndicator());
@@ -626,8 +626,9 @@ class _RMRecivedState extends State<RMRecived> {
 
                   // Convert snapshot to list
                   Map? values = snapshot.data!.snapshot.value as Map?;
-                  if (values == null)
+                  if (values == null) {
                     return const Center(child: Text("No data"));
+                  }
 
                   List<Map> items = [];
                   values.forEach((key, value) {

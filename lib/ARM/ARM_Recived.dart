@@ -181,7 +181,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
       Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
       treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
-      CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
+      CO_name = Sent['timberReportheadlines']['CO_name'] ?? "N/A";
       Income = Sent['timberReportheadlines']['income'].toString();
       Outcome = Sent['timberReportheadlines']['outcome'].toString();
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";
@@ -209,7 +209,7 @@ class _ARMReceivedState extends State<ARMReceived> {
       donor_details = Sent['timberReportheadlines']['donor_details'] ?? "N/A";
       Condition = Sent['timberReportheadlines']['Condition'] ?? "N/A";
       treeCount = Sent['timberReportheadlines']['TreeCount'] ?? "N/A";
-      CO_name = Sent['timberReportheadlines']['From_CO'] ?? "N/A";
+      CO_name = Sent['timberReportheadlines']['CO_name'] ?? "N/A";
       Income = Sent['timberReportheadlines']['income'].toString();
       Outcome = Sent['timberReportheadlines']['outcome'].toString();
       latestUpdate = Sent['timberReportheadlines']['latest_update'] ?? "N/A";

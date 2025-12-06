@@ -537,7 +537,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                           .child(widget.SerialNum)
                           .child("timberReportheadlines")
                           .set({
-                            "Status": "ADGM Approved",
+                            "Status": widget.Status,
                             "ADGM_ID": widget.AGM_ID,
                             "serialnum": widget.SerialNum,
                             "placeofcoupe": widget.poc,
@@ -592,7 +592,7 @@ class _RmRecivedView_ADGMState extends State<RmRecivedView_ADGM> {
                           .child(widget.SerialNum)
                           .child("info")
                           .set({
-                            "Status": "ADGM Approved",
+                            "Status": widget.Status,
                             "ADGM_ID": widget.AGM_ID,
                             "serialnum": widget.SerialNum,
                             "placeofcoupe": widget.poc,

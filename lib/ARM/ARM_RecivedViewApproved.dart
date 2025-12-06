@@ -23,7 +23,7 @@ class ArmRecivedviewapproved extends StatefulWidget {
   final String PlaceOfCoupe_exact_from_arm;
   final String user_name;
   final String ARM_Branch_Name;
-  final String ARM_Office;
+
   final String Income;
   final String Outcome;
   final String Profit;
@@ -51,7 +51,7 @@ class ArmRecivedviewapproved extends StatefulWidget {
     required this.PlaceOfCoupe_exact_from_arm,
     required this.user_name,
     required this.ARM_Branch_Name,
-    required this.ARM_Office,
+
     required this.Income,
     required this.Outcome,
     required this.Profit,
@@ -275,7 +275,7 @@ class _ArmRecivedviewapprovedState extends State<ArmRecivedviewapproved> {
         {"label": "RM ID", "value": widget.RM_ID},
         {"label": "RM Office", "value": widget.RM_office},
         {"label": "ARM ID", "value": widget.ARM_ID},
-        {"label": "ARM Office", "value": widget.ARM_Office},
+        {"label": "ARM Office", "value": widget.ARM_Branch_Name},
         {"label": "CO ID", "value": widget.CO_id},
         {"label": "CO Name", "value": widget.CO_name},
         {"label": "POC", "value": widget.poc},

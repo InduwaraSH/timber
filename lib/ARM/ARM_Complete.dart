@@ -29,6 +29,7 @@ class ArmComplete extends StatefulWidget {
   final String CO_name;
   final String ARM_ID;
   final String RM_ID;
+  final String reject_details;
 
   const ArmComplete({
     super.key,
@@ -56,6 +57,7 @@ class ArmComplete extends StatefulWidget {
     required this.CO_name,
     required this.ARM_ID,
     required this.RM_ID,
+    required this.reject_details,
   });
 
   @override
@@ -64,11 +66,56 @@ class ArmComplete extends StatefulWidget {
 
 class _ArmCompleteState extends State<ArmComplete> {
   final database = FirebaseDatabase.instance.ref();
+  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref();
   bool _isLoading = false;
   late Query dbref;
   final ScrollController _scrollController = ScrollController();
   bool _showHeader = true;
   String ADGM_Name = "";
+  Map<dynamic, dynamic> procurementData = {};
+  List<MapEntry<dynamic, dynamic>> _procurementEntries = [];
+
+  Future<void> _fetchProcurementData() async {
+    try {
+      final snapshot = await _dbRef
+          .child('procurement')
+          .child(widget.ARM_Branch_Name)
+          .child(widget.SerialNum)
+          .get();
+
+      if (snapshot.exists && snapshot.value is Map) {
+        // convert keys to String (Firebase expects string keys)
+        final raw = Map<dynamic, dynamic>.from(snapshot.value as Map);
+        final Map<String, dynamic> typed = {};
+        raw.forEach((k, v) {
+          typed[k.toString()] = v;
+        });
+
+        if (mounted) {
+          setState(() {
+            procurementData = typed;
+            _procurementEntries = procurementData.entries.toList();
+          });
+        }
+        debugPrint('Fetched procurementData: ${procurementData.length} items');
+      } else {
+        if (mounted) {
+          setState(() {
+            procurementData = {};
+            _procurementEntries = [];
+          });
+        }
+        debugPrint('No procurement data found at path.');
+      }
+    } catch (e, st) {
+      debugPrint('Error fetching procurement: $e\n$st');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error fetching procurementData: $e')),
+        );
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -147,20 +194,34 @@ class _ArmCompleteState extends State<ArmComplete> {
       //     .child("tree_removal")
       //     .set(DateFormat('yyyy-MM-dd').format(DateTime.now()));
       DatabaseEvent event = await dbref.once();
+      await _fetchProcurementData();
       if (event.snapshot.value != null) {
         await database
             .child('Completed_jobs')
-            .child(widget.ARM_Office)
+            .child(widget.RM_office)
+            .child(widget.ARM_Branch_Name)
             .child(DateTime.now().year.toString())
             .child(widget.SerialNum)
             .child("allTrees")
             .set(event.snapshot.value);
       }
 
+      if (procurementData.isNotEmpty) {
+        await database
+            .child('Completed_jobs')
+            .child(widget.RM_office)
+            .child(widget.ARM_Branch_Name)
+            .child(DateTime.now().year.toString())
+            .child(widget.SerialNum)
+            .child("procument")
+            .set(procurementData);
+      }
+
       // Set info under ARM_branch_data_saved_test
       await database
           .child('Completed_jobs')
-          .child(widget.ARM_Office)
+          .child(widget.RM_office)
+          .child(widget.ARM_Branch_Name)
           .child(DateTime.now().year.toString())
           .child(widget.SerialNum)
           .child("timberReportheadlines")
@@ -182,10 +243,11 @@ class _ArmCompleteState extends State<ArmComplete> {
             "ARM_location": widget.ARM_Office,
             "CO_name": widget.CO_name,
             "CO_id": widget.CO_id,
-            //"ARM_Id": widget.ARM_Id,
+            "ARM_Id": widget.user_name,
             "RM_Id": widget.user_name,
             "income": widget.Income,
             "outcome": widget.Outcome,
+            "reject_details": widget.reject_details,
             "latest_update": DateFormat(
               'yyyy-MM-dd HH:mm:ss',
             ).format(DateTime.now()).toString(),
