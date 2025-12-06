@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:timber_app/ARM/ARM_Complete.dart';
+import 'package:timber_app/ARM/ARM_Completed.dart';
 import 'package:timber_app/ARM/ARM_Sent_Cardview.dart';
 import 'package:timber_app/ARM/ARM_SentView_RM.dart';
 
@@ -398,12 +400,12 @@ class _ARM_SentState extends State<ARM_Sent> {
               height: _showHeader ? 100 : 1,
               curve: Curves.easeInOut,
               child: _showHeader
-                  ? const Padding(
+                  ? Padding(
                       padding: EdgeInsets.only(top: 0, left: 28, right: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Sent",
                             style: TextStyle(
                               fontSize: 50,
@@ -411,6 +413,24 @@ class _ARM_SentState extends State<ARM_Sent> {
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
+                          ),
+
+                          FloatingActionButton.extended(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const YearSelectionScreen(
+                                        rmOffice:
+                                            "Ratnapura", // You must provide this
+                                        armOffice: "Embilipitya", // And this
+                                      ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.add),
+                            label: const Text('New'),
                           ),
                         ],
                       ),
